@@ -34,3 +34,6 @@
 
 # gen:build-files
 isee*
+
+# cmake-build
+build
