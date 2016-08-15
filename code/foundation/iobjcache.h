@@ -26,8 +26,8 @@ typedef struct iobjcache {
     imemorystatistics statis; /* mutex */
 }iobjcache;
     
-#define __iobjcache_format "cache: %d, capacity: %d, statis:["__istatis_format"]"
-#define __iobjcache_value(cache) (cache).num,(cache).capacity,__istatis_value((cache).statis)
+#define __iobjcache_format "cache: %lu/%lu, statis:("__istatis_format")"
+#define __iobjcache_value(cache) (cache)->num,(cache)->capacity,__istatis_value(&((cache)->statis))
    
 /* make a cache able allocator */
 imetaallocator *imakecacheableallocator(imeta *meta, size_t capacity);

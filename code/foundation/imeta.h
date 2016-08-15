@@ -58,8 +58,8 @@ typedef struct imeta {
 }imeta;
     
 /*Hepler Macro for log*/
-#define __imeta_format "Meta-Obj: (%15.15s, %5lu, %5lu)"__istatis_format
-#define __imeta_value(meta) (meta)->name,(meta)->size,(meta)->capacity,__istatis_value(iobjcachestatis(meta))
+#define __imeta_format "Meta-Obj: (%15.15s, %5lu, %5lu) Cache: ("__iobjcache_format")"
+#define __imeta_value(meta) (meta)->name,(meta)->size,(meta)->capacity,__iobjcache_value(iobjcacheget(meta))
     
 /* type-meta-flag */
 typedef enum IMetaFlag {
