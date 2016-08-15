@@ -9,6 +9,7 @@
 #include "foundation/test_imemory.h"
 #include "foundation/test_imeta.h"
 #include "foundation/test_imutex.h"
+#include "foundation/test_iatomic.h"
 
 int main(int argc, const char* argv[]) {
     int n;
