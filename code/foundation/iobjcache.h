@@ -32,8 +32,14 @@ typedef struct iobjcache {
 /* make a cache able allocator */
 imetaallocator *imakecacheableallocator(imeta *meta, size_t capacity);
     
+/* free the memory taken by allocator */
+void iobjcachefree(imetaallocator *allocator);
+    
 /* get a objcache from the meta-system */
 iobjcache* iobjcacheget(imeta *meta);
+    
+/* set the obj cache capacity */
+void iobjcachesetcapacity(iobjcache *cache, size_t capacity);
     
 /* get the memory for objcache, if meta is null then return the global-memory-statis */
 imemorystatistics *iobjcachestatis(imeta *meta);

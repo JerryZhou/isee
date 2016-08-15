@@ -141,11 +141,24 @@ imetaallocator *imakecacheableallocator(imeta *meta, size_t capacity) {
     return (imetaallocator*)(cache);
 }
 
+/* free the memory taken by allocator */
+void iobjcachefree(imetaallocator *allocator) {
+    iobjcache *cache = (iobjcache*)allocator;
+    icheck(cache);
+    cache->flag = 0; /* clear salt */
+    ifree(cache);
+}
+
 /* get a objcache from the meta-system */
 iobjcache* iobjcacheget(imeta *meta) {
-    iobjcache *cache = (iobjcache*)meta->allocator;
+    iobjcache *cache = meta ? (iobjcache*)meta->allocator : NULL;
     icheckret(cache && cache->flag==_IOBJCACHE_CLS_SALT, NULL);
     return cache;
+}
+
+/* set the obj cache capacity */
+void iobjcachesetcapacity(iobjcache *cache, size_t capacity) {
+    cache->capacity = capacity;
 }
 
 /* get the memory for objcache, if meta is null then return the global-memory-statis */
@@ -175,17 +188,16 @@ void iobjcacheclear(imeta *meta) {
 
 /* calculating the memory size taking by meta in what we want kind */
 int64_t iobjcachememorysize(const void *meta, int kind) {
-    iobjcache *cache = meta ? (iobjcache*)((imeta*)meta)->allocator:NULL;
-    icheckret(!cache || (cache && cache->flag == _IOBJCACHE_CLS_SALT), 0);
+    imemorystatistics *statis = iobjcachestatis((imeta*)meta);
     switch (kind) {
         case EnumObjCacheMemoerySizeKind_Alloced:
-            return cache ? cache->statis.alloced : _g_global_statis.alloced;
+            return statis->alloced;
             break;
         case EnumObjCacheMemoerySizeKind_Freed:
-            return cache ? cache->statis.freed : _g_global_statis.freed;
+            return statis->freed;
             break;
         case EnumObjCacheMemoerySizeKind_Hold:
-            return cache ? cache->statis.current : _g_global_statis.current;
+            return statis->current;
             break;
         default:
             break;
