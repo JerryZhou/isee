@@ -38,7 +38,7 @@ void _imeta_init(imeta *meta) {
 /* get meta information by meta-index */
 imeta *imetaget(int idx) {
     imeta *meta = NULL;
-    icheckret(idx<0, meta);
+    icheckret(idx>=0 && idx <__g_meta_index, meta);
     meta = &__g_all_metas[idx];
     _imeta_init(meta);
     
@@ -58,12 +58,14 @@ int imetaregister(const char* name, size_t size, size_t capacity) {
 
 /* calloc a obj by meta-system */
 void *imetacalloc(imeta *meta) {
+    icheckret(meta, NULL);
     return meta->allocator->fcalloc(meta->allocator, meta);
 }
 
 /* free the object to right meta-system */
 void imetafree(void *p) {
     iobj *newp = __iobj(p);
+    icheck(newp);
     newp->meta->allocator->ffree(newp->meta->allocator, p);
 }
 

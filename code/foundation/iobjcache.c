@@ -148,6 +148,12 @@ iobjcache* iobjcacheget(imeta *meta) {
     return cache;
 }
 
+/* get the memory for objcache, if meta is null then return the global-memory-statis */
+imemorystatistics *iobjcachestatis(imeta *meta) {
+    iobjcache *cache = iobjcacheget(meta);
+    return cache ? &cache->statis : &_g_global_statis;
+}
+
 /* free all the cached object in the meta-system with the right meta */
 void iobjcacheclear(imeta *meta) {
     iobjcache *cache = iobjcacheget(meta);

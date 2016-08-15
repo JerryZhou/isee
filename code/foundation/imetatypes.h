@@ -38,6 +38,12 @@ typedef enum EnumMetaTypeIndex {
 /* support IMaxMetaCountForUser user define meta-type */
 #define IMaxMetaCountForUser 512
     
+/* include imetatypes.h */
+#define iobjmalloc(type) ((type*)imetacalloc(imetaof(type)))
+#define iobjfree(p) do { imetafree(p); p = NULL; } while(0)
+/* quickly type-compare */
+#define iistype(p, type) (iobjgetmeta(p) == imetaof(type))
+    
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }

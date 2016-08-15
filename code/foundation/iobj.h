@@ -17,7 +17,7 @@ typedef struct iobj {
     struct iobj *next;      /* next object in cache */
     ithis xthis;            /* values extends danymics */
     
-    char addr[];
+    char addr[];            /* the address of sub object*/
 }iobj;
     
 /* caculating the offset of real iobj */
