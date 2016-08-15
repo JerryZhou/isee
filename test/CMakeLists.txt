@@ -10,4 +10,4 @@ add_executable(isee-test-foundation ${SRC_LIST}
     ${HEAD_LIST_FOUNDATION} 
     ${HEAD_LIST_APPLICATION} 
     ${HEAD_LIST_GRAPHICS})
-target_link_libraries(isee-test-foundation foundation)
+target_link_libraries(isee-test-foundation foundation pthread)
