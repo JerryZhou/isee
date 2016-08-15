@@ -1,10 +1,10 @@
 
-#include "foundation/imeta.h"
-#include "foundation/imetatypes.h"
-#include "foundation/iobj.h"
-#include "foundation/iobjcache.h"
-#include "foundation/imutex.h"
-#include "foundation/imemory.h"
+#include "foundation/core/imeta.h"
+#include "foundation/core/imetatypes.h"
+#include "foundation/core/iobj.h"
+#include "foundation/core/iobjcache.h"
+#include "foundation/platform/imutex.h"
+#include "foundation/memory/imemory.h"
 
 /* default meta-funcs */
 imetafuncs* _inewdefaultmetafuncs() {

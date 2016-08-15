@@ -1,5 +1,5 @@
 #include "simpletest.h"
-#include "foundation/iatomic.h"
+#include "foundation/platform/iatomic.h"
 
 SP_SUIT(iatomic);
 

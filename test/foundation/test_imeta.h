@@ -1,6 +1,6 @@
 #include "simpletest.h"
-#include "foundation/imetatypes.h"
-#include "foundation/iobjcache.h"
+#include "foundation/core/imetatypes.h"
+#include "foundation/core/iobjcache.h"
 
 // **********************************************************************************
 // imeta

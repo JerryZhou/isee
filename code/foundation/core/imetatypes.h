@@ -1,7 +1,7 @@
 #ifndef _IMETATYPES_H_
 #define _IMETATYPES_H_
 
-#include "foundation/imeta.h"
+#include "foundation/core/imeta.h"
 
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus

@@ -1,6 +1,6 @@
 
 #include "simpletest.h"
-#include "foundation/imemory.h"
+#include "foundation/memory/imemory.h"
 
 // **********************************************************************************
 // imemory

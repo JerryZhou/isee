@@ -1,9 +1,9 @@
 #ifndef _IOBJCACHE_H_
 #define _IOBJCACHE_H_
 
-#include "foundation/imutex.h"
-#include "foundation/imemorystatistics.h"
-#include "foundation/imeta.h"
+#include "foundation/platform/imutex.h"
+#include "foundation/memory/imemorystatistics.h"
+#include "foundation/core/imeta.h"
 
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus

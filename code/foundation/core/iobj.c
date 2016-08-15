@@ -1,6 +1,6 @@
-#include "foundation/iobj.h"
+#include "foundation/core/iobj.h"
+#include "foundation/core/imeta.h"
 #include "foundation/itype.h"
-#include "foundation/imeta.h"
 
 /* get the meta of obj */
 struct imeta *iobjgetmeta(const void *p) {

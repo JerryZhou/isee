@@ -1,5 +1,5 @@
 #include "simpletest.h"
-#include "foundation/imutex.h"
+#include "foundation/platform/imutex.h"
 
 // **********************************************************************************
 // imutex

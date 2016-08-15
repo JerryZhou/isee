@@ -1,4 +1,4 @@
-#include "foundation/iplatform.h"
+#include "foundation/platform/iplatform.h"
 
 #ifdef _WIN32
 #include <windows.h>

@@ -1,7 +1,7 @@
 
 #include "simpletest.h"
-#include "foundation/iobj.h"
-#include "foundation/imetatypes.h"
+#include "foundation/core/iobj.h"
+#include "foundation/core/imetatypes.h"
 
 // **********************************************************************************
 // iobj

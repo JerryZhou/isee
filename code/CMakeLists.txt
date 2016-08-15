@@ -4,9 +4,36 @@
 include_directories(${PROJECT_SOURCE_DIR}/code)
 
 # library foundation
-aux_source_directory(${PROJECT_SOURCE_DIR}/code/foundation SRC_LIST)
-file(GLOB HEAD_LIST ${PROJECT_SOURCE_DIR}/code/foundation/*.h)
-add_library(foundation STATIC ${SRC_LIST} ${HEAD_LIST})
+file(GLOB SOURCE_FILES_ 
+    ${PROJECT_SOURCE_DIR}/code/foundation/*.h
+	${PROJECT_SOURCE_DIR}/code/foundation/*.inl 
+	${PROJECT_SOURCE_DIR}/code/foundation/*.c)
+source_group("" FILES ${SOURCE_FILES_})
+
+file(GLOB SOURCE_FILES_CORE 
+    ${PROJECT_SOURCE_DIR}/code/foundation/core/*.h
+	${PROJECT_SOURCE_DIR}/code/foundation/core/*.inl 
+	${PROJECT_SOURCE_DIR}/code/foundation/core/*.c)
+source_group("core" FILES ${SOURCE_FILES_CORE})
+
+file(GLOB SOURCE_FILES_MEMORY 
+    ${PROJECT_SOURCE_DIR}/code/foundation/memory/*.h
+ 	${PROJECT_SOURCE_DIR}/code/foundation/memory/*.inl 
+	${PROJECT_SOURCE_DIR}/code/foundation/memory/*.c)
+source_group("memory" FILES ${SOURCE_FILES_MEMORY})
+
+file(GLOB SOURCE_FILES_PLATFORM 
+    ${PROJECT_SOURCE_DIR}/code/foundation/platform/*.h 
+	${PROJECT_SOURCE_DIR}/code/foundation/platform/*.inl 
+	${PROJECT_SOURCE_DIR}/code/foundation/platform/*.c)
+source_group("platform" FILES ${SOURCE_FILES_PLATFORM})
+
+add_library(foundation STATIC 
+    ${SOURCE_FILES_}
+    ${SOURCE_FILES_CORE}
+    ${SOURCE_FILES_MEMORY}
+    ${SOURCE_FILES_PLATFORM}
+    )
 
 # library application
 # aux_source_directory(${PROJECT_SOURCE_DIR}/code/application SRC_LIST)

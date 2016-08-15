@@ -1,5 +1,5 @@
 #include "simpletest.h"
-#include "foundation/imemorystatistics.h"
+#include "foundation/memory/imemorystatistics.h"
 
 // **********************************************************************************
 // imemorystatistics

@@ -1,4 +1,4 @@
-#include "foundation/imutex.h"
+#include "foundation/platform/imutex.h"
 
 #ifdef WIN32
 #include <windows.h>

@@ -1,4 +1,4 @@
-#include "foundation/iatomic.h"
+#include "foundation/platform/iatomic.h"
 
 #ifdef WIN32
 #include <windows.h>

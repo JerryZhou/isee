@@ -1,6 +1,6 @@
-#include "foundation/iobjcache.h"
-#include "foundation/imemory.h"
-#include "foundation/iobj.h"
+#include "foundation/core/iobjcache.h"
+#include "foundation/core/iobj.h"
+#include "foundation/memory/imemory.h"
 
 /* make some salt in objcache */
 #define _IOBJCACHE_CLS_SALT 0xefeefe

@@ -1,4 +1,4 @@
-#include "foundation/imemorystatistics.h"
+#include "foundation/memory/imemorystatistics.h"
 
 /* memory-behavior: alloc */
 void imemorystatisbehavior_alloc(imemorystatistics *statis, size_t size) {
