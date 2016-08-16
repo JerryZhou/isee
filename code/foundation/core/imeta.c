@@ -12,6 +12,8 @@
 #include "foundation/core/iwref.h"
 #include "foundation/container/irefcache.h"
 #include "foundation/container/ireflist.h"
+#include "foundation/container/iarray.h"
+#include "foundation/container/islice.h"
 
 /* default meta-funcs */
 imetafuncs* _inewdefaultmetafuncs(imeta *meta, const imetaconfig *config) {
@@ -40,12 +42,11 @@ static imeta __g_all_metas[EnumMetaTypeIndex_imax+IMaxMetaCountForUser+1];
 #define __ideclaremetapart(type, cap, constructor, destructor) __ideclaremetafull(type, cap, NULL, constructor, destructor, NULL, NULL)
 #define __ideclaremetacapacity(type, cap) __ideclaremetapart(type, cap, NULL, NULL)
 #define __ideclaremeta(type) __ideclaremetacapacity(type, 0)
-static imetaconfig __g_all_meta_configs[EnumMetaTypeIndex_imax+1] = {
+static imetaconfig __g_all_meta_configs[EnumMetaTypeIndex_imax] = {
     __iallmeta,
-    __ideclaremeta(imeta),
 };
 /* current meta index */
-static volatile int __g_meta_index = EnumMetaTypeIndex_imax+1;
+static volatile int __g_meta_index = EnumMetaTypeIndex_imax;
 /* gen a index for user meta */
 static int _imeta_gen_index() {
     return __g_meta_index++;
@@ -75,7 +76,7 @@ static void _imeta_init(imeta *meta, int index) {
         /* set the meta-index */
         meta->index = index;
         /* internal types */
-        if (index<=EnumMetaTypeIndex_imax) {
+        if (index<EnumMetaTypeIndex_imax) {
             /* fetch the config for meta */
             const imetaconfig *config = &__g_all_meta_configs[index];
             /* init the inernal type-meta */

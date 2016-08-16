@@ -33,7 +33,10 @@ __ideclaremeta(iref),\
 __ideclaremeta(iwref),\
 __ideclaremetapart(irefcache, 0, NULL, irefcache_destructor),\
 __ideclaremetapart(irefjoint, 0, NULL, irefjoint_destructor),\
-__ideclaremetapart(ireflist, 0, NULL, ireflist_destructor)
+__ideclaremetapart(ireflist, 0, NULL, ireflist_destructor),\
+__ideclaremetapart(iarray, 1000, NULL, iarray_destructor),\
+__ideclaremetapart(islice, 1000, NULL, islice_destructor),\
+__ideclaremeta(imeta)
 
 
 /* all meta-indexs */
