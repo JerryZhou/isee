@@ -7,22 +7,22 @@
 /* iarray: iref                                              */
 /*************************************************************/
 
-/* 内置的整数数组 */
+/* array-int */
 iarray* iarraymakeint(size_t capacity);
 
-/* 浮点数组 */
+/* array-ireal */
 iarray* iarraymakeireal(size_t capacity);
 
-/* int64 数组*/
+/* array-int64 */
 iarray* iarraymakeint64(size_t capacity);
 
-/* char 数组*/
+/* array-char */
 iarray* iarraymakechar(size_t capacity);
 
 /* get entry */
 const iarrayentry* iarrayentryget(int type);
 
-/* 用来告知 对象的坐标发生变化 */
+/* tracing the index change in array with ref */
 typedef void (*irefarray_index_change) (iarray *arr, iref *ref, int index);
 
 /* append to iarray with iref entry */
@@ -30,14 +30,13 @@ typedef struct irefarrayentry {
     irefarray_index_change indexchange;
 } irefarrayentry;
 
-/* 内置的引用数组 */
+/* array-iref */
 iarray* iarraymakeiref(size_t capacity);
 
-/* 内置的引用数组 */
+/* array-iref tracing the indexing change */
 iarray* iarraymakeirefwithentry(size_t capacity, const irefarrayentry *refentry);
 
-
-/* 辅助宏，获取*/
+/* macro: indexing */
 #define iarrayof(arr, type, i) (((type *)iarrayat(arr, i))[0])
 
 /* Helper-Macro: For-Earch in c89 */
