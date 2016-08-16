@@ -21,6 +21,9 @@ extern "C" {
     
 /* this pointer */
 typedef void* ithis;
+
+/* default name with 32 bits */
+typedef char iname[32];
     
 /* flag operators */
 #define iflag_add(value, state) value |= state
