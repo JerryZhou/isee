@@ -22,6 +22,7 @@ typedef struct iobj {
     
 /* caculating the offset of real iobj */
 #define __iobj(p) ((p) ? (iobj*)((char*)(p) - sizeof(iobj)) : NULL)
+#define __irobj(o) ((o) ? (o)->addr : NULL)
 
 /* get the meta of obj */
 struct imeta *iobjgetmeta(const void *p);
