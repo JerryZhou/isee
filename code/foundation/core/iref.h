@@ -11,47 +11,48 @@ extern "C" {
 /* declare the iref-sub struct */
 #define irefdeclare \
     volatile uint32_t _ref; \
-    volatile struct iwref * _wref; \
-    struct irefcache* _cache; \
-    ientryconstructor _constructor; \
-    ientrydestructor _destructor; \
-    ientrywatch _watch
-    
+    volatile struct iwref * _wref;\
+    struct iwref * _watcher
+
 /* iref cast target */
 #define icast(type, v) ((type*)(v))
 /* cast to iref */
 #define irefcast(v) icast(iref, v)
+/* iobj cast to iref */
+#define __iref(o) irefcast(__irobj(o))
     
 /* forward declares */
 struct iref;
-struct irefcache;
 struct iwref;
+struct irefwatcher;
     
-/* iref constructor */
-typedef void (*ientryconstructor)(struct iref* ref);
-
-/* iref destructor */
-typedef void (*ientrydestructor)(struct iref* ref);
-
 /* iref watcher: call when deref */
-typedef void (*ientrywatch)(struct iref* ref);
+typedef void (*ientrywatch)(struct irefwatcher *watcher, struct iref *ref);
+
+/* declare the watcher */
+#define irefwatcherdeclare \
+    irefdeclare;\
+    ientrywatch watch
+    
+/* watch the iref */
+typedef struct irefwatcher {
+    irefwatcherdeclare;
+}irefwatcher;
+   
 
 /* basic iref-struct */
 typedef struct iref {
     irefdeclare;
 }iref;
 
-/* store details in imeta xthis */
-typedef struct irefmeta {
-    struct irefcache *cache;
-    ientrywatch watch;
-}irefmeta;
-
 /* retain the reference */
 int irefretain(iref *ref);
 
 /* release the reference */
 void irefrelease(iref *ref);
+    
+/* return the ref self and retain it */
+iref *irefassistretain(iref *ref);
 
 /* macro wrap for irefretain */
 #define iretain(p) do { if(p) irefretain((iref*)(p)); } while(0)

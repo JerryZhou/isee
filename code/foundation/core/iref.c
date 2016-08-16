@@ -16,6 +16,7 @@ int irefretain(iref *ref) {
 /* release reference */
 void irefrelease(iref *ref) {
     /* no any ref, do destrctor */
+    irefwatcher *watcher = NULL;
 #if iithreadsafe
     if (iatomicdecrement(&ref->_ref) == 0) {
 #else
@@ -29,20 +30,26 @@ void irefrelease(iref *ref) {
                 ref->_wref = NULL;
             }
             /* notify the watcher */
-            if (ref->_watch) {
-                ref->_watch(ref);
+            watcher = icast(irefwatcher, iwrefstrong(ref->_watcher));
+            if (watcher) {
+                /* watch ref change */
+                watcher->watch(watcher, ref);
+                /* release the watcher */
+                irelease(watcher);
             }
             if (ref->_ref != 0) {
                 break;
             }
-            /* release resources */
-            if (ref->_destructor) {
-                ref->_destructor(ref);
-            }else {
-                /* just release memory */
-                iobjfree(ref);
-            }
+            
+            /*call constructor and release the memory */
+            iobjfree(ref);
             break;
         }
     }
+}
+
+/* return the ref self and retain it */
+iref *irefassistretain(iref *ref) {
+    iretain(ref);
+    return ref;
 }

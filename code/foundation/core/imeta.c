@@ -9,6 +9,8 @@
 /******************************************/
 /* all internal types should declare here */
 #include "foundation/core/iref.h"
+#include "foundation/core/iwref.h"
+#include "foundation/core/irefcache.h"
 
 /* default meta-funcs */
 imetafuncs* _inewdefaultmetafuncs(imeta *meta, const imetaconfig *config) {
@@ -102,6 +104,7 @@ int imetaregisterwithcapacity(const char* name, size_t size, size_t capacity) {
     return imetaregisterwithconfig(&config);
 }
 
+/* register a type with config, return the meta-index */
 int imetaregisterwithconfig(const imetaconfig *config) {
     int index = _imeta_gen_index();
     imeta *meta = &__g_all_metas[index];

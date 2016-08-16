@@ -29,7 +29,10 @@ extern "C" {
 #define __iallmeta                            \
 __ideclaremeta(iobj),\
 __ideclaremeta(iobjcache),\
-__ideclaremeta(iref)
+__ideclaremeta(iref),\
+__ideclaremeta(iwref),\
+__ideclaremeta(irefcache)
+
 
 /* all meta-indexs */
 typedef enum EnumMetaTypeIndex {
