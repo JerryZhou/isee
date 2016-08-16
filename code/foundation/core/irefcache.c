@@ -82,7 +82,7 @@ void irefcachefree(irefcache *cache) {
     /* should clear the capacity before remove all cached refs */
     cache->capacity = 0;
     /* release all cached object */
-    ireflistfree(cache->cache);
+    irelease(cache->cache);
     /* release self */
     irelease(cache);
 }

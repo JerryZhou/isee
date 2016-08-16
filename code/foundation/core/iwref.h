@@ -9,7 +9,7 @@
 extern "C" {
 #endif
     
-/* 弱引用: we can do operators as iref: iretain; irelease; iassign */
+/* weak reference: we can do operators as iref: iretain; irelease; iassign */
 /* the iwref not thread safe: only use iwref in one thread context */
 typedef struct iwref {
     irefdeclare;

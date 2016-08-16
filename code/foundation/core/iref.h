@@ -2,6 +2,7 @@
 #define _IREF_H_
 
 #include "foundation/itype.h"
+#include "foundation/core/iobj.h"
 
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus

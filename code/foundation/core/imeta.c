@@ -11,6 +11,7 @@
 #include "foundation/core/iref.h"
 #include "foundation/core/iwref.h"
 #include "foundation/core/irefcache.h"
+#include "foundation/core/ireflist.h"
 
 /* default meta-funcs */
 imetafuncs* _inewdefaultmetafuncs(imeta *meta, const imetaconfig *config) {
