@@ -28,11 +28,18 @@ file(GLOB SOURCE_FILES_PLATFORM
 	${PROJECT_SOURCE_DIR}/code/foundation/platform/*.c)
 source_group("platform" FILES ${SOURCE_FILES_PLATFORM})
 
+file(GLOB SOURCE_FILES_CONTAINER 
+    ${PROJECT_SOURCE_DIR}/code/foundation/container/*.h 
+	${PROJECT_SOURCE_DIR}/code/foundation/container/*.inl 
+	${PROJECT_SOURCE_DIR}/code/foundation/container/*.c)
+source_group("container" FILES ${SOURCE_FILES_CONTAINER})
+
 add_library(foundation STATIC 
     ${SOURCE_FILES_}
     ${SOURCE_FILES_CORE}
     ${SOURCE_FILES_MEMORY}
     ${SOURCE_FILES_PLATFORM}
+    ${SOURCE_FILES_CONTAINER}
     )
 
 # library application

@@ -1,4 +1,4 @@
-#include "foundation/core/ireflist.h"
+#include "foundation/container/ireflist.h"
 #include "foundation/core/imetatypes.h"
 
 /* macro: list operators */

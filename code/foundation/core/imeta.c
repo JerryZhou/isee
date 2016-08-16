@@ -10,8 +10,8 @@
 /* all internal types should declare here */
 #include "foundation/core/iref.h"
 #include "foundation/core/iwref.h"
-#include "foundation/core/irefcache.h"
-#include "foundation/core/ireflist.h"
+#include "foundation/container/irefcache.h"
+#include "foundation/container/ireflist.h"
 
 /* default meta-funcs */
 imetafuncs* _inewdefaultmetafuncs(imeta *meta, const imetaconfig *config) {

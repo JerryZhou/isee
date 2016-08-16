@@ -1,7 +1,7 @@
 #ifndef _IREFCACHE_H_
 #define _IREFCACHE_H_
 #include "foundation/core/iref.h"
-#include "foundation/core/ireflist.h"
+#include "foundation/container/ireflist.h"
 
 /* ref constructor */
 typedef iref* (*icachenewentry)();
