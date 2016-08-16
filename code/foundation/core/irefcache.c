@@ -2,6 +2,11 @@
 #include "foundation/core/iwref.h"
 #include "foundation/core/imetatypes.h"
 
+void irefcache_destructor(ithis x, iobj *o) {
+    irefcache *cache = icast(irefcache, __iref(o));
+    irefcacheclear(cache);
+}
+
 /* the call back for ref change */
 static void _ientrywatch_cache(irefwatcher *watcher, iref *ref) {
     irefcache *cache = icast(irefcache, watcher);

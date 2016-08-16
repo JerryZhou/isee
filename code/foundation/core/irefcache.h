@@ -26,6 +26,9 @@ typedef struct irefcache{
     icacheaddentry whenadd;
 }irefcache;
 
+/* irefcache release all the memory */
+void irefcache_destructor(ithis x, iobj *o);
+
 /* make a ref cache with capacity */
 irefcache *irefcachemake(size_t capacity, icachenewentry newentry);
 

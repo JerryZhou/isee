@@ -31,7 +31,7 @@ __ideclaremeta(iobj),\
 __ideclaremeta(iobjcache),\
 __ideclaremeta(iref),\
 __ideclaremeta(iwref),\
-__ideclaremeta(irefcache),\
+__ideclaremetapart(irefcache, 0, NULL, irefcache_destructor),\
 __ideclaremetapart(irefjoint, 0, NULL, irefjoint_destructor),\
 __ideclaremetapart(ireflist, 0, NULL, ireflist_destructor)
 
