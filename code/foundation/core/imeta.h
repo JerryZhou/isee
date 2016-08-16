@@ -13,19 +13,19 @@ extern "C" {
 struct imeta;
 struct iobj;
     
-/* tracing the iobj alloc */
-typedef void (*ientryobjconstructor)(ithis i, struct imeta *meta, struct iobj *obj);
-/* tracing the iobj free */
-typedef void (*ientryobjdestructor)(ithis i, struct imeta *meta, struct iobj *obj);
+/* tracing the iobj alloc: i default point to struct imetafuncs  */
+typedef void (*ientryobjconstructor)(ithis i, struct iobj *obj);
+/* tracing the iobj free: i default point to struct imetafuncs */
+typedef void (*ientryobjdestructor)(ithis i, struct iobj *obj);
     
-/* make all iobj has the hash values */
-typedef int (*ientryobjhash)(ithis i, struct imeta *meta, struct iobj *obj);
-/* make all iobj can be compare with each other */
-typedef int (*ientryobjcompare)(ithis i, struct imeta *meta, struct iobj *lfs, struct iobj *rfs);
+/* make all iobj has the hash values: i default point to struct imetafuncs */
+typedef int (*ientryobjhash)(ithis i, struct iobj *obj);
+/* make all iobj can be compare with each other: i default point to struct imetafuncs  */
+typedef int (*ientryobjcompare)(ithis i, struct iobj *lfs, struct iobj *rfs);
     
-/* entry for calloc iobj */
+/* entry for calloc iobj: i default point to struct iobjcache */
 typedef void* (*ientryobjcalloc)(ithis i, struct imeta *meta); /* alloc the iobj */
-/* entry for free iobj */
+/* entry for free iobj: i default point to struct iobjcache */
 typedef void (*ientryobjfree)(ithis i, void *ptr); /* free the iobj */
     
 /* all internal meta-config informations */
