@@ -15,12 +15,11 @@ SP_CASE(imeta, imetaget) {
 
 int _buf_meta_index = 0;
 SP_CASE(imeta, imetaregister) {
-    _buf_meta_index = imetaregister("--buf--", 100, 1);
+    _buf_meta_index = imetaregisterwithcapacity("--buf--", 100, 1);
     SP_TRUE(_buf_meta_index > 0);
     imeta *meta = imetaget(_buf_meta_index);
     SP_TRUE(meta != NULL);
     SP_TRUE(meta->size == 100);
-    SP_TRUE(meta->capacity == 1);
     
     iobjcache *cache = iobjcacheget(meta);
     SP_TRUE(cache->capacity == 1);

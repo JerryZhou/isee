@@ -47,8 +47,8 @@ iobj *_imetadirectalloc(iobjcache *xthis, imeta *meta) {
     _imeta_global_unlock;
     
     /* tracing */
-    if (meta->funcs && meta->funcs->tracecalloc) {
-        meta->funcs->tracecalloc((ithis)xthis, meta, obj);
+    if (meta->funcs && meta->funcs->constructor) {
+        meta->funcs->constructor((ithis)xthis, meta, obj);
     }
     
     return obj;
@@ -60,8 +60,8 @@ void _imetadirectfree(iobjcache *xthis, iobj *obj) {
     size_t newsize = obj->meta->size + sizeof(iobj);
     
     /* tracing the free */
-    if (meta->funcs && meta->funcs->tracefree) {
-        meta->funcs->tracefree((ithis)xthis, meta, obj);
+    if (meta->funcs && meta->funcs->destructor) {
+        meta->funcs->destructor((ithis)xthis, meta, obj);
     }
     
     /* meta-statis */

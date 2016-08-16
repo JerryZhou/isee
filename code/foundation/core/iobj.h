@@ -15,7 +15,7 @@ struct imeta;
 typedef struct iobj {
     struct imeta *meta;     /* description of iobj */
     struct iobj *next;      /* next object in cache */
-    ithis xthis;            /* values extends danymics */
+    ithis othis;            /* store the self-explain instance, values extends danymics */
     
     char addr[];            /* the address of sub object*/
 }iobj;
@@ -27,6 +27,12 @@ typedef struct iobj {
 struct imeta *iobjgetmeta(const void *p);
 /* if the obj is what we required */
 int iobjistype(const void *p, const char* name);
+    
+/* include imetatypes.h */
+#define iobjmalloc(type) ((type*)imetacalloc(imetaof(type)))
+#define iobjfree(p) do { imetafree(p); p = NULL; } while(0)
+/* quickly type-compare */
+#define iistype(p, type) (iobjgetmeta(p) == imetaof(type))
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

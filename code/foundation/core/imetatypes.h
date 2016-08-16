@@ -1,6 +1,7 @@
 #ifndef _IMETATYPES_H_
 #define _IMETATYPES_H_
 
+#include "foundation/core/iobj.h"
 #include "foundation/core/imeta.h"
 
 /* Set up for C function definitions, even when using C++ */
@@ -8,8 +9,6 @@
 extern "C" {
 #endif
 
-/* meta-index */
-#define imetaindex(type) imeta_##type##_index
 /* meta-registing with cache */
 #define iregister(type, capacity) imetaregister(#type, sizeof(type), capacity)
 /* meta-index declare */
@@ -20,14 +19,17 @@ extern "C" {
 #define irealimplementregister(type, capacity) imetaindex(type) = iregister(type, capacity)
 /* meta-index registing in runtime */
 #define iimplementregister(type, capacity) int irealimplementregister(type, capacity)
-/* meta-get by meta-index */
-#define imetaof(type) imetaget(imetaindex(type))
 
 /* declare all the foundation types meta */
-#define __ideclaremeta(type, capacity) imetaindex(type)
+#define __ideclaremeta(type) imetaindex(type)
+#define __ideclaremetacapacity(type, capacity) imetaindex(type)
+#define __ideclaremetapart(type, capacity, constructor, destructor) imetaindex(type)
+#define __ideclaremetafull(type, capacity, constructor, destructor, hash, compare) imetaindex(type)
 
 #define __iallmeta                            \
-__ideclaremeta(iobj, 0)
+__ideclaremeta(iobj),\
+__ideclaremeta(iobjcache),\
+__ideclaremeta(iref)
 
 /* all meta-indexs */
 typedef enum EnumMetaTypeIndex {
@@ -37,12 +39,6 @@ typedef enum EnumMetaTypeIndex {
 
 /* support IMaxMetaCountForUser user define meta-type */
 #define IMaxMetaCountForUser 512
-    
-/* include imetatypes.h */
-#define iobjmalloc(type) ((type*)imetacalloc(imetaof(type)))
-#define iobjfree(p) do { imetafree(p); p = NULL; } while(0)
-/* quickly type-compare */
-#define iistype(p, type) (iobjgetmeta(p) == imetaof(type))
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
