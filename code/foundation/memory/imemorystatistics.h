@@ -16,7 +16,8 @@ typedef struct imemorystatistics {
 }imemorystatistics;
     
 /*Hepler Macro for log*/
-#define __istatis_format "alloc: %9lld, free: %9lld, hold: %9lld"
+/*http://stackoverflow.com/questions/6299083/cross-platform-printing-of-64-bit-integers-with-printf*/
+#define __istatis_format "alloc: %9"PRId64", free: %9"PRId64", hold: %9"PRId64""
 #define __istatis_value(statis) (statis)->alloced,(statis)->freed,(statis)->current
 
 /* memory-behavior: alloc */

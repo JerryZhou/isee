@@ -21,7 +21,7 @@ extern "C" {
 /* macosx, linux */
 #define iimplementapplication() \
     int ISeeMain(const icmdarg * arg); \
-    int __cdecl main(int argc, const char** argv) { \
+    int main(int argc, const char** argv) { \
         icmdarg *arg = icmdargmake(argc, argv);\
         return ISeeMain(arg);\
     }
