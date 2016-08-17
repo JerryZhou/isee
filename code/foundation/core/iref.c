@@ -4,6 +4,13 @@
 #include "foundation/core/imeta.h"
 #include "foundation/platform/iatomic.h"
 
+/* make a new iref with meta-index */
+iref* irefmalloc(int index) {
+    imeta *meta = imetaget(index);
+    iref *ref = (iref*)(imetacalloc(meta));
+    return irefassistretain(ref);
+}
+
 /* add reference */
 int irefretain(iref *ref) {
 #if iithreadsafe

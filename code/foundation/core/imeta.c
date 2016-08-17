@@ -14,6 +14,7 @@
 #include "foundation/container/ireflist.h"
 #include "foundation/container/iarray.h"
 #include "foundation/container/islice.h"
+#include "foundation/util/icmdarg.h"
 
 /* default meta-funcs */
 imetafuncs* _inewdefaultmetafuncs(imeta *meta, const imetaconfig *config) {

@@ -46,6 +46,9 @@ typedef struct iref {
     irefdeclare;
 }iref;
 
+/* make a new iref with meta-index */
+iref* irefmalloc(int index);
+
 /* retain the reference */
 int irefretain(iref *ref);
 
@@ -63,6 +66,9 @@ iref *irefassistretain(iref *ref);
 
 /* macro wrap for irefretain and irefrelease */
 #define iassign(dst, src) do { if(src != dst) { irelease(dst); iretain(src); dst = src; } } while(0)
+   
+/* macro wrap a ref-sub-type new: will retain it */
+#define irefnew(type) ((type*)irefmalloc(imetaindex(type)))
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
