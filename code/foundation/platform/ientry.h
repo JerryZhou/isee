@@ -8,6 +8,12 @@
 extern "C" {
 #endif
     
+/*
+ * https://msdn.microsoft.com/en-us/library/k2b2ssfy(v=vs.80).aspx
+ * windows: visual-studio,  __cdecl, __stdcall, __fastcall
+ * linux: gcc,  __attribute__(__cdecl)
+ */
+    
 /* platform application entry */
 #ifdef WIN32
 /* windows */
