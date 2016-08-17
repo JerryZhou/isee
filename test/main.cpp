@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "simpletest.h"
-
+#include "foundation/platform/ientry.h"
 #include "foundation/test_iobj.h"
 #include "foundation/test_iobjcache.h"
 #include "foundation/test_imemorystatistic.h"
@@ -11,11 +11,10 @@
 #include "foundation/test_imutex.h"
 #include "foundation/test_iatomic.h"
 
-int main(int argc, const char* argv[]) {
-    int n;
-    for (n=0; n<argc; ++n) {
-        printf("args[%d]=%s%s", n, argv[n], (n!=argc-1?", ":"\n"));
-    }
+iimplementapplication();
+
+int ISeeMain(const icmdarg *arg) {
+    iunused(arg);
     runAllTest();
     return 0;
 }
