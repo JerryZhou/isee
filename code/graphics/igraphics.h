@@ -7,9 +7,9 @@ typedef struct igraphicscontext {
     irefdeclare;
 }igraphicscontext;
 
-typedef struct imodel {
+typedef struct imesh {
     irefdeclare;
-} imodel;
+} imesh;
 
 typedef struct itexture {
     irefdeclare;
