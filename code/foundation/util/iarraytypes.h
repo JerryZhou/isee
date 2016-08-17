@@ -2,6 +2,12 @@
 #define _IARRAYTYPES_H_
 #include "foundation/container/iarray.h"
 
+
+/* Set up for C function definitions, even when using C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /*************************************************************/
 /* iarray: int, ireal, int64, char,                          */
 /* iarray: iref                                              */
@@ -62,5 +68,11 @@ do { \
 /* Helper-Macro: For-Earch in cplusplus */
 #define irangearray(arr, type, wrap) \
     irangearrayin(arr, type, 0, iarraylen(arr), wrap)
+    
+/* Ends C function definitions when using C++ */
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif

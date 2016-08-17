@@ -3,6 +3,11 @@
 
 #include "foundation/container/iarray.h"
 
+/* Set up for C function definitions, even when using C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /*make the slice be a string or heap*/
 typedef enum EnumSliceFlag {
     EnumSliceFlag_String = 1<<3,
@@ -126,6 +131,11 @@ do {\
 
 /* Helper-Macro: For-Each in cplusplus*/
 #define irangeslice(slice, type, wrap) \
-irangeslicein(slice, type, 0, islicelen(slice), wrap)
+    irangeslicein(slice, type, 0, islicelen(slice), wrap)
+    
+/* Ends C function definitions when using C++ */
+#ifdef __cplusplus
+}
+#endif
 
 #endif

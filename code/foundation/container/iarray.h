@@ -3,6 +3,12 @@
 
 #include "foundation/core/iref.h"
 
+
+/* Set up for C function definitions, even when using C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /* forward declares */
 struct iarray;
 
@@ -131,5 +137,10 @@ void iarrayforeach(const iarray *arr, iarray_entry_visitor visitor);
 
 /* macro: indexing */
 #define __arr_i(arr, i) ((void*)((arr)->buffer + (i) * (arr)->entry->size))
+    
+/* Ends C function definitions when using C++ */
+#ifdef __cplusplus
+}
+#endif
 
 #endif

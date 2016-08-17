@@ -2,6 +2,11 @@
 #define _ISTRING_H_
 #include "foundation/container/islice.h"
 
+/* Set up for C function definitions, even when using C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 typedef islice* istring;
 
 /* declare the string in stack, no need to free */
@@ -83,5 +88,9 @@ int istringatoi(const istring s);
  */
 double istringatof(const istring s);
 
+/* Ends C function definitions when using C++ */
+#ifdef __cplusplus
+}
+#endif
 
 #endif

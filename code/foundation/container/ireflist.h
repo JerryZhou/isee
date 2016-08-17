@@ -4,6 +4,11 @@
 #include "foundation/core/iref.h"
 #include "foundation/core/iwref.h"
 
+/* Set up for C function definitions, even when using C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /* ireflist-joint */
 typedef struct irefjoint {
     irefdeclare;
@@ -86,5 +91,10 @@ irefjoint* ireflistremove(ireflist *list, iref *value);
 /* remove all of joints in the list */
 void ireflistremoveall(ireflist *list);
 
+    
+/* Ends C function definitions when using C++ */
+#ifdef __cplusplus
+}
+#endif
 
 #endif

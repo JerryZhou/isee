@@ -4,6 +4,11 @@
 #include "foundation/core/iref.h"
 #include "foundation/util/istring.h"
 
+/* Set up for C function definitions, even when using C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /* wrap the cmd arguments */
 typedef struct icmdarg {
     irefdeclare;
@@ -21,6 +26,11 @@ icmdarg *icmdargmakeby(const char* origin);
 /* for win32 */
 #ifdef WIN32
 icmdarg *icmdargmakewin32(LPSTR str);
+#endif
+    
+/* Ends C function definitions when using C++ */
+#ifdef __cplusplus
+}
 #endif
 
 #endif

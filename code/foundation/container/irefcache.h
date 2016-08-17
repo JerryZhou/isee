@@ -3,6 +3,12 @@
 #include "foundation/core/iref.h"
 #include "foundation/container/ireflist.h"
 
+
+/* Set up for C function definitions, even when using C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /* ref constructor */
 typedef iref* (*icachenewentry)();
 
@@ -51,5 +57,11 @@ size_t irefcachesize(irefcache *cache);
 #define icache(cache, type) ((type*)irefcachepoll(cache))
 /* macro: put */
 #define icacheput(cache, ref) irefcachepush(cache, (iref*)(ref))
+    
+/* Ends C function definitions when using C++ */
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif

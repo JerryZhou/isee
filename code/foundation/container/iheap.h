@@ -3,6 +3,11 @@
 
 #include "foundation/container/iarray.h"
 
+/* Set up for C function definitions, even when using C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /*a heap is a array */
 typedef iarray iheap;
 
@@ -30,5 +35,11 @@ void iheapdelete(iheap *heap, int index);
 
 /* heap-sort */
 void iarraysortheap(iarray *arr, int start, int end);
+    
+/* Ends C function definitions when using C++ */
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif
