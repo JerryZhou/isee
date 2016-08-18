@@ -16,6 +16,10 @@
 #include "foundation/container/islice.h"
 #include "foundation/util/icmdarg.h"
 
+
+/******************************************/
+#include "foundation/core/imeta.define.inl"
+
 /* default meta-funcs */
 imetafuncs* _inewdefaultmetafuncs(imeta *meta, const imetaconfig *config) {
     imetafuncs *funcs = icalloc(1, sizeof(imetafuncs));
@@ -34,15 +38,6 @@ imetaallocator* _inewdefaultmetaallocator(imeta *meta, const imetaconfig *config
 
 /* all internal types-meta */
 static imeta __g_all_metas[EnumMetaTypeIndex_imax+IMaxMetaCountForUser+1];
-#undef __ideclaremeta
-#undef __ideclaremetacapacity
-#undef __ideclaremetapart
-#undef __ideclaremetafull
-/* name, size, capacity, mthis, constructor, destructor, hash, compare */
-#define __ideclaremetafull(type, cap, mthis, constructor, destructor, hash, compare) {#type, sizeof(type), cap, mthis, constructor, destructor, hash, compare }
-#define __ideclaremetapart(type, cap, constructor, destructor) __ideclaremetafull(type, cap, NULL, constructor, destructor, NULL, NULL)
-#define __ideclaremetacapacity(type, cap) __ideclaremetapart(type, cap, NULL, NULL)
-#define __ideclaremeta(type) __ideclaremetacapacity(type, 0)
 static imetaconfig __g_all_meta_configs[EnumMetaTypeIndex_imax] = {
     __iallmeta,
 };

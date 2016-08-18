@@ -10,15 +10,26 @@ extern "C" {
 #endif
 
 /* meta-registing with cache */
-#define iregister(type, capacity) imetaregister(#type, sizeof(type), capacity)
+#define iregister(type, capacity) imetaregisterwithcapacity(#type, sizeof(type), capacity)
 /* meta-index declare */
 #define irealdeclareregister(type) int imetaindex(type)
 /* meta-index extern declare */
 #define iideclareregister(type) extern irealdeclareregister(type)
 /* meta-index registing */
 #define irealimplementregister(type, capacity) imetaindex(type) = iregister(type, capacity)
+#define irealimplementregisterfull(type, xcapacity, xconstructor, xdestructor, xhash, xcompare) \
+    config.name = #type; config.size=sizeof(type); config.capacity=xcapacity; \
+    config.constructor = xconstructor; config.destructor=xdestructor;\
+    config.hash = xhash; config.compare = xcompare;\
+    imetaindex(type) = imetaregisterwithconfig(&config)
 /* meta-index registing in runtime */
 #define iimplementregister(type, capacity) int irealimplementregister(type, capacity)
+
+/* declare all the types for user defines */
+#define __iudeclaremeta(type) iideclareregister(type)
+#define __iudeclaremetacapacity(type, capacity) iideclareregister(type)
+#define __iudeclaremetapart(type, capacity, constructor, destructor) iideclareregister(type)
+#define __iudeclaremetafull(type, capacity, constructor, destructor, hash, compare) iideclareregister(type)
 
 /* declare all the foundation types meta */
 #define __ideclaremeta(type) imetaindex(type)
