@@ -13,6 +13,7 @@ extern "C" {
 #define irefdeclare \
     volatile uint32_t _ref; \
     volatile struct iwref * _wref;\
+    ithis _rthis; \
     struct iwref * _watcher
 
 /* iref cast target */
@@ -69,6 +70,9 @@ iref *irefassistretain(iref *ref);
    
 /* macro wrap a ref-sub-type new: will retain it */
 #define irefnew(type) ((type*)irefmalloc(imetaindex(type)))
+    
+/* get the private pointer */
+#define irefthis(type, ref) icast(type, (ref)->_rthis)
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
