@@ -85,7 +85,7 @@ typedef unsigned char ibool;
 #define ilog(...) printf(__VA_ARGS__)
 
 /* 精度 */
-typedef double ireal;
+typedef float ireal;
     
 /* real default epsilon */
 #define iepsilon 0.1e-6
