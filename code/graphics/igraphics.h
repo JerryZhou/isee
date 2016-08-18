@@ -118,10 +118,6 @@ int igraphicsappisexit(igraphicsapp *app);
 int igraphicsapploop(igraphicsapp *app);
 
 
-typedef struct igraphicscontext {
-    irefdeclare;
-}igraphicscontext;
-
 typedef struct imesh {
     irefdeclare;
 } imesh;
@@ -134,8 +130,25 @@ typedef struct ishader {
     irefdeclare;
 }ishader;
 
+/* shader destructor  */
+void ishader_destructor(ithis x, iobj *o);
+
+/* create shader */
+ishader *ishadercreate(const char* vs, const char* fs);
+
+/* make current shader-program */
+int ishaderuse(ishader *shader);
+
+/* get uniform location */
+int ishadergetuniformloc(ishader *shader, const char* name);
+
+/* get the attri location */
+int ishadergetattriloc(ishader *shader, const char* name);
+
 #define __iallmeta_graphics \
     __iudeclaremeta(iwindow);\
+    __iudeclaremeta(ishader);\
+    __iudeclaremeta(ishader_private);\
     __iudeclaremetapart(igraphicsapp, 0, NULL, igraphicsapp_destructor)
 
 /* declare all the meta-indexs */

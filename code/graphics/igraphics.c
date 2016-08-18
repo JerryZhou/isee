@@ -1,6 +1,7 @@
 #include "graphics/igraphics.h"
 
 #include "glfw/glfw3.h"
+#include "foundation/platform/iplatform.h"
 
 static void error_callback(int error, const char* description)
 {
@@ -87,7 +88,6 @@ void igraphicsappasyncremovewin(igraphicsapp *app, iwindow *win) {
     ireflistremove(app->asyncremoves, irefcast(win));
 }
 
-
 /* exit app */
 int igraphicsappexit(igraphicsapp *app) {
     iflag_add(app->flag, EnumGraphicsAppFlag_Exit);
@@ -135,7 +135,7 @@ int igraphicsapploop(igraphicsapp *app) {
             win = icast(iwindow, joint->value);
            
             /* one-frame */
-            iwindowframe(win, 0);
+            iwindowframe(win, igetcurtick());
             
             /* to next */
             joint = joint->next;
@@ -148,15 +148,6 @@ int igraphicsapploop(igraphicsapp *app) {
     return 0;
 }
 
-/* all graphics types */
-#include "foundation/core/imeta.define.inl"
-__iallmeta_graphics;
-#include "foundation/core/imeta.imp.inl"
-int igraphicsinit() {
-    imetaconfig config;
-    __iallmeta_graphics;
-    return 0;
-}
 
 int igraphicsappisexit(igraphicsapp *app) {
     if(iflag_is(app->flag, EnumGraphicsAppFlag_Exit)) {
@@ -252,4 +243,69 @@ void iwindowswap(iwindow *win) {
     GLFWwindow* glfxwin = (GLFWwindow*)win->wthis;
     
     glfwSwapBuffers(glfxwin);
+}
+
+typedef struct ishader_private {
+    GLuint program;
+}ishader_private;
+
+void ishader_destructor(ithis x, iobj *o) {
+    ishader *shader = icast(ishader, __irobj(o));
+    ishader_private *rthis = irefthis(ishader_private, shader);
+    glDeleteProgram(rthis->program);
+    iobjfree(shader->_rthis);
+}
+
+ishader *ishadercreate(const char* vsource, const char* fsource) {
+    ishader *shader = irefnew(ishader);
+    ishader_private *rthis = iobjmalloc(ishader_private);
+    GLuint vs, fs;
+    
+    vs = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vs, 1, &vsource, NULL);
+    glCompileShader(vs);
+    fs = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fs, 1, &fsource, NULL);
+    glCompileShader(fs);
+    rthis->program = glCreateProgram();
+    glAttachShader(rthis->program, vs);
+    glAttachShader(rthis->program, fs);
+    glLinkProgram(rthis->program);
+    
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+    
+    shader->_rthis = rthis;
+    return shader;
+}
+
+/* make current program actived */
+int ishaderuse(ishader *shader) {
+    ishader_private *rthis = irefthis(ishader_private, shader);
+    glUseProgram(rthis->program);
+    return iiyes;
+}
+
+/* get uniform location */
+int ishadergetuniformloc(ishader *shader, const char* name) {
+    /* todo: cache it */
+    ishader_private *rthis = irefthis(ishader_private, shader);
+    return glGetUniformLocation(rthis->program, name);
+}
+
+/* get the attri location */
+int ishadergetattriloc(ishader *shader, const char* name) {
+    ishader_private *rthis = irefthis(ishader_private, shader);
+    return glGetAttribLocation(rthis->program, name);
+}
+
+
+/* all graphics types */
+#include "foundation/core/imeta.define.inl"
+__iallmeta_graphics;
+#include "foundation/core/imeta.imp.inl"
+int igraphicsinit() {
+    __iudeclare;
+    __iallmeta_graphics;
+    return 0;
 }
