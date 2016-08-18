@@ -1,5 +1,5 @@
 
-link_libraries(foundation application graphics glad glfw)
+link_libraries(foundation application graphics glfw)
 
 include_directories(${PROJECT_SOURCE_DIR}/code)
 include_directories(${PROJECT_SOURCE_DIR}/depends)
