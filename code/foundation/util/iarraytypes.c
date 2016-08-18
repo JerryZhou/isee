@@ -1,6 +1,14 @@
 #include "foundation/util/iarraytypes.h"
 #include "foundation/memory/imemory.h"
 
+#include "foundation/math/ivec.h"
+#include "foundation/math/ipos.h"
+#include "foundation/math/isize.h"
+#include "foundation/math/irect.h"
+#include "foundation/math/icircle.h"
+#include "foundation/math/iline.h"
+#include "foundation/math/iplane.h"
+
 
 /* array-assign */
 static void _iarray_entry_assign_copy(struct iarray *arr,
@@ -239,3 +247,24 @@ iarray* iarraymakeirefwithentry(size_t capacity, const irefarrayentry *refentry)
     arr->userdata = (void*)refentry;
     return arr;
 }
+
+/* implement a copyable array type */
+#define __iimplement_array(type) \
+static const iarrayentry _arr_entry_##type = {\
+    EnumArrayFlagAutoShirk |\
+    EnumArrayFlagKeepOrder |\
+    EnumArrayFlagMemsetZero,\
+    sizeof(type),\
+    _iarray_entry_swap_copy,\
+    _iarray_entry_assign_copy,\
+    NULL,\
+};\
+iarray * iarraymake##type(size_t capacity) {\
+    return iarraymake(capacity, &_arr_entry_##type);\
+}
+
+/* all-array-copyable-types */
+#undef __ideclare_array_copy_type
+#define __ideclare_array_copy_type(type) __iimplement_array(type)
+__iall_array_types
+

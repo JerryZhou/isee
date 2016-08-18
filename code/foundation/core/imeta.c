@@ -15,6 +15,7 @@
 #include "foundation/container/iarray.h"
 #include "foundation/container/islice.h"
 #include "foundation/util/icmdarg.h"
+#include "foundation/math/ipolygon.h"
 
 
 /******************************************/

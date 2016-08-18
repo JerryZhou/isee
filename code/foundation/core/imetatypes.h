@@ -48,6 +48,8 @@ __ideclaremetapart(ireflist, 0, NULL, ireflist_destructor),\
 __ideclaremetapart(iarray, 1000, NULL, iarray_destructor),\
 __ideclaremetapart(islice, 1000, NULL, islice_destructor),\
 __ideclaremeta(icmdarg),\
+__ideclaremetapart(ipolygon3d, 1000, NULL, ipolygon3d_destructor),\
+__ideclaremetapart(ipolygon2d, 1000, NULL, ipolygon2d_destructor),\
 __ideclaremeta(imeta)
 
 

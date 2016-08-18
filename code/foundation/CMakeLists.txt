@@ -40,6 +40,11 @@ file(GLOB SOURCE_FILES_UTIL
 	${PROJECT_SOURCE_DIR}/code/foundation/util/*.c)
 source_group("util" FILES ${SOURCE_FILES_UTIL})
 
+file(GLOB SOURCE_FILES_MATH 
+    ${PROJECT_SOURCE_DIR}/code/foundation/math/*.h 
+	${PROJECT_SOURCE_DIR}/code/foundation/math/*.inl 
+	${PROJECT_SOURCE_DIR}/code/foundation/math/*.c)
+source_group("math" FILES ${SOURCE_FILES_MATH})
 
 add_library(foundation STATIC 
     ${SOURCE_FILES_}
@@ -48,6 +53,7 @@ add_library(foundation STATIC
     ${SOURCE_FILES_PLATFORM}
     ${SOURCE_FILES_CONTAINER}
     ${SOURCE_FILES_UTIL}
+    ${SOURCE_FILES_MATH}
     )
 
 
