@@ -11,3 +11,5 @@
 #define __iudeclaremetapart(type, capacity, constructor, destructor) __iudeclaremetafull(type, capacity, constructor, destructor, NULL, NULL)
 #define __iudeclaremetacapacity(type, capacity) __iudeclaremetapart(type, capacity, NULL, NULL)
 #define __iudeclaremeta(type) __iudeclaremetacapacity(type, 0)
+
+#define __iudeclare imetaconfig config
