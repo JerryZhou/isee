@@ -110,6 +110,16 @@ ivec3 ivec3parallel(const ivec3 *l, const ivec3 *r);
 /* perpendicular, besure r have been normalized */
 ivec3 ivec3perpendicular(const ivec3 *l, const ivec3 *r);
     
+/*************************************************************/
+/* ivec4                                                     */
+/*************************************************************/
+typedef union ivec4 {
+    ireal values[4];
+    struct {
+        ireal x, y, z, w;
+    }v;
+}ivec4;
+    
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
