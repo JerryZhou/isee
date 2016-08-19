@@ -299,6 +299,125 @@ int ishadergetattriloc(ishader *shader, const char* name) {
     return glGetAttribLocation(rthis->program, name);
 }
 
+/* destructor */
+void ilayoutvertex_destructor(ithis x, iobj *o) {
+    ilayoutvertex *layout = icast(ilayoutvertex, __irobj(o));
+    irelease(layout->layouts);
+}
+
+/* make one */
+ilayoutvertex* ilayoutvertexmake() {
+    ilayoutvertex *layout = irefnew(ilayoutvertex);
+    layout->layouts = iarraymakecopyable(12, sizeof(ilayoutdes));
+    return layout;
+}
+
+/* ilayout make with */
+ilayoutvertex* ilayoutvertexmakewith(int layout) {
+    ilayoutvertex* lv = ilayoutvertexmake();
+    ilayoutvertexparse(lv, layout);
+    return lv;
+}
+
+/* layout parse */
+void ilayoutvertexparse(ilayoutvertex *lv, int layout) {
+    int i=0;
+    ilayoutdes *des = NULL;
+    
+    /* clear all */
+    lv->size = 0;
+    iarrayremoveall(lv->layouts);
+    
+    /* parsing */
+    for (; i<icountof(_g_all_layouts); ++i) {
+        des = &_g_all_layouts[i];
+        if (iflag_is(layout, des->value)) {
+            iarrayadd(lv->layouts, des);                            /* add one */
+            iarrayoflast(lv->layouts, ilayoutdes).value = lv->size; /* offset */
+            lv->size += des->size;                                  /* total size */
+        }
+    }
+}
+
+/* gl vertex buffer */
+typedef struct ibuffervertex_private {
+    GLuint buffer;
+}ibuffervertex_private;
+
+/* destructor */
+void ibuffervertex_destructor(ithis x, iobj *o) {
+    ibuffervertex *vertex = icast(ibuffervertex, __irobj(o));
+    ibuffervertex_private *rthis = icast(ibuffervertex_private, vertex->_rthis);
+    
+    irelease(vertex->vertexs);
+    irelease(vertex->layout);
+    
+    if (rthis->buffer) {
+        glDeleteBuffers(1, &rthis->buffer);
+    }
+}
+
+/* make a vertex buffer */
+ibuffervertex* ibuffervertexmake(int layout) {
+    ibuffervertex *vertex = irefnew(ibuffervertex);
+    vertex->layout = ilayoutvertexmakewith(layout);
+    vertex->vertexs = iarraymakecopyable(256, vertex->layout->size); /* default 256 vertex for buffer */
+    vertex->_rthis = iobjmalloc(ibuffervertex_private);
+    return vertex;
+}
+
+/* make a vertex buffer */
+ibuffervertex* ibuffervertexmakewith(int layout, size_t num, const void *data) {
+    ibuffervertex *vertex = ibuffervertexmake(layout);
+    ibuffervertexdata(vertex, num, data);
+    return vertex;
+}
+
+/* set the vertex data */
+void ibuffervertexdata(ibuffervertex *vertex, size_t num, const void *data) {
+    /* remove old datas */
+    iarrayremoveall(vertex->vertexs);
+    iarrayappend(vertex->vertexs, data, num);
+    
+    /* link the gl resource */
+    ibuffervertexlinkgl(vertex);
+}
+
+void ibuffervertexlinkgl(ibuffervertex *vertex) {
+    ibuffervertex_private *rthis = icast(ibuffervertex_private, vertex->_rthis);
+    /* remove old ones */
+    if (rthis->buffer) {
+        glDeleteBuffers(1, &rthis->buffer);
+    }
+    
+    /* gen array buffer and filled*/
+    glGenBuffers(1, &rthis->buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, rthis->buffer);
+    glBufferData(GL_ARRAY_BUFFER,
+                 iarraylen(vertex->vertexs)*vertex->layout->size,
+                 iarraybuffer(vertex->vertexs),
+                 GL_STATIC_DRAW);
+}
+
+/* enable the vertex with shader */
+void ibuffervertexenableto(ibuffervertex *vertex, ishader *shader) {
+    ibuffervertex_private *rthis = icast(ibuffervertex_private, vertex->_rthis);
+    GLint loc = 0;
+    int i = 0;
+    ilayoutdes *des;
+    
+    /* bind buffer */
+    glBindBuffer(GL_ARRAY_BUFFER, rthis->buffer);
+    /* enable the vertex attri */
+    for (i=0; i<iarraylen(vertex->layout->layouts); ++i) {
+        des = &iarrayof(vertex->layout->layouts, ilayoutdes, i);
+        loc = ishadergetattriloc(shader, des->name);
+        glEnableVertexAttribArray(loc);
+        glVertexAttribPointer(loc, des->num, des->type, GL_FALSE,
+                           vertex->layout->size, /* stride */
+                           des->value);           /* offset */
+    }
+}
 
 /* all graphics types */
 #include "foundation/core/imeta.define.inl"
