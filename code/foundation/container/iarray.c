@@ -19,6 +19,10 @@ void iarray_destructor(ithis x, iobj *o) {
     iarraytruncate(array, 0);
     /* release the raw buffer */
     ifree(array->buffer);
+    /* for dynamic array */
+    if (array->entry && iflag_is(array->entry->flag, EnumArrayFlagNeedFreeEntry)) {
+        ifree((void*)array->entry);
+    }
     /*
      array->buffer = NULL;
      array->len = 0;
@@ -61,6 +65,19 @@ const void* iarrayat(const iarray *arr, int index) {
     icheckret(index>=0 && index<arr->len, NULL);
     
     return  __arr_i(arr, index);
+}
+
+/* element indexing */
+const void* iarraylast(const iarray *arr) {
+    icheckret(arr, NULL);
+    icheckret(arr->len>0, NULL);
+    
+    return  __arr_i(arr, arr->len-1);
+}
+
+/* element indexing */
+const void* iarrayfirst(const iarray *arr) {
+    return iarrayat(arr, 0);
 }
 
 /* the raw buffer */
@@ -156,6 +173,11 @@ static void _iarrayautoshrink(iarray *arr) {
 /* operators: add */
 int iarrayadd(iarray *arr, const void* value) {
     return iarrayinsert(arr, arr->len, value, 1);
+}
+
+/* append values after */
+int iarrayappend(iarray *arr, const void *value, int nums) {
+    return iarrayinsert(arr, arr->len, value, nums);
 }
 
 /* operators: insert */

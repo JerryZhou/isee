@@ -8,6 +8,7 @@
 #include "foundation/math/icircle.h"
 #include "foundation/math/iline.h"
 #include "foundation/math/iplane.h"
+#include "foundation/math/imat.h"
 
 
 /* array-assign */
@@ -48,6 +49,26 @@ static void _iarray_entry_swap_copy(struct iarray *arr,
     if (tmp != buffer) {
         ifree(tmp);
     }
+}
+
+/* the copyable array */
+iarray* iarraymakecopyable(size_t capacity, size_t size) {
+    return iarraymakecopyablewith(capacity, size, NULL);
+}
+
+/* the copyable array with cmp */
+iarray* iarraymakecopyablewith(size_t capacity, size_t size, iarray_entry_cmp cmp) {
+    iarrayentry *entry = iobjmalloc(iarrayentry);
+    entry->flag = EnumArrayFlagAutoShirk |
+    EnumArrayFlagSimple |
+    EnumArrayFlagKeepOrder |
+    EnumArrayFlagMemsetZero |
+    EnumArrayFlagNeedFreeEntry;
+    entry->size = size;
+    entry->swap = _iarray_entry_swap_copy;
+    entry->assign = _iarray_entry_assign_copy;
+    entry->cmp = cmp;
+    return iarraymake(capacity, entry);
 }
 
 /* compare */
@@ -244,6 +265,31 @@ iarray* iarraymakeiref(size_t capacity) {
 /* array-iref with user config, index the change */
 iarray* iarraymakeirefwithentry(size_t capacity, const irefarrayentry *refentry) {
     iarray*  arr = iarraymake(capacity, &_arr_entry_iref);
+    arr->userdata = (void*)refentry;
+    return arr;
+}
+
+/* array-iref with anthor cmp */
+iarray* iarraymakeirefwithcmp(size_t capacity, iarray_entry_cmp cmp) {
+    return iarraymakeirefwithentryandcmp(capacity, NULL, cmp);
+}
+
+/* array-iref with entry anthor cmp */
+iarray* iarraymakeirefwithentryandcmp(size_t capacity, const irefarrayentry *refentry, iarray_entry_cmp cmp) {
+    iarray*  arr;
+    iarrayentry *entry = iobjmalloc(iarrayentry);
+    
+    entry->flag = EnumArrayFlagAutoShirk |
+    EnumArrayFlagSimple |
+    EnumArrayFlagKeepOrder |
+    EnumArrayFlagMemsetZero |
+    EnumArrayFlagNeedFreeEntry;
+    entry->size = sizeof(iref*);
+    entry->swap = _iarray_entry_swap_iref;
+    entry->assign = _iarray_entry_assign_iref;
+    entry->cmp = cmp;
+    
+    arr = iarraymake(capacity, &_arr_entry_iref);
     arr->userdata = (void*)refentry;
     return arr;
 }

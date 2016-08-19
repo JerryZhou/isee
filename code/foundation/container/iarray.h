@@ -50,6 +50,9 @@ typedef enum EnumArrayFlag {
     /* the array have been sliced, then the array should not do any operators in shirk, remove, truncate
      * after sliced the insert operator will failed when the capacity need expanding */
     EnumArrayFlagSliced = 1<<5,
+   
+    /* the array entry is malloc by dynamic */
+    EnumArrayFlagNeedFreeEntry = 1<<6,
 }EnumArrayFlag;
 
 /* the array sencond-meta information */
@@ -92,6 +95,10 @@ size_t iarraycapacity(const iarray *arr);
 
 /* element indexing */
 const void* iarrayat(const iarray *arr, int index);
+/* element indexing */
+const void* iarraylast(const iarray *arr);
+/* element indexing */
+const void* iarrayfirst(const iarray *arr);
 
 /* the array raw buffer */
 void* iarraybuffer(iarray *arr);
@@ -110,6 +117,9 @@ int iarrayremove(iarray *arr, int index);
 
 /* operators: add */
 int iarrayadd(iarray *arr, const void* value);
+    
+/* append values after */
+int iarrayappend(iarray *arr, const void *value, int nums);
 
 /* operators: insert */
 int iarrayinsert(iarray *arr, int index, const void *value, int nums);

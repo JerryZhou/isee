@@ -13,6 +13,12 @@ extern "C" {
 /* iarray: iref                                              */
 /*************************************************************/
 
+/* the copyable array */
+iarray* iarraymakecopyable(size_t capacity, size_t size);
+    
+/* the copyable array with cmp */
+iarray* iarraymakecopyablewith(size_t capacity, size_t size, iarray_entry_cmp cmp);
+    
 /* array-int */
 iarray* iarraymakeint(size_t capacity);
 
@@ -24,6 +30,7 @@ iarray* iarraymakeint64(size_t capacity);
 
 /* array-char */
 iarray* iarraymakechar(size_t capacity);
+
 
 /* get entry */
 const iarrayentry* iarrayentryget(int type);
@@ -41,6 +48,12 @@ iarray* iarraymakeiref(size_t capacity);
 
 /* array-iref tracing the indexing change */
 iarray* iarraymakeirefwithentry(size_t capacity, const irefarrayentry *refentry);
+    
+/* array-iref with anthor cmp */
+iarray* iarraymakeirefwithcmp(size_t capacity, iarray_entry_cmp cmp);
+
+/* array-iref with entry anthor cmp */
+iarray* iarraymakeirefwithentryandcmp(size_t capacity, const irefarrayentry *refentry, iarray_entry_cmp cmp);
 
 /* macro: declare a copy-array-type */
 #define __ideclare_array_copy_type(type) iarray* iarraymake##type(size_t capacity);
@@ -52,16 +65,20 @@ iarray* iarraymakeirefwithentry(size_t capacity, const irefarrayentry *refentry)
     __ideclare_array_copy_type(icircle)\
     __ideclare_array_copy_type(ivec2)\
     __ideclare_array_copy_type(ivec3)\
+    __ideclare_array_copy_type(ivec4)\
     __ideclare_array_copy_type(iline2d)\
     __ideclare_array_copy_type(iline3d)\
     __ideclare_array_copy_type(iplane)\
+    __ideclare_array_copy_type(imat4)\
     __ideclare_array_copy_type(irect)
 
 /* all copyable-array-types */
 __iall_array_types
 
 /* macro: indexing */
-#define iarrayof(arr, type, i) (((type *)iarrayat(arr, i))[0])
+#define iarrayof(arr, type, i) (((type *)iarrayat((arr), (i)))[0])
+#define iarrayoflast(arr, type) (((type *)iarraylast((arr)))[0])
+#define iarrayoffirst(arr, type) (((type *)iarrayfirst((arr)))[0])
 
 /* Helper-Macro: For-Earch in c89 */
 #define irangearraycin(arr, type, begin, end, key, value, wrap) \
