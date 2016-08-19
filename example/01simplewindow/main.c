@@ -7,31 +7,32 @@
 
 iimplementapplication()
 
-static const struct
+typedef struct pos_color
 {
-    float x, y;
-    float r, g, b;
-} vertices[3] =
+    float x, y, z;
+    float r, g, b, a;
+}pos_color;
+const static pos_color vertices[3] =
 {
-    { -0.6f, -0.4f, 1.f, 0.f, 0.f },
-    {  0.6f, -0.4f, 0.f, 1.f, 0.f },
-    {   0.f,  0.6f, 0.f, 0.f, 1.f }
+    { -0.6f, -0.4f, 0.0f, 1.f, 0.f, 0.f, 1.0f },
+    {  0.6f, -0.4f, 0.0f, 0.f, 1.f, 0.f, 1.0f },
+    {   0.f,  0.6f, 0.0f, 0.f, 0.f, 1.f, 1.0f }
 };
 static const char* vertex_shader_text =
 "uniform mat4 MVP;\n"
-"attribute vec3 vCol;\n"
-"attribute vec2 vPos;\n"
-"varying vec3 color;\n"
+"attribute vec4 vColor;\n"
+"attribute vec3 vPos;\n"
+"varying vec4 color;\n"
 "void main()\n"
 "{\n"
-"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
-"    color = vCol;\n"
+"    gl_Position = MVP * vec4(vPos, 1.0);\n"
+"    color = vColor;\n"
 "}\n";
 static const char* fragment_shader_text =
-"varying vec3 color;\n"
+"varying vec4 color;\n"
 "void main()\n"
 "{\n"
-"    gl_FragColor = vec4(color, 1.0);\n"
+"    gl_FragColor = color;\n"
 "}\n";
 
 /* cross-platorm window: event handler */
@@ -43,8 +44,8 @@ int _x_ientry_window_event(struct iwindow *win, ievent *event) {
 int _x_ientry_window_draw(struct iwindow *win) {
     static int initdraws = 0;
     static ishader *shader;
-    static GLuint vertex_buffer;
-    static GLint mvp_location, vpos_location, vcol_location;
+    static ibuffervertex *vertex;
+    static GLint mvp_location;
     float ratio;
     int width, height;
     mat4x4 m, p, mvp;
@@ -53,22 +54,16 @@ int _x_ientry_window_draw(struct iwindow *win) {
     if (initdraws == 1) {
         glfwSwapInterval(1);
         // NOTE: OpenGL error checks have been omitted for brevity
-        
+        /* shader */
         shader = ishadercreate(vertex_shader_text, fragment_shader_text);
+        /* vertex */
+        vertex = ibuffervertexmakewith(EnumVertexLayout_Pos|EnumVertexLayout_Color,
+                                       icountof(vertices),
+                                       vertices);
+        /* enable */
+        ibuffervertexenableto(vertex, shader);
+        
         mvp_location = ishadergetuniformloc(shader, "MVP");
-        vpos_location = ishadergetattriloc(shader, "vPos");
-        vcol_location = ishadergetattriloc(shader, "vCol");
-        
-        glGenBuffers(1, &vertex_buffer);
-        glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(vpos_location);
-        glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
-                              sizeof(float) * 5, (void*) 0);
-        glEnableVertexAttribArray(vcol_location);
-        glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
-                              sizeof(float) * 5, (void*) (sizeof(float) * 2));
-        
     }
     
     /* frame size */
