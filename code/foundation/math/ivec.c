@@ -87,6 +87,20 @@ ivec2 ivec2perpendicular(const ivec2 *l, const ivec2 *r) {
 /* ivec3                                                     */
 /*************************************************************/
 
+/* extern const */
+const ivec3 kVec3_Axis_X = {{1.f, 0.f, 0.f}};
+const ivec3 kVec3_Axis_Y = {{0.f, 1.f, 0.f}};
+const ivec3 kVec3_Axis_Z = {{0.f, 0.f, 1.f}};
+const ivec3 kVec3_Axis_Neg_Z = {{0.f, 0.f, -1.f}};
+const ivec3 kVec3_Zero = {{0.f, 0.f, 0.f}};
+
+/* almost equal */
+int ivec3isequal(const ivec3 *l, const ivec3 *r) {
+    return ireal_equal(l->values[0], r->values[0]) &&
+        ireal_equal(l->values[1], r->values[1]) &&
+        ireal_equal(l->values[2], r->values[2]);
+}
+
 /* sub point */
 ivec3 ivec3subtractpoint(const ipos3 *p0, const ipos3 *p1) {
     ivec3 v;
@@ -115,7 +129,7 @@ ivec3 ivec3subtract(const ivec3 *l, const ivec3 *r) {
 }
 
 /* mul */
-ivec3 ivec3multipy(const ivec3 *l, ireal a) {
+ivec3 ivec3scale(const ivec3 *l, ireal a) {
     ivec3 vec;
     vec.v.x = l->v.x * a;
     vec.v.y = l->v.y * a;
@@ -165,13 +179,13 @@ ivec3 ivec3abs(const ivec3* l) {
 /* normalized */
 ivec3 ivec3normalize(const ivec3 *l) {
     ireal len = ivec3length(l);
-    return len > 0 ? ivec3multipy(l, 1.0/len) : *l;
+    return len > 0 ? ivec3scale(l, 1.0/len) : *l;
 }
 
 /* parallel */
 ivec3 ivec3parallel(const ivec3 *l, const ivec3 *r) {
     ireal projection = ivec3dot (l, r);
-    return ivec3multipy(r, projection);
+    return ivec3scale(r, projection);
 }
 
 /* perpendicular */

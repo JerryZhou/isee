@@ -70,6 +70,11 @@ typedef unsigned char ibool;
 #define iiyes 1
 #define iiok 1
 #define iino 0
+    
+/* for params */
+#define __iin
+#define __iout
+#define __ioutin
 
 /* condition-check, without assert */
 #define icheck(con) do { if(!(con)) return ; } while(0)

@@ -74,6 +74,15 @@ typedef union ivec3 {
     }v;
 }ivec3;
 
+/* extern const */
+extern const ivec3 kVec3_Axis_X;
+extern const ivec3 kVec3_Axis_Y;
+extern const ivec3 kVec3_Axis_Z;
+extern const ivec3 kVec3_Axis_Neg_Z;
+extern const ivec3 kVec3_Zero;
+
+/* almost equal */
+int ivec3isequal(const ivec3 *l, const ivec3 *r);
 /* ipos3 ==> ivec3 */
 ivec3 ivec3subtractpoint(const struct ipos3 *p0, const struct ipos3 *p1);
 
@@ -84,7 +93,7 @@ ivec3 ivec3add(const ivec3 *l, const ivec3 *r);
 ivec3 ivec3subtract(const ivec3 *l, const ivec3 *r);
 
 /* mul */
-ivec3 ivec3multipy(const ivec3 *l, const ireal a);
+ivec3 ivec3scale(const ivec3 *l, const ireal a);
 
 /* dot */
 ireal ivec3dot(const ivec3 *l, const ivec3 *r);
@@ -120,6 +129,8 @@ typedef union ivec4 {
     }v;
 }ivec4;
     
+/* scaler type copy */
+#define __iscaler_copy(type, dst, src) memcpy((dst)->values, (src)->values, sizeof(type))
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
