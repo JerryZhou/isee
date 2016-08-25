@@ -109,7 +109,7 @@ void imat4perspectiveprojection(__iout imat4 *mat,
 
 /* make a orthographic projection */
 void imat4orthographicprojection(__iout imat4 *mat,
-                                 ireal left, ireal right, ireal top, ireal bottom,
+                                 ireal left, ireal right, ireal bottom, ireal top,
                                  ireal near, ireal far);
 
 /* make a camera view matrix */

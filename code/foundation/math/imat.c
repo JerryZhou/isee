@@ -115,9 +115,9 @@ void imat4multiply(__iout imat4 *mat, const imat4 *a, const imat4 *b) {
     int k, r, c;
     
     for(c=0; c<4; ++c) for(r=0; r<4; ++r) {
-        __imat4_v(&tmp, c, r) = 0.f;
+        __imat4_v(&tmp, r, c) = 0.f;
         for(k=0; k<4; ++k) {
-            __imat4_v(&tmp, c, r) += __imat4_v(a, k, r) * __imat4_v(b, c, k);
+            __imat4_v(&tmp, r, c) += __imat4_v(a, r, k) * __imat4_v(b, k, c);
         }
     }
     __imat4_copy(mat, &tmp);
@@ -135,7 +135,7 @@ void imat4rotationx(__iout imat4 *mat, ireal radians) {
         {{0.f,  -s,   c, 0.f}},
         {{0.f, 0.f, 0.f, 1.f}}
     }};
-    __imat4_copy(mat, &R);
+    imat4multiply(mat, &R, mat);
 }
 
 /* a rotate matrix: rotate by y aixs */
@@ -148,7 +148,7 @@ void imat4rotationy(__iout imat4 *mat, ireal radians) {
         {{   s, 0.f,   c, 0.f}},
         {{ 0.f, 0.f, 0.f, 1.f}}
     }};
-    __imat4_copy(mat, &R);
+    imat4multiply(mat, &R, mat);
 }
 
 /* a rotate matrix: rotate by z aixs */
@@ -161,7 +161,7 @@ void imat4rotationz(__iout imat4 *mat, ireal radians) {
         {{ 0.f, 0.f, 1.f, 0.f}},
         {{ 0.f, 0.f, 0.f, 1.f}}
     }};
-    __imat4_copy(mat, &R);
+    imat4multiply(mat, &R, mat);
 }
 
 void imat4yawrollpitch(__iout imat4 *mat, ireal yaw, ireal roll, ireal pitch) {
@@ -250,12 +250,14 @@ void imat4perspectiveprojection(__iout imat4 *mat,
     __M(0, 0) = cotangent / aspect;
     __M(1, 1) = cotangent;
     __M(2, 2) = -(zfar + znear) / deltaZ;
-    __M(3, 2) = -2 * znear * zfar / deltaZ;
+    __M(3, 2) = -1.f;
+    __M(2, 3) = -2 * znear * zfar / deltaZ;
+    __M(3, 3) = 0.f;
 }
 
 /* make a orthographic projection */
 void imat4orthographicprojection(__iout imat4 *mat,
-                                 ireal left, ireal right, ireal top, ireal bottom,
+                                 ireal left, ireal right, ireal bottom, ireal top,
                                  ireal near, ireal far) {
     ireal tx = -((right + left) / (right - left));
     ireal ty = -((top + bottom) / (top - bottom));
@@ -265,9 +267,9 @@ void imat4orthographicprojection(__iout imat4 *mat,
     __M(0, 0) = 2 / (right - left);
     __M(1, 1) = 2 / (top - bottom);
     __M(2, 2) = -2 / (far - near);
-    __M(3, 0) = tx;
-    __M(3, 1) = ty;
-    __M(3, 2) = tz;
+    __M(0, 3) = tx;
+    __M(1, 3) = ty;
+    __M(2, 3) = tz;
 }
 
 /* make a camera view matrix */
