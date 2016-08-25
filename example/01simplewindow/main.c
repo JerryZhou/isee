@@ -2,8 +2,8 @@
 
 //#include "glad/glad.h"
 #include "glfw/glfw3.h"
-#include "linmath/linmath.h"
 #include "graphics/igraphics.h"
+#include "foundation/math/imat.h"
 
 iimplementapplication()
 
@@ -48,7 +48,8 @@ int _x_ientry_window_draw(struct iwindow *win) {
     static GLint mvp_location;
     float ratio;
     int width, height;
-    mat4x4 m, p, mvp;
+    imat4 m, p, mvp;
+    ireal curtime;
     
     ++initdraws;
     if (initdraws == 1) {
@@ -72,12 +73,16 @@ int _x_ientry_window_draw(struct iwindow *win) {
     ratio = width / (float) height;
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
-    mat4x4_identity(m);
-    mat4x4_rotate_Z(m, m, (float) glfwGetTime());
-    mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-    mat4x4_mul(mvp, p, m);
+ 
+    curtime = (ireal)glfwGetTime();
+    
+    imat4identity(&m);
+    imat4rotationz(&m, curtime);
+    imat4orthographicprojection(&p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+    imat4multiply(&mvp, &p, &m);
+    
     ishaderuse(shader);
-    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
+    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)mvp.values);
     glDrawArrays(GL_TRIANGLES, 0, 3);
     
     /* swap */
