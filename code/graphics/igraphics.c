@@ -22,6 +22,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 void igraphicsapp_destructor(ithis x, iobj *o) {
     igraphicsapp *app = icast(igraphicsapp, __irobj(o));
     irelease(app->windows);
+    irelease(app->asyncremoves);
     
     glfwTerminate();
 }
@@ -30,6 +31,7 @@ void igraphicsapp_destructor(ithis x, iobj *o) {
 igraphicsapp *igraphicsappmake() {
     igraphicsapp *app = irefnew(igraphicsapp);
     app->windows = ireflistmake();
+    app->asyncremoves = ireflistmake();
     
     return app;
 }
@@ -67,7 +69,7 @@ iwindow *igraphicsappcreatewindow(igraphicsapp *app,
     
     /* cross-platform window */
     win = irefnew(iwindow);
-    win->app = iwrefmake(irefcast(win));
+    win->app = iwrefmake(irefcast(app));
     win->entry = entry;
     win->name = istringmake(name);
     win->width = w;
@@ -85,7 +87,7 @@ iwindow *igraphicsappcreatewindow(igraphicsapp *app,
 
 void igraphicsappasyncremovewin(igraphicsapp *app, iwindow *win) {
     /* asyncd remove from app */
-    ireflistremove(app->asyncremoves, irefcast(win));
+    ireflistadd(app->asyncremoves, irefcast(win));
 }
 
 /* exit app */
@@ -106,7 +108,9 @@ void igraphicsappprocesswindowremove(igraphicsapp *app) {
     /* remove destroyed windows */
     irefjoint *joint = ireflistfirst(app->asyncremoves);
     while (joint) {
+        /* remove from the living window list */
         ireflistremove(app->windows, joint->value);
+        /* next */
         joint = joint->next;
     }
     
