@@ -28,41 +28,39 @@
         node->next = NULL;               \
     }while(0)
 
-/* irefjoint destructor */
-void irefjoint_destructor(ithis x, iobj *o) {
-    irefjoint *joint = icast(irefjoint, __iref(o));
+/* release all the refs */
+static void _irefjoint_release_it(irefjoint *joint) {
     ireflist *list = NULL;
     icheck(joint);
-    irelease(joint->value);
+    
     /* release the resouce */
     list = icast(ireflist, iwrefstrong(joint->list));
     if (list && list->entry) {
         list->entry(joint);
         irelease(list);
     }
+    /* release the ref-value */
+    iassign(joint->value, NULL);
+    
+    /* weak list ref */
+    iassign(joint->list, NULL);
+}
+/* irefjoint destructor */
+void irefjoint_destructor(ithis x, iobj *o) {
+    irefjoint *joint = icast(irefjoint, __iref(o));
+    _irefjoint_release_it(joint);
 }
 
 /* make a joint */
 irefjoint* irefjointmake(iref *value) {
-    irefjoint *joint = iobjmalloc(irefjoint);
+    irefjoint *joint = irefnew(irefjoint);
     iassign(joint->value, value);
-    iretain(joint);
     return joint;
 }
 
 /* release the joint */
 void irefjointfree(irefjoint* joint) {
-    ireflist *list = NULL;
-    icheck(joint);
-    irelease(joint->value);
-    /* release the resouce */
-    list = icast(ireflist, iwrefstrong(joint->list));
-    if (list && list->entry) {
-        list->entry(joint);
-        irelease(list);
-    }
-    joint->value = NULL;
-    joint->res = NULL;
+    _irefjoint_release_it(joint);
     
     irelease(joint);
 }
@@ -77,8 +75,7 @@ void ireflist_destructor(ithis x, iobj *o) {
 
 /* make list */
 ireflist *ireflistmake() {
-    ireflist *list = iobjmalloc(ireflist);
-    iretain(list);
+    ireflist *list = irefnew(ireflist);
     return list;
 }
 
@@ -120,8 +117,10 @@ irefjoint* ireflistfind(const ireflist *list, const iref *value) {
 
 /* add node to list: insert before */
 irefjoint* ireflistaddjoint(ireflist *list, irefjoint * joint) {
-    joint->list = iwrefmake(irefcast(list));
+    iwref *wlist = iwrefmake(irefcast(list));
+    iassign(joint->list, wlist);
     list_add_front(list->root, joint);
+    iretain(joint);
     ++list->length;
     return joint;
 }
@@ -131,7 +130,9 @@ irefjoint* ireflistadd(ireflist *list, iref *value) {
     irefjoint *joint = NULL;
     icheckret(list, NULL);
     joint = irefjointmake(value);
-    return ireflistaddjoint(list, joint);
+    ireflistaddjoint(list, joint);
+    irelease(joint); /* already hold by list */
+    return joint;
 }
 
 /* add value and res to list: insert before */
@@ -142,34 +143,21 @@ irefjoint* ireflistaddres(ireflist *list, iref *value, void *res) {
     return joint;
 }
 
-/* remove joint from list and release the joint reference */
-static irefjoint* _ireflistremovejointwithfree(ireflist *list, irefjoint *joint, int withfree) {
+/* remove joint from the list and return the next joint */
+irefjoint * ireflistremovejoint(ireflist *list, irefjoint *joint) {
     irefjoint *next = NULL;
     icheckret(list, next);
     icheckret(joint, next);
     icheckret(iwrefunsafestrong(joint->list) == irefcast(list), next);
-    joint->list = NULL;
+    iassign(joint->list, NULL);
     
     next = joint->next;
     
     list_remove(list->root, joint);
     --list->length;
-    
-    if (withfree) {
-        irefjointfree(joint);
-    }
+    irelease(joint);
     
     return next;
-}
-
-/* remove and release current joint from the list, then return the next joint */
-irefjoint* ireflistremovejointandfree(ireflist *list, irefjoint *joint) {
-    return _ireflistremovejointwithfree(list, joint, 1);
-}
-
-/* remove joint from the list and return the next joint */
-irefjoint * ireflistremovejoint(ireflist *list, irefjoint *joint) {
-    return _ireflistremovejointwithfree(list, joint, 0);
 }
 
 /* remove the first joint with the right value, then return the next joint */
@@ -177,7 +165,7 @@ irefjoint* ireflistremove(ireflist *list, iref *value) {
     irefjoint *joint = NULL;
     icheckret(list, NULL);
     joint = ireflistfind(list, value);
-    return _ireflistremovejointwithfree(list, joint, 1);
+    return ireflistremovejoint(list, joint);
 }
 
 /* remove all of joints in the list */

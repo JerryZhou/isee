@@ -72,19 +72,20 @@ irefjoint* ireflistfirst(const ireflist *list);
 irefjoint* ireflistfind(const ireflist *list,
                         const iref *value);
 
-/* add node to list: insert before */
+/* add node to list: insert before, 
+ * the return value should be retain by yourself if you want to hold it */
 irefjoint* ireflistaddjoint(ireflist *list, irefjoint * joint);
 
-/* add value to list: insert before */
+/* add value to list: insert before,
+ * the return value should be retain by yourself if you want to hold it */
 irefjoint* ireflistadd(ireflist *list, iref *value);
 
-/* add value and res to list: insert before */
+/* add value and res to list: insert before
+ * the return value should be retain by yourself if you want to hold it */
 irefjoint* ireflistaddres(ireflist *list, iref *value, void *res);
 
 /* remove joint from the list and return the next joint */
 irefjoint* ireflistremovejoint(ireflist *list, irefjoint *joint);
-/* remove and release current joint from the list, then return the next joint */
-irefjoint* ireflistremovejointandfree(ireflist *list, irefjoint *joint);
 /* remove the first joint with the right value, then return the next joint */
 irefjoint* ireflistremove(ireflist *list, iref *value);
 
