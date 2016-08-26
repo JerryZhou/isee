@@ -43,12 +43,12 @@ iref *irefcachepoll(irefcache *cache) {
     iref *ref = NULL;
     irefjoint* joint = ireflistfirst(cache->cache);
     if (joint) {
-        ireflistremovejoint(cache->cache, joint);
-        
+        /* got the ref-value */
         iassign(ref, joint->value);
-        
-        irefjointfree(joint);
-        
+       
+        /* remove from the cache list */
+        ireflistremovejoint(cache->cache, joint);
+       
         if (ref->_ref != 1) {
             ilog("[IMAP-RefCache] Poll - %d\n", ref->_ref);
         }
@@ -84,10 +84,8 @@ void irefcacheclear(irefcache *cache) {
 /* clear the cache refs and release the cache self */
 void irefcachefree(irefcache *cache) {
     icheck(cache);
-    /* should clear the capacity before remove all cached refs */
-    cache->capacity = 0;
-    /* release all cached object */
-    irelease(cache->cache);
+    /* clear the refs */
+    irefcacheclear(cache);
     /* release self */
     irelease(cache);
 }

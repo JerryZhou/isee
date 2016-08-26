@@ -2,6 +2,13 @@
 #include "foundation/core/imetatypes.h"
 #include "foundation/util/iarraytypes.h"
 
+/* destructor */
+void icmdarg_destructor(ithis x, iobj *o) {
+    icmdarg *arg = icast(icmdarg, __irobj(o));
+    iassign(arg->args, NULL);
+    iassign(arg->origin, NULL);
+}
+
 /* make a icmdarg from command lines */
 icmdarg *icmdargmake(int argc, const char **argv) {
     icmdarg *arg = irefnew(icmdarg);

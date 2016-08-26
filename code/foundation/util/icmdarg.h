@@ -17,6 +17,9 @@ typedef struct icmdarg {
     iarray *args; /*iarray<istring> */
 } icmdarg;
 
+/* destructor */
+void icmdarg_destructor(ithis x, iobj *o);
+
 /* make a icmdarg from command lines */
 icmdarg *icmdargmake(int argc, const char **argv);
 

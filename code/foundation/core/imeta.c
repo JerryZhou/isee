@@ -14,6 +14,9 @@
 #include "foundation/container/ireflist.h"
 #include "foundation/container/iarray.h"
 #include "foundation/container/islice.h"
+#include "foundation/container/idict.h"     /* hash-map */
+#include "foundation/container/itree.h"     /* tree-node */
+#include "foundation/container/ineighbor.h" /* graph-node */
 #include "foundation/util/icmdarg.h"
 #include "foundation/math/ipolygon.h"
 
