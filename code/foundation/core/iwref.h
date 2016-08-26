@@ -28,7 +28,7 @@ iref *iwrefstrong(iwref *wref);
 iref *iwrefunsafestrong(iwref *wref);
 
 /* ref assign to weak ref */
-#define iwassign(dst, src) do { if (dst && (iref*)(dst->wref) == (iref*)(src)) { \
+#define iwassign(dst, src) do { if (dst && (iref*)(dst->_wref) == (iref*)(src)) { \
 break; } irelease(dst); dst = iwrefmake((iref*)(src)); } while(0)
 
     
