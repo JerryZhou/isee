@@ -47,6 +47,8 @@ void irefrelease(iref *ref) {
             if (ref->_ref != 0) {
                 break;
             }
+            /* release the _watcher */
+            iwassign(ref->_watcher, NULL);
             
             /*call constructor and release the memory */
             iobjfree(ref);
