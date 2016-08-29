@@ -68,7 +68,8 @@ void isleep(unsigned int milliseconds) {
 #ifdef WIN32
     Sleep((DWORD)milliseconds);
 #else
-    sleep(milliseconds);
+    /* http://man7.org/linux/man-pages/man3/usleep.3.html */
+    usleep(milliseconds*1000);
 #endif
 }
 
