@@ -15,8 +15,7 @@ struct iobj;
 
 /* object-cache */
 typedef struct iobjcache {
-    ientryobjcalloc fcalloc;    /* should imp the calloc */
-    ientryobjfree ffree;
+    ideclaremetaallocator; /* should imp the calloc */
     
     struct iobj *root;
     size_t capacity;

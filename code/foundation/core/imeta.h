@@ -55,10 +55,12 @@ typedef struct imetafuncs {
 /* should be register with funcs */
 typedef imetafuncs* (*ientrymake_funcs)(struct imeta* meta, ithis i);
     
+/* declare the meta-allocator */
+#define ideclaremetaallocator ientryobjcalloc fcalloc; ientryobjfree ffree
+    
 /* type meta allocator */
 typedef struct imetaallocator {
-    ientryobjcalloc fcalloc;    /* should imp the calloc */
-    ientryobjfree ffree;
+    ideclaremetaallocator; /* should imp the calloc */
 } imetaallocator;
 
 /* should be register with allocator */
