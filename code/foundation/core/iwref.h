@@ -31,6 +31,8 @@ iref *iwrefunsafestrong(iwref *wref);
 #define iwassign(dst, src) do { if (dst && (iref*)(dst->_wref) == (iref*)(src)) { \
 break; } irelease(dst); dst = iwrefmake((iref*)(src)); } while(0)
 
+/* wrap iwrefmake */
+#define iwrefnew(ref) iwrefmake(irefcast(ref))
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
