@@ -5,6 +5,8 @@
 #include "foundation/platform/ientry.h"
 #include "foundation/test_iobj.h"
 #include "foundation/test_iobjcache.h"
+#include "foundation/test_iref.h"
+#include "foundation/test_iwref.h"
 #include "foundation/test_imemorystatistic.h"
 #include "foundation/test_imemory.h"
 #include "foundation/test_imeta.h"
