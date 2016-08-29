@@ -146,7 +146,7 @@ void imetafree(void *p) {
     newp->meta->allocator->ffree(newp->meta->allocator, p);
 }
 
-/* 打印当前内存状态 */
+/* print-the-memory-state */
 void imetamemorystate() {
     int i=0;
     imeta *meta=NULL;
