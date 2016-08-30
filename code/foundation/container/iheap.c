@@ -34,10 +34,16 @@ static void _iarray_heap_build(iarray *arr, int start, int end) {
 /* sort heap */
 void iarraysortheap(iarray *arr, int start, int end) {
     int i;
+    icheck(iarraylen(arr) > 0);
+    icheckassert(start>=0 && start<=end && end <=(iarraylen(arr)-1));
+    
+    /* build heap */
     _iarray_heap_build(arr, start, end);
     
     for (i=start; i<=end; ++i) {
+        /* minisize the heap: swap the biggest to last */
         arr->entry->swap(arr, start, end-start-i);
+        /* adjust the heap to find the biggest one */
         _iarray_heap_shift(arr, start, end - start - i - 1);
     }
 }
