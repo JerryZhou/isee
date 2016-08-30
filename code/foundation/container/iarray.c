@@ -6,7 +6,7 @@
 /*invalid index */
 const int kindex_invalid = -1;
 
-/* 释放数组相关的资源 */
+/* release all resources hold by the array */
 void iarray_destructor(ithis x, iobj *o) {
     iarray *array = icast(iarray, __iref(o));
     
@@ -35,14 +35,13 @@ void iarray_destructor(ithis x, iobj *o) {
 
 /* make array */
 iarray *iarraymake(size_t capacity, const iarrayentry *entry) {
-    iarray *array = (iarray *)iobjmalloc(iarray);
+    iarray *array = irefnew(iarray);
     array->capacity = capacity;
     array->len = 0;
     array->buffer = capacity > 0 ? (char*)icalloc(capacity, entry->size) : NULL;
     array->entry = entry;
     array->flag = entry->flag;
     array->cmp = entry->cmp;
-    iretain(array);
     
     return array;
 }
@@ -154,9 +153,15 @@ static size_t _iarray_be_capacity(iarray *arr, size_t capacity) {
     icheckret(arr->capacity < capacity, arr->capacity);
     
     /* new capacity */
-    newcapacity = arr->capacity;
+    newcapacity = imax(arr->capacity, 1);
     do {
-        newcapacity = newcapacity * 2;
+        if (newcapacity < 1024) {
+            newcapacity = newcapacity * 2;
+        } else if (newcapacity < 1024*1024) {
+            newcapacity = (size_t)(newcapacity  * 1.1f);
+        } else {
+            newcapacity = (size_t)(newcapacity * 1.01f);
+        }
     } while(newcapacity < capacity);
     
     return _iarray_just_capacity(arr, newcapacity);

@@ -167,10 +167,6 @@ iarray* iarraymakechar(size_t capacity) {
     return iarraymake(capacity, &_arr_entry_char);
 }
 
-/* get entry */
-const iarrayentry* iarrayentryget(int type) {
-    return &_arr_entry_char;
-}
 
 /*************************************************************/
 /* iarray - iref                                             */
@@ -314,3 +310,23 @@ iarray * iarraymake##type(size_t capacity) {\
 #define __ideclare_array_copy_type(type) __iimplement_array(type)
 __iall_array_types
 
+/* get entry */
+const iarrayentry* iarrayentryget(int type) {
+    switch (type) {
+        case EnumArrayEntryType_Char:
+            return &_arr_entry_char;
+            break;
+        case EnumArrayEntryType_Int:
+            return &_arr_entry_int;
+            break;
+        case EnumArrayEntryType_Int64:
+            return &_arr_entry_int64;
+            break;
+        case EnumArrayEntryType_Real:
+            return &_arr_entry_ireal;
+            break;
+        default:
+            break;
+    }
+    return NULL;
+}

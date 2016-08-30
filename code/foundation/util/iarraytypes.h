@@ -32,9 +32,6 @@ iarray* iarraymakeint64(size_t capacity);
 iarray* iarraymakechar(size_t capacity);
 
 
-/* get entry */
-const iarrayentry* iarrayentryget(int type);
-
 /* tracing the index change in array with ref */
 typedef void (*irefarray_index_change) (iarray *arr, iref *ref, int index);
 
@@ -54,7 +51,19 @@ iarray* iarraymakeirefwithcmp(size_t capacity, iarray_entry_cmp cmp);
 
 /* array-iref with entry anthor cmp */
 iarray* iarraymakeirefwithentryandcmp(size_t capacity, const irefarrayentry *refentry, iarray_entry_cmp cmp);
-
+    
+    
+/* the inner array entry type */
+typedef enum EnumArrayEntryType {
+    EnumArrayEntryType_Char,
+    EnumArrayEntryType_Int,
+    EnumArrayEntryType_Int64,
+    EnumArrayEntryType_Real,
+}EnumArrayEntryType;
+    
+/* get entry */
+const iarrayentry* iarrayentryget(int type);
+    
 /* macro: declare a copy-array-type */
 #define __ideclare_array_copy_type(type) iarray* iarraymake##type(size_t capacity);
 /* all array types with copy-assign behaviors */

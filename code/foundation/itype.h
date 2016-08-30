@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <sys/types.h>
 #include <stdarg.h>
+#include <assert.h>
 
 /* Set up for C function definitions, even when using C++ */
 
@@ -79,6 +80,10 @@ typedef unsigned char ibool;
 /* condition-check, without assert */
 #define icheck(con) do { if(!(con)) return ; } while(0)
 #define icheckret(con, ret) do { if(!(con)) return ret; } while(0)
+
+/* condition-check, with assert */
+#define icheckassert(con) do { if (!(con)) { assert(#con && 0); return ; } } while(0)
+#define icheckretassert(con, ret) do { if(!(con)) { assert(#con && 0); return ret ; } } while(0)
 
 /* flat array count */
 #define icountof(arr) (sizeof(arr)/sizeof(arr[0]))
