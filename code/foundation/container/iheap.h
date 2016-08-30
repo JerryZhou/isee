@@ -8,7 +8,8 @@
 extern "C" {
 #endif
     
-/*a heap is a array */
+/* a heap is a array */
+/* BIG-HEAP */
 typedef iarray iheap;
 
 /* build heap */
