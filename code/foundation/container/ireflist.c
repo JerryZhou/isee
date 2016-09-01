@@ -149,7 +149,6 @@ irefjoint * ireflistremovejoint(ireflist *list, irefjoint *joint) {
     icheckret(list, next);
     icheckret(joint, next);
     icheckret(iwrefunsafestrong(joint->list) == irefcast(list), next);
-    iassign(joint->list, NULL);
     
     next = joint->next;
     
