@@ -70,6 +70,9 @@ iref *irefassistretain(iref *ref);
    
 /* macro wrap a ref-sub-type new: will retain it */
 #define irefnew(type) ((type*)irefmalloc(imetaindex(type)))
+
+/* macro wrap a ref-release and reset NULL */
+#define irefdelete(ref) iassign(ref, NULL)
     
 /* get the private pointer */
 #define irefthis(type, ref) icast(type, (ref)->_rthis)
