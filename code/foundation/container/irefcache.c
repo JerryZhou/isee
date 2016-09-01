@@ -30,7 +30,7 @@ static void _ientrywatch_cache(irefwatcher *watcher, iref *ref) {
 
 /* make a ref cache with capacity */
 irefcache *irefcachemake(size_t capacity, icachenewentry newentry) {
-    irefcache *cache = iobjmalloc(irefcache);
+    irefcache *cache = irefnew(irefcache);
     cache->cache = ireflistmake();
     cache->capacity = capacity;
     cache->newentry = newentry;
