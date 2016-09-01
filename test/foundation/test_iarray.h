@@ -43,11 +43,12 @@ static void _t_x_iarray_entry_assign(struct iarray *arr, int i, const void *valu
 }
 
 /* foreach visitor */
-static void _t_x_iarray_entry_visitor(const struct iarray *arr, int i, const void *value) {
+/*static void _t_x_iarray_entry_visitor(const struct iarray *arr, int i, const void *value) {
     TChar *tchars = (TChar*)value;
     char tmp[5] = {tchars[0].chars[0], tchars[0].chars[1], tchars[0].chars[2], tchars[0].chars[3], 0};
     printf("arr[%d]=%s\n", i, tmp);
 }
+*/
 
 static iarrayentry _t_x_array_entry = {
     EnumArrayFlagSimple | EnumArrayFlagKeepOrder | EnumArrayFlagAutoShirk,
