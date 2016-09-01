@@ -26,6 +26,7 @@ typedef struct irefcache{
     iname name;
     ireflist* cache;
     size_t capacity;
+    uint32_t flag;
     
     icachenewentry newentry;
     icacheenvictedentry envicted;
@@ -46,9 +47,6 @@ void irefcachepush(irefcache *cache, iref *ref);
 
 /* clear the cache refs */
 void irefcacheclear(irefcache *cache);
-
-/* clear the cache refs and release the cache self */
-void irefcachefree(irefcache *cache);
 
 /* get num of ref in the cache */
 size_t irefcachesize(irefcache *cache);

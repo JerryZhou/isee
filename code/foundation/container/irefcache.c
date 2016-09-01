@@ -2,10 +2,17 @@
 #include "foundation/core/iwref.h"
 #include "foundation/core/imetatypes.h"
 
+/* destructor for flag */
 void irefcache_destructor(ithis x, iobj *o) {
     irefcache *cache = icast(irefcache, __iref(o));
     irefcacheclear(cache);
+    irefdelete(cache->cache);
 }
+
+/* cache-flag */
+enum {
+    __iRefCacheFlag_Invalid = 1,
+};
 
 /* the call back for ref change */
 static void _ientrywatch_cache(irefwatcher *watcher, iref *ref) {
@@ -15,7 +22,7 @@ static void _ientrywatch_cache(irefwatcher *watcher, iref *ref) {
     
     /* only move ref to live cache */
     len = ireflistlen(cache->cache);
-    if (len < cache->capacity) {
+    if (len < cache->capacity && !iflag_is(cache->flag, __iRefCacheFlag_Invalid)) {
         /* may release some resource hold by ref */
         if (cache->whenadd) {
             cache->whenadd(ref);
@@ -50,7 +57,7 @@ iref *irefcachepoll(irefcache *cache) {
         ireflistremovejoint(cache->cache, joint);
        
         if (ref->_ref != 1) {
-            ilog("[IMAP-RefCache] Poll - %d\n", ref->_ref);
+            ilog("##IMAP-RefCache## Poll - %d\n", ref->_ref);
         }
         return ref;
     }
@@ -73,21 +80,10 @@ void irefcachepush(irefcache *cache, iref *ref) {
 
 /* clear the cache refs */
 void irefcacheclear(irefcache *cache) {
-    int oldcapacity = 0;
     icheck(cache);
-    oldcapacity = cache->capacity;
-    cache->capacity = 0;
+    iflag_add(cache->flag, __iRefCacheFlag_Invalid);
     ireflistremoveall(cache->cache);
-    cache->capacity = oldcapacity;
-}
-
-/* clear the cache refs and release the cache self */
-void irefcachefree(irefcache *cache) {
-    icheck(cache);
-    /* clear the refs */
-    irefcacheclear(cache);
-    /* release self */
-    irelease(cache);
+    iflag_remove(cache->flag, __iRefCacheFlag_Invalid);
 }
 
 /* get num of ref in the cache */
