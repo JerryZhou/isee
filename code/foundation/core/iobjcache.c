@@ -150,7 +150,7 @@ void iobjcachefree(imetaallocator *allocator) {
 }
 
 /* get a objcache from the meta-system */
-iobjcache* iobjcacheget(imeta *meta) {
+iobjcache* iobjcacheget(const imeta *meta) {
     iobjcache *cache = meta ? (iobjcache*)meta->allocator : NULL;
     icheckret(cache && cache->flag==_IOBJCACHE_CLS_SALT, NULL);
     return cache;

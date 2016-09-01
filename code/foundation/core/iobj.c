@@ -3,7 +3,7 @@
 #include "foundation/itype.h"
 
 /* get the meta of obj */
-struct imeta *iobjgetmeta(const void *p) {
+const struct imeta *iobjgetmeta(const void *p) {
     iobj *obj = __iobj(p);
     icheckret(obj, NULL);
     return obj->meta;
@@ -11,7 +11,7 @@ struct imeta *iobjgetmeta(const void *p) {
 
 /* if the obj is what we required */
 int iobjistype(const void *p, const char* type) {
-    imeta *meta = iobjgetmeta(p);
+    const imeta *meta = iobjgetmeta(p);
     icheckret(type, iino);
     icheckret(meta, iino);
     

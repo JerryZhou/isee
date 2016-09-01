@@ -35,7 +35,7 @@ imetaallocator *imakecacheableallocator(imeta *meta, size_t capacity);
 void iobjcachefree(imetaallocator *allocator);
     
 /* get a objcache from the meta-system */
-iobjcache* iobjcacheget(imeta *meta);
+iobjcache* iobjcacheget(const imeta *meta);
     
 /* set the obj cache capacity */
 void iobjcachesetcapacity(iobjcache *cache, size_t capacity);

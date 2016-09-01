@@ -25,7 +25,7 @@ typedef struct iobj {
 #define __irobj(o) ((o) ? (o)->addr : NULL)
 
 /* get the meta of obj */
-struct imeta *iobjgetmeta(const void *p);
+const struct imeta *iobjgetmeta(const void *p);
 /* if the obj is what we required */
 int iobjistype(const void *p, const char* name);
     
