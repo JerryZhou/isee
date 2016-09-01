@@ -7,7 +7,7 @@ static iwref kzero_wref = {1, NULL};
 
 /* make a weak iref by ref */
 iwref *iwrefmake(iref *ref) {
-    volatile iwref *wref;
+    volatile iwref *wref = NULL;
     if (ref == NULL) {
         wref = (iwref*)(&kzero_wref);
     } else if (ref->_wref == NULL) {
