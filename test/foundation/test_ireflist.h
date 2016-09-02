@@ -118,9 +118,40 @@ SP_CASE(ireflist, ireflistfirst) {
     ireflistremovejoint(list, joint);
     SP_TRUE(ireflistfirst(list) == NULL);
     
-    ireflistremove(list, ref);
+    SP_TRUE(ireflistremove(list, ref) == NULL);
+    SP_TRUE(ireflistfirst(list) == NULL);
     
     irelease(ref);
+    irelease(list);
+}
+
+SP_CASE(ireflist, ireflisttick) {
+    ireflist *list = ireflistmake();
+    SP_TRUE(ireflistlen(list) == 0);
+    SP_TRUE(ireflistfirst(list) == NULL);
+    int64_t t0 = ireflisttick(list);
+    SP_TRUE(t0 == 0);
+    
+    ireflistadd(list, NULL);
+    int64_t t1 = ireflisttick(list);
+    SP_TRUE(t1 > t0);
+    
+    ireflistadd(list, NULL);
+    int64_t t2 = ireflisttick(list);
+    SP_TRUE(t2 > t1);
+    
+    SP_TRUE(ireflistremove(list, NULL) != NULL);
+    int64_t t3 = ireflisttick(list);
+    SP_TRUE(t3 > t2);
+    
+    SP_TRUE(ireflistremove(list, NULL) == NULL);
+    int64_t t4 = ireflisttick(list);
+    SP_TRUE(t4 > t3);
+    
+    SP_TRUE(ireflistremove(list, NULL) == NULL);
+    int64_t t5 = ireflisttick(list);
+    SP_TRUE(t5 == t4);
+    
     irelease(list);
 }
 
