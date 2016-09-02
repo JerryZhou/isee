@@ -1,5 +1,6 @@
 #include "foundation/container/ireflist.h"
 #include "foundation/core/imetatypes.h"
+#include "foundation/platform/iplatform.h"
 
 /* macro: list operators */
 #define list_add_front(root, node) \
@@ -37,6 +38,7 @@ static void _irefjoint_release_it(irefjoint *joint) {
     list = icast(ireflist, iwrefstrong(joint->list));
     if (list && list->entry) {
         list->entry(joint);
+        list->tick = igetnextmicro();
         irelease(list);
     }
     /* release the ref-value */
@@ -122,6 +124,8 @@ irefjoint* ireflistaddjoint(ireflist *list, irefjoint * joint) {
     list_add_front(list->root, joint);
     iretain(joint);
     ++list->length;
+    list->tick = igetnextmicro();
+    
     return joint;
 }
 
@@ -150,11 +154,14 @@ irefjoint * ireflistremovejoint(ireflist *list, irefjoint *joint) {
     icheckret(joint, next);
     icheckret(iwrefunsafestrong(joint->list) == irefcast(list), next);
     
+    /* next */
     next = joint->next;
     
+    /* remove-joint */
     list_remove(list->root, joint);
     --list->length;
     irelease(joint);
+    list->tick = igetnextmicro();
     
     return next;
 }
