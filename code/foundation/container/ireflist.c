@@ -98,6 +98,12 @@ size_t ireflistlen(const ireflist *list) {
     icheckret(list, 0);
     return list->length;
 }
+    
+/* get the list last changed tick */
+int64_t ireflisttick(const ireflist *list) {
+    icheckret(list, 0);
+    return list->tick;
+}
 
 /* get the list first node */
 irefjoint* ireflistfirst(const ireflist *list) {

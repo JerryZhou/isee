@@ -64,6 +64,9 @@ ireflist *ireflistmakeentry(ientryrefjointresrelease entry);
 
 /* get the list length */
 size_t ireflistlen(const ireflist *list);
+    
+/* get the list last changed tick */
+int64_t ireflisttick(const ireflist *list);
 
 /* get the list first node */
 irefjoint* ireflistfirst(const ireflist *list);
