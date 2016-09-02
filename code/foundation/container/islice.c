@@ -7,7 +7,7 @@ void islice_destructor(ithis x, iobj *o ) {
     irelease(slice->array);
 }
 
-/* 左闭右开的区间 [begin, end) */
+/* half-open range [begin, end) */
 islice *islicemake(iarray *arr, int begin, int end, int capacity) {
     islice* slice;
     int difflen = imax(end-begin, 0);
@@ -30,14 +30,12 @@ islice *islicemake(iarray *arr, int begin, int end, int capacity) {
      * */
     iarraysetflag(arr, EnumArrayFlagSliced);
     
-    slice = iobjmalloc(islice);
+    slice = irefnew(islice);
     slice->begin = begin;
     slice->end = end;
     slice->capacity = capacity;
-    slice->array = arr;
+    iassign(slice->array, arr);
     
-    iretain(arr);
-    iretain(slice);
     return slice;
 }
 
@@ -142,7 +140,7 @@ islice* isliceappendvalues(islice* slice, const void *values, int count) {
     size_t newcapacity = 0;
     islice *newslice;
     iarray * newarray;
-    
+    icheckret(values, slice);
     
 #define __value_i(values, i, size) (const void *)((char*)values + i * size)
     
@@ -188,11 +186,9 @@ islice* isliceappendvalues(islice* slice, const void *values, int count) {
         
         /* free the new array ref*/
         irelease(newarray);
-        /* free the old slice*/
-        irelease(slice);
-        
         /* set slice to return*/
-        slice = newslice;
+        /* free the old slice*/
+        iassign(slice, newslice);
     }
     return slice;
 }
@@ -200,6 +196,8 @@ islice* isliceappendvalues(islice* slice, const void *values, int count) {
 /* append */
 islice* isliceappend(islice *slice, const islice *append) {
     /* should be the same slice entry */
+    icheckret(slice, NULL);
+    icheckret(append, slice);
     icheckret(slice->array->entry == slice->array->entry, slice);
     return isliceappendvalues(slice,
                               __arr_i(append->array, append->begin),

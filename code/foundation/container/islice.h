@@ -74,9 +74,6 @@ islice *islicemakeargby(islice *slice, const char* args);
 /* parse the args */
 void isliceparamsparse(int *params, const char* args, const char delim);
 
-/* release */
-void islicefree(islice *slice);
-
 /* length */
 size_t islicelen(const islice *slice);
 
@@ -112,7 +109,7 @@ void isliceforeach(const islice *slice, islice_entry_visitor visitor);
 #define irangeslicecin(arr, type, begin, end, key, value, wrap) \
 do { \
     for(key=begin; key<end; ++key) {\
-        value = isliceof(arr, type, idx);\
+        value = isliceof(arr, type, key);\
         wrap;\
     }\
 } while(0)
