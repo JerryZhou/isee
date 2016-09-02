@@ -75,9 +75,8 @@ irefjoint* ireflistfirst(const ireflist *list);
 irefjoint* ireflistfind(const ireflist *list,
                         const iref *value);
 
-/* add node to list: insert before, 
- * the return value should be retain by yourself if you want to hold it */
-irefjoint* ireflistaddjoint(ireflist *list, irefjoint * joint);
+/* add node to list: insert before */
+void ireflistaddjoint(ireflist *list, irefjoint * joint);
 
 /* add value to list: insert before,
  * the return value should be retain by yourself if you want to hold it */

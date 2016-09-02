@@ -36,8 +36,10 @@ static void _irefjoint_release_it(irefjoint *joint) {
     
     /* release the resouce */
     list = icast(ireflist, iwrefstrong(joint->list));
-    if (list && list->entry) {
-        list->entry(joint);
+    if (list) {
+        if (list->entry) {
+            list->entry(joint);
+        }
         list->tick = igetnextmicro();
         irelease(list);
     }
@@ -124,15 +126,17 @@ irefjoint* ireflistfind(const ireflist *list, const iref *value) {
 }
 
 /* add node to list: insert before */
-irefjoint* ireflistaddjoint(ireflist *list, irefjoint * joint) {
-    iwref *wlist = iwrefmake(irefcast(list));
+void ireflistaddjoint(ireflist *list, irefjoint * joint) {
+    iwref *wlist = NULL;
+    
+    icheck(joint);
+    wlist = iwrefmake(irefcast(list));
     iassign(joint->list, wlist);
     list_add_front(list->root, joint);
     iretain(joint);
     ++list->length;
     list->tick = igetnextmicro();
-    
-    return joint;
+    irelease(wlist);
 }
 
 /* add value to list: insert before */
@@ -184,7 +188,9 @@ irefjoint* ireflistremove(ireflist *list, iref *value) {
 void ireflistremoveall(ireflist *list) {
     irefjoint *joint = NULL;
     irefjoint *next = NULL;
+    
     icheck(list);
+    icheck(list->length);
     joint = ireflistfirst(list);
     while(joint) {
         next = joint->next;
@@ -193,5 +199,6 @@ void ireflistremoveall(ireflist *list) {
     }
     list->root = NULL;
     list->length = 0;
+    list->tick = igetnextmicro();
 }
 
