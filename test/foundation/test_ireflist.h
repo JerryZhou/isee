@@ -155,6 +155,102 @@ SP_CASE(ireflist, ireflisttick) {
     irelease(list);
 }
 
+SP_CASE(ireflist, ireflistfind) {
+    ireflist *list = ireflistmake();
+    SP_TRUE(ireflistlen(list) == 0);
+    SP_TRUE(ireflistfirst(list) == NULL);
+    
+    SP_TRUE(ireflistfind(list, NULL) == NULL);
+    
+    ireflistadd(list, NULL);
+    SP_TRUE(ireflistfind(list, NULL) != NULL);
+    
+    irelease(list);
+}
+
+SP_CASE(ireflist, ireflistaddjoint) {
+    ireflist *list = ireflistmake();
+    SP_TRUE(ireflistlen(list) == 0);
+    SP_TRUE(ireflistfirst(list) == NULL);
+    
+    ireflistaddjoint(list, NULL);
+    SP_TRUE(ireflistlen(list) == 0);
+    SP_TRUE(ireflistfirst(list) == NULL);
+    
+    irefjoint * joint = irefjointmake(NULL);
+    ireflistaddjoint(list, joint);
+    SP_TRUE(ireflistlen(list) == 1);
+    SP_TRUE(ireflistfirst(list) == joint);
+    
+    irelease(list);
+    
+    irelease(joint);
+}
+
+SP_CASE(ireflist, ireflistremovejoint) {
+    ireflist *list = ireflistmake();
+    SP_TRUE(ireflistlen(list) == 0);
+    SP_TRUE(ireflistfirst(list) == NULL);
+    
+    irefjoint * joint0 = irefjointmake(NULL);
+    ireflistaddjoint(list, joint0);
+    SP_TRUE(ireflistlen(list) == 1);
+    SP_TRUE(ireflistfirst(list) == joint0);
+    
+    irefjoint * joint1 = irefjointmake(NULL);
+    ireflistaddjoint(list, joint1);
+    SP_TRUE(ireflistlen(list) == 2);
+    SP_TRUE(ireflistfirst(list) == joint1);
+    
+    irefjoint * joint2 = irefjointmake(NULL);
+    ireflistaddjoint(list, joint2);
+    SP_TRUE(ireflistlen(list) == 3);
+    SP_TRUE(ireflistfirst(list) == joint2);
+    
+    SP_TRUE(ireflistremovejoint(list, joint1) == joint0);
+    SP_TRUE(ireflistlen(list) == 2);
+    SP_TRUE(ireflistfirst(list) == joint2);
+    SP_TRUE(joint1->next == NULL);
+    SP_TRUE(joint1->pre == NULL);
+    
+    SP_TRUE(ireflistremovejoint(list, joint0) == NULL);
+    SP_TRUE(ireflistlen(list) == 1);
+    SP_TRUE(ireflistfirst(list) == joint2);
+    SP_TRUE(joint0->next == NULL);
+    SP_TRUE(joint0->pre == NULL);
+    
+    irelease(joint0);
+    irelease(joint1);
+    irelease(joint2);
+    
+    irelease(list);
+}
+
+SP_CASE(ireflist, ireflistremoveall) {
+    ireflist *list = ireflistmake();
+    SP_TRUE(ireflistlen(list) == 0);
+    SP_TRUE(ireflistfirst(list) == NULL);
+    
+    ireflistremoveall(list);
+    SP_TRUE(ireflisttick(list) == 0);
+    SP_TRUE(ireflistlen(list) == 0);
+    SP_TRUE(ireflistfirst(list) == NULL);
+    
+    ireflistadd(list, NULL);
+    int64_t t0 = ireflisttick(list);
+    SP_TRUE(t0 != 0);
+    SP_TRUE(ireflistlen(list) == 1);
+    SP_TRUE(ireflistfirst(list) != NULL);
+    
+    ireflistremoveall(list);
+    int64_t t1 = ireflisttick(list);
+    SP_TRUE(t1 > t0);
+    SP_TRUE(ireflistlen(list) == 0);
+    SP_TRUE(ireflistfirst(list) == NULL);
+    
+    irelease(list);
+}
+
 SP_CASE(ireflist, end) {
     SP_TRUE(1);
 }
