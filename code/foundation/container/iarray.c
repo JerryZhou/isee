@@ -9,6 +9,7 @@ const int kindex_invalid = -1;
 /* release all resources hold by the array */
 void iarray_destructor(ithis x, iobj *o) {
     iarray *array = icast(iarray, __iref(o));
+    iarrayentry *entry = (iarrayentry*)array->entry;
     
     /* unset the autoshirnk flag */
     iarrayunsetflag(array, EnumArrayFlagAutoShirk);
@@ -21,7 +22,11 @@ void iarray_destructor(ithis x, iobj *o) {
     ifree(array->buffer);
     /* for dynamic array */
     if (array->entry && iflag_is(array->entry->flag, EnumArrayFlagNeedFreeEntry)) {
-        ifree((void*)array->entry);
+        iobjfree(entry);
+    }
+    /* for dynamic user-data */
+    if (array->userdata && array->entry && iflag_is(array->entry->flag, EnumArrayFlagNeedFreeUserData)) {
+        iobjfree(array->userdata);
     }
     /*
      array->buffer = NULL;
