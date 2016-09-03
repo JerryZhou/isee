@@ -193,14 +193,14 @@ static void _iarray_entry_assign_iref(struct iarray *arr,
         
         /* watch the index change */
         if (arrs[i] && entry && entry->indexchange) {
-            entry->indexchange(arr, arrs[i], kindex_invalid);
+            entry->indexchange(entry, arr, arrs[i], kindex_invalid);
         }
         
         iassign(arrs[i], ref);
         
         /* watch the index change */
         if (ref && entry && entry->indexchange) {
-            entry->indexchange(arr, ref, i);
+            entry->indexchange(entry, arr, ref, i);
         }
         ++j;
         ++i;
@@ -229,8 +229,8 @@ static void _iarray_entry_swap_iref(struct iarray *arr,
         
         /* watch the index change */
         if (entry && entry->indexchange) {
-            entry->indexchange(arr, arrs[i], i);
-            entry->indexchange(arr, arrs[j], j);
+            entry->indexchange(entry, arr, arrs[i], i);
+            entry->indexchange(entry, arr, arrs[j], j);
         }
     }
 }
@@ -276,7 +276,6 @@ iarray* iarraymakeirefwithentryandcmp(size_t capacity, const irefarrayentry *ref
     iarrayentry *entry = iobjmalloc(iarrayentry);
     
     entry->flag = EnumArrayFlagAutoShirk |
-    EnumArrayFlagSimple |
     EnumArrayFlagKeepOrder |
     EnumArrayFlagMemsetZero |
     EnumArrayFlagNeedFreeEntry;
@@ -285,7 +284,7 @@ iarray* iarraymakeirefwithentryandcmp(size_t capacity, const irefarrayentry *ref
     entry->assign = _iarray_entry_assign_iref;
     entry->cmp = cmp;
     
-    arr = iarraymake(capacity, &_arr_entry_iref);
+    arr = iarraymake(capacity, entry);
     arr->userdata = (void*)refentry;
     return arr;
 }

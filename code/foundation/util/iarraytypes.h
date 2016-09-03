@@ -20,7 +20,7 @@ iarray* iarraymakecopyable(size_t capacity, size_t size);
 iarray* iarraymakecopyablewith(size_t capacity, size_t size, iarray_entry_cmp cmp);
 
 /* tracing the index change in array with ref */
-typedef void (*irefarray_index_change) (iarray *arr, iref *ref, int index);
+typedef void (*irefarray_index_change) (ithis x, iarray *arr, iref *ref, int index);
 
 /* append to iarray with iref entry */
 typedef struct irefarrayentry {
