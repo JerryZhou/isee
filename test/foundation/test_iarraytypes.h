@@ -36,6 +36,81 @@ SP_CASE(iarraytypes, iarraymakecopyableANDiarraymakeint) {
     }
 }
 
+typedef struct test_iref_st {
+    irefdeclare;
+    
+    int xid;
+    int x, y, z;
+    int index;
+}test_iref_st;
+irealdeclareregister(test_iref_st);
+
+int _t_x_y_iarray_entry_cmp (struct iarray *arr, int i, int j) {
+    test_iref_st *st0 = iarrayof(arr, test_iref_st*, i);
+    test_iref_st *st1 = iarrayof(arr, test_iref_st*, j);
+    return st0->z - st1->z;
+}
+
+void test_iref_st_destructor(ithis x, iobj *o) {
+    test_iref_st *st = icast(test_iref_st, __irobj(o));
+    ilog("##destructor##: %d\n", st->xid);
+}
+
+SP_CASE(iarraytypes, register_test_iref) {
+    imetaconfig config = {0};
+    config.name = "test_iref_st";
+    config.size = sizeof(test_iref_st);
+    config.destructor = test_iref_st_destructor;
+    imetaindex(test_iref_st) = imetaregisterwithconfig(&config);
+}
+
+static void _t_x_irefarray_index_change (ithis x, iarray *arr, iref *ref, int index) {
+    test_iref_st *st = icast(test_iref_st, ref);
+    st->index = index;
+}
+
+irefarrayentry _t_x_test_array_entry = {_t_x_irefarray_index_change};
+
+SP_CASE(iarraytypes, iarraymakeirefwithentryandcmp) {
+    iarray *arr = iarraymakeirefwithentryandcmp(10, &_t_x_test_array_entry, _t_x_y_iarray_entry_cmp);
+    
+    SP_TRUE(arr);
+    
+    test_iref_st *st0 = irefnew(test_iref_st);
+    test_iref_st *st1 = irefnew(test_iref_st);
+    test_iref_st *st2 = irefnew(test_iref_st);
+    
+    st2->z = 2;st2->xid = 2;
+    st1->z = 1;st1->xid = 1;
+    st0->z = 0;st0->xid = 0;
+    
+    iarrayadd(arr, &st2);
+    SP_TRUE(st2->index == 0);
+    
+    iarrayadd(arr, &st0);
+    SP_TRUE(st0->index == 1);
+    
+    iarrayadd(arr, &st1);
+    SP_TRUE(st1->index == 2);
+    
+    irangearray(arr, test_iref_st*,
+                ilog("arr[%d]=(xid:%d,index:%d)\n", __key, __value->xid, __value->index));
+    
+    iarraysort(arr);
+    
+    irangearray(arr, test_iref_st*,
+                ilog("arr[%d]=(xid:%d,index:%d)\n", __key, __value->xid, __value->index));
+    
+    SP_TRUE(st0->index == 0 && st1->index == 1 && st2->index == 2);
+    
+    
+    irelease(st0);
+    irelease(st1);
+    irelease(st2);
+    
+    irelease(arr);
+}
+
 SP_CASE(iarraytypes, end) {
     SP_TRUE(1);
 }
