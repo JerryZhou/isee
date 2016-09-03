@@ -47,6 +47,7 @@ __ideclaremetapart(irefjoint, 0, NULL, irefjoint_destructor),\
 __ideclaremetapart(ireflist, 0, NULL, ireflist_destructor),\
 __ideclaremetapart(iarray, 1000, NULL, iarray_destructor),\
 __ideclaremetacapacity(iarrayentry, 1000),\
+__ideclaremetacapacity(irefarrayentry, 1000),\
 __ideclaremetapart(islice, 1000, NULL, islice_destructor),\
 __ideclaremetapart(icmdarg, 0, NULL, icmdarg_destructor),\
 __ideclaremeta(itree),\
