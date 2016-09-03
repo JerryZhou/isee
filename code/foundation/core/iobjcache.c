@@ -31,7 +31,7 @@ static imutex *_imeta_mutex() {
 static imemorystatistics _g_global_statis;
 
 /* iobj: direct alloc */
-iobj *_imetadirectalloc(iobjcache *xthis, imeta *meta) {
+static iobj *_imetadirectalloc(iobjcache *xthis, imeta *meta) {
     size_t newsize = sizeof(struct iobj) + meta->size;
     iobj *obj = (iobj*)icalloc(1, newsize);
     obj->meta = meta;
@@ -46,23 +46,13 @@ iobj *_imetadirectalloc(iobjcache *xthis, imeta *meta) {
     imemorystatisbehavior_alloc(&_g_global_statis, newsize);
     _imeta_global_unlock;
     
-    /* tracing */
-    if (meta->funcs && meta->funcs->constructor) {
-        meta->funcs->constructor((ithis)xthis, obj);
-    }
-    
     return obj;
 }
 
 /* iobj: direct free */
-void _imetadirectfree(iobjcache *xthis, iobj *obj) {
+static void _imetadirectfree(iobjcache *xthis, iobj *obj) {
     imeta *meta = obj->meta;
     size_t newsize = obj->meta->size + sizeof(iobj);
-    
-    /* tracing the free */
-    if (meta->funcs && meta->funcs->destructor) {
-        meta->funcs->destructor((ithis)xthis, obj);
-    }
     
     /* meta-statis */
     _imeta_lock;
@@ -91,18 +81,29 @@ static iobj *_icachepoll(iobjcache *cache, imeta *meta) {
         --cache->num;
         memset(obj->addr, 0, meta->size);
         _imeta_unlock;
+       
     } else {
         _imeta_unlock;
         
         obj = _imetadirectalloc(cache, meta);
     }
     
+    /* tracing */
+    if (meta->funcs && meta->funcs->constructor) {
+        meta->funcs->constructor((ithis)cache, obj);
+    }
+    
     return obj;
 }
 
-/* Meta 的缓冲区管理 */
-void _icachepush(iobjcache *cache, iobj *obj) {
+/* Meta -Cache: Managing */
+static void _icachepush(iobjcache *cache, iobj *obj) {
     imeta *meta = obj->meta;
+    
+    /* tracing the free */
+    if (meta->funcs && meta->funcs->destructor) {
+        meta->funcs->destructor((ithis)cache, obj);
+    }
     
     _imeta_lock;
     if (cache->num < cache->capacity) {
@@ -110,6 +111,7 @@ void _icachepush(iobjcache *cache, iobj *obj) {
         cache->root = obj;
         ++cache->num;
         _imeta_unlock;
+        
     } else {
         _imeta_unlock;
         
