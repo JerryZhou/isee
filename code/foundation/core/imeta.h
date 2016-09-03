@@ -99,6 +99,12 @@ imeta *imetaget(int idx);
 /* register a type with cache, return the meta-index */
 int imetaregister(const char* name, size_t size);
 
+/* register a type with details */
+int imetaregisterwithdetails(const char *name, size_t size,
+                             size_t capacity,
+                             ientryobjconstructor constructor,
+                             ientryobjconstructor destructor);
+    
 /* register a type with capacity, return the meta-index */
 int imetaregisterwithcapacity(const char *name, size_t size, size_t capacity);
 

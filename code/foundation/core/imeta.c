@@ -100,6 +100,15 @@ int imetaregister(const char* name, size_t size) {
     return imetaregisterwithcapacity(name, size, 0);
 }
 
+/* register a type with details */
+int imetaregisterwithdetails(const char *name, size_t size,
+                             size_t capacity,
+                             ientryobjconstructor constructor,
+                             ientryobjconstructor destructor) {
+    imetaconfig config = {name, size, capacity, NULL, constructor, destructor };
+    return imetaregisterwithconfig(&config);
+}
+
 /* register a type with capacity, return the meta-index */
 int imetaregisterwithcapacity(const char* name, size_t size, size_t capacity) {
     imetaconfig config = {name, size, capacity};
