@@ -18,19 +18,6 @@ iarray* iarraymakecopyable(size_t capacity, size_t size);
     
 /* the copyable array with cmp */
 iarray* iarraymakecopyablewith(size_t capacity, size_t size, iarray_entry_cmp cmp);
-    
-/* array-int */
-iarray* iarraymakeint(size_t capacity);
-
-/* array-ireal */
-iarray* iarraymakeireal(size_t capacity);
-
-/* array-int64 */
-iarray* iarraymakeint64(size_t capacity);
-
-/* array-char */
-iarray* iarraymakechar(size_t capacity);
-
 
 /* tracing the index change in array with ref */
 typedef void (*irefarray_index_change) (iarray *arr, iref *ref, int index);
@@ -52,6 +39,17 @@ iarray* iarraymakeirefwithcmp(size_t capacity, iarray_entry_cmp cmp);
 /* array-iref with entry anthor cmp */
 iarray* iarraymakeirefwithentryandcmp(size_t capacity, const irefarrayentry *refentry, iarray_entry_cmp cmp);
     
+/* array-int */
+iarray* iarraymakeint(size_t capacity);
+
+/* array-ireal */
+iarray* iarraymakeireal(size_t capacity);
+
+/* array-int64 */
+iarray* iarraymakeint64(size_t capacity);
+
+/* array-char */
+iarray* iarraymakechar(size_t capacity);
     
 /* the inner array entry type */
 typedef enum EnumArrayEntryType {
