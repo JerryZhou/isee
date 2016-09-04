@@ -6,7 +6,7 @@ SP_SUIT(icmdarg);
 SP_CASE(icmdarg, icmdargmakeANDicmdargmakeby) {
     icmdarg * arg = icmdargmake(0, NULL);
     SP_TRUE(arg->origin);
-    SP_TRUE(istringcompare(arg->origin, kstring_zero) == 0);
+    SP_TRUE(istringcompare(arg->origin, kstring_empty) == 0);
     SP_TRUE(iarraylen(arg->args)==0);
     
     irelease(arg);
