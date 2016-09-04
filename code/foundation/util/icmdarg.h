@@ -13,7 +13,7 @@ extern "C" {
 typedef struct icmdarg {
     irefdeclare;
     
-    istring origin;
+    istring *origin;
     iarray *args; /*iarray<istring> */
 } icmdarg;
 

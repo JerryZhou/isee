@@ -12,7 +12,7 @@ void icmdarg_destructor(ithis x, iobj *o) {
 /* make a icmdarg from command lines */
 icmdarg *icmdargmake(int argc, const char **argv) {
     icmdarg *arg = irefnew(icmdarg);
-    istring tmp = NULL;
+    istring *tmp = NULL;
     int i=0;
     
     /* make istring */
