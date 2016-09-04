@@ -15,8 +15,10 @@ iarray name##_array = {1, NULL, NULL, 0, NULL, strlen(value), strlen(value), (ch
 islice name##_slice = {1, NULL, NULL, 0, NULL, &name##_array, 0, strlen(value)};\
 islice * name = & name##_slice
 
-/* empty istring */
+/* NULL istring */
 extern istring *kstring_zero;
+/* empty istring */
+extern istring *kstring_empty;
 
 /*Make a string by c-style string */
 istring* istringmake(const char* s);

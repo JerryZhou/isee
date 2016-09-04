@@ -1,17 +1,29 @@
 #include "foundation/util/istring.h"
 #include "foundation/util/iarraytypes.h"
 
-ideclarestring(kstring_zero, "");
+ideclarestring(kstring_empty, "");
+istring *kstring_zero = NULL;
 
 /*Make a string by c-style string */
 istring* istringmake(const char* s) {
+    icheckret(s, kstring_zero);
     return istringmakelen(s, strlen(s));
 }
 
 /*Make a string by s and len*/
 istring* istringmakelen(const char* s, size_t len) {
     islice *str;
-    iarray *arr = iarraymakechar(len+1);
+    iarray *arr = NULL;
+    
+    /* kstring_zero */
+    icheckret(s, kstring_zero);
+    /* kstring_empty */
+    if (len == 0) {
+        iretain(kstring_empty);
+        return kstring_empty;
+    }
+    
+    arr = iarraymakechar(len+1);
     iarrayinsert(arr, 0, s, len);
     ((char*)iarraybuffer(arr))[len] = 0;
     
@@ -213,7 +225,19 @@ istring* istringformat(const char* fmt, ...) {
 int istringcompare(const istring *lfs, const istring *rfs) {
     size_t lfslen = istringlen(lfs);
     size_t rfslen = istringlen(rfs);
-    int n = strncmp(istringbuf(lfs), istringbuf(rfs), imin(lfslen, rfslen));
+    int n;
+    /* zero string */
+    if (lfs == NULL || rfs == NULL) {
+        if (lfs == rfs) {
+            return 0;
+        } else if (lfs) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+    /* not zero string */
+    n = strncmp(istringbuf(lfs), istringbuf(rfs), imin(lfslen, rfslen));
     if (n) {
         return n;
     }
