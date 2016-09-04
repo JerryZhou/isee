@@ -28,7 +28,7 @@
 #include "foundation/test_irefcache.h"
 #include "foundation/test_ireflist.h"
 #include "foundation/test_islice.h"
-#include "foundation/test_itree.h" // TODO: 
+#include "foundation/test_itree.h" // TODO:
 
 // foundation/util
 #include "foundation/test_iarraytypes.h"
