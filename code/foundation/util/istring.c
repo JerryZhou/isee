@@ -4,12 +4,12 @@
 ideclarestring(kstring_zero, "");
 
 /*Make a string by c-style string */
-istring istringmake(const char* s) {
+istring* istringmake(const char* s) {
     return istringmakelen(s, strlen(s));
 }
 
 /*Make a string by s and len*/
-istring istringmakelen(const char* s, size_t len) {
+istring* istringmakelen(const char* s, size_t len) {
     islice *str;
     iarray *arr = iarraymakechar(len+1);
     iarrayinsert(arr, 0, s, len);
@@ -21,23 +21,23 @@ istring istringmakelen(const char* s, size_t len) {
 }
 
 /*Make a copy of s with c-style string*/
-istring istringdup(const istring s) {
+istring* istringdup(const istring *s) {
     return istringmakelen(istringbuf(s), istringlen(s));
 }
 
 /*Return the string length */
-size_t istringlen(const istring s) {
+size_t istringlen(const istring *s) {
     icheckret(s, 0);
     return islicelen(s);
 }
 
 /*visit the real string buffer*/
-const char* istringbuf(const istring s) {
+const char* istringbuf(const istring *s) {
     return (const char*)isliceat(s, 0);
 }
 
 /*set the entry for stack string */
-istring istringlaw(istring s) {
+istring* istringlaw(istring *s) {
     if (s->array->entry == NULL) {
         s->array->entry = iarrayentryget(0);
     }
@@ -120,8 +120,8 @@ size_t _idouble2str(char *s, double d) {
 }
 
 /*format the string and return the value*/
-istring istringformat(const char* fmt, ...) {
-    istring s;
+istring* istringformat(const char* fmt, ...) {
+    istring *s;
     iarray *arr = iarraymakechar(strlen(fmt)*2);
     const char *f = fmt;
     size_t i;
@@ -155,7 +155,7 @@ istring istringformat(const char* fmt, ...) {
                         break;
                     case 'v':
                     case 'V':
-                        s = va_arg(ap, istring);
+                        s = va_arg(ap, istring*);
                         l = istringlen(s);
                         iarrayinsert(arr, iarraylen(arr), istringbuf(s), l);
                         i += l;
@@ -210,7 +210,7 @@ istring istringformat(const char* fmt, ...) {
 }
 
 /*compare the two istring*/
-int istringcompare(const istring lfs, const istring rfs) {
+int istringcompare(const istring *lfs, const istring *rfs) {
     size_t lfslen = istringlen(lfs);
     size_t rfslen = istringlen(rfs);
     int n = strncmp(istringbuf(lfs), istringbuf(rfs), imin(lfslen, rfslen));
@@ -324,7 +324,7 @@ iarray* _istringfind_boyermoore(unsigned char *pattern, int m, unsigned char *te
 }
 
 /*find the index in istring */
-int istringfind(const istring rfs, const char *sub, int len, int index) {
+int istringfind(const istring *rfs, const char *sub, int len, int index) {
     iarray *indexs;
     icheckret(index>=0 && index<istringlen(rfs), kindex_invalid);
     
@@ -343,17 +343,17 @@ int istringfind(const istring rfs, const char *sub, int len, int index) {
 }
 
 /*sub string*/
-istring istringsub(const istring s, int begin, int end) {
-    return istringlaw(islicedby(s, begin, end));
+istring* istringsub(const istring *s, int begin, int end) {
+    return istringlaw(islicedby((istring*)s, begin, end));
 }
 
 /*return the array of istring*/
-iarray* istringsplit(const istring s, const char* split, int len) {
+iarray* istringsplit(const istring *s, const char* split, int len) {
     int subindex = 0;
     int lastsubindex = 0;
     int i;
     size_t size = istringlen(s);
-    istring sub;
+    istring *sub;
     iarray* arr = iarraymakeiref(8);
     
     /*find all the sub*/
@@ -391,20 +391,20 @@ iarray* istringsplit(const istring s, const char* split, int len) {
 }
 
 /*return the array of sting joined by dealer */
-istring istringjoin(const iarray* ss, const char* join, int len) {
+istring* istringjoin(const iarray* ss, const char* join, int len) {
     iarray *joined = iarraymakechar(8);
-    istring s;
+    istring *s;
     size_t i = 0;
     size_t num = iarraylen(ss);
     /*the first one*/
     if (num) {
-        s = iarrayof(ss, istring, 0);
+        s = iarrayof(ss, istring*, 0);
         iarrayinsert(joined, 0, istringbuf(s), istringlen(s));
     }
     /*the after childs*/
     for (i=1; i<num; ++i) {
         iarrayinsert(joined, iarraylen(joined), join, len);
-        s = iarrayof(ss, istring, i);
+        s = iarrayof(ss, istring*, i);
         iarrayinsert(joined, iarraylen(joined), istringbuf(s), istringlen(s));
     }
     
@@ -415,17 +415,17 @@ istring istringjoin(const iarray* ss, const char* join, int len) {
 }
 
 /*return the new istring with new component*/
-istring istringrepleace(const istring s, const char* olds, const char* news) {
+istring* istringrepleace(const istring *s, const char* olds, const char* news) {
     iarray *splits = istringsplit(s, olds, strlen(olds));
-    istring ns = istringjoin(splits, news, strlen(news));
+    istring *ns = istringjoin(splits, news, strlen(news));
     irelease(splits);
     
     return ns;
 }
 
 /*return the new istring append with value*/
-istring istringappend(const istring s, const char* append) {
-    istring ns;
+istring* istringappend(const istring *s, const char* append) {
+    istring *ns;
     iarray *arr = iarraymakechar(istringlen(s) + strlen(append));
     iarrayinsert(arr, 0, istringbuf(s), istringlen(s));
     iarrayinsert(arr, iarraylen(arr), append, strlen(append));
@@ -436,7 +436,7 @@ istring istringappend(const istring s, const char* append) {
 }
 
 /*baisc wrap for ::atoi */
-int istringatoi(const istring s) {
+int istringatoi(const istring *s) {
     char buf[256+1] = {0};
     size_t size = istringlen(s);
     icheckret(size, 0);
@@ -454,7 +454,7 @@ int istringatoi(const istring s) {
  * @param str The string be to converted to double.
  * @return Returns converted value of a string.
  */
-double istringatof(const istring s) {
+double istringatof(const istring *s) {
     char buf[256+1] = {0};
     char* dot = NULL;
     size_t size = istringlen(s);

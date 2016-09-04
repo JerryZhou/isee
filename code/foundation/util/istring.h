@@ -7,7 +7,7 @@
 extern "C" {
 #endif
     
-typedef islice* istring;
+typedef islice istring;
 
 /* declare the string in stack, no need to free */
 #define ideclarestring(name, value) \
@@ -15,23 +15,26 @@ iarray name##_array = {1, NULL, NULL, 0, NULL, strlen(value), strlen(value), (ch
 islice name##_slice = {1, NULL, NULL, 0, NULL, &name##_array, 0, strlen(value)};\
 islice * name = & name##_slice
 
+/* empty istring */
+extern istring *kstring_zero;
+
 /*Make a string by c-style string */
-istring istringmake(const char* s);
+istring* istringmake(const char* s);
 
 /*Make a string by s and len*/
-istring istringmakelen(const char* s, size_t len);
+istring* istringmakelen(const char* s, size_t len);
 
 /*Make a copy of s with c-style string*/
-istring istringdup(const istring s);
+istring* istringdup(const istring *s);
 
 /*Return the string length */
-size_t istringlen(const istring s);
+size_t istringlen(const istring *s);
 
 /*visit the real string buffer*/
-const char* istringbuf(const istring s);
+const char* istringbuf(const istring *s);
 
 /*set the entry for stack string */
-istring istringlaw(istring s);
+istring* istringlaw(istring *s);
 
 /*format the string and return the value*/
 /* This function is similar to sdscatprintf, but much faster as it does
@@ -51,31 +54,31 @@ istring istringlaw(istring s);
  * %V - istring
  * %% - Verbatim "%" character.
  */
-istring istringformat(const char* format, ...);
+istring* istringformat(const char* format, ...);
 
 /*compare the two istring*/
-int istringcompare(const istring lfs, const istring rfs);
+int istringcompare(const istring *lfs, const istring *rfs);
 
 /*find the index in istring */
-int istringfind(const istring rfs, const char *sub, int len, int index);
+int istringfind(const istring *rfs, const char *sub, int len, int index);
 
 /*sub string*/
-istring istringsub(const istring s, int begin, int end);
+istring* istringsub(const istring *s, int begin, int end);
 
 /*return the array of istring*/
-iarray* istringsplit(const istring s, const char* split, int len);
+iarray* istringsplit(const istring *s, const char* split, int len);
 
 /*return the array of string joined by dealer */
-istring istringjoin(const iarray* ss, const char* join, int len);
+istring* istringjoin(const iarray* ss, const char* join, int len);
 
 /*return the new istring with new component*/
-istring istringrepleace(const istring s, const char* olds, const char* news);
+istring* istringrepleace(const istring *s, const char* olds, const char* news);
 
 /*return the new istring append with value*/
-istring istringappend(const istring s, const char* append);
+istring* istringappend(const istring *s, const char* append);
 
 /*baisc wrap for ::atoi */
-int istringatoi(const istring s);
+int istringatoi(const istring *s);
 
 /*[cocos2dx](https://github.com/cocos2d/cocos2d-x/blob/v3/cocos/base/ccUtils.h)*/
 /** Same to ::atof, but strip the string, remain 7 numbers after '.' before call atof.
@@ -86,7 +89,7 @@ int istringatoi(const istring s);
  * @param str The string be to converted to double.
  * @return Returns converted value of a string.
  */
-double istringatof(const istring s);
+double istringatof(const istring *s);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
