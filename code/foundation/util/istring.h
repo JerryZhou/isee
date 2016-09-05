@@ -54,6 +54,8 @@ istring* istringlaw(istring *s);
  * %U - 64 bit unsigned integer (unsigned long long, uint64_t)
  * %v - istring
  * %V - istring
+ * %f - double
+ * %F - double
  * %% - Verbatim "%" character.
  */
 istring* istringformat(const char* format, ...);
