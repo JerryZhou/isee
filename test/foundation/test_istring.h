@@ -94,6 +94,26 @@ SP_CASE(istring, istringformat) {
     irelease(s1);
 }
 
+SP_CASE(istring, istringcompare) {
+    istring * s0 = istringmake("aba");
+    istring * s1 = istringmake("abb");
+    istring * s2 = istringmake("abc");
+    
+    // s0 < s1 < s2
+    SP_TRUE(istringcompare(s0, s1) < 0);
+    SP_TRUE(istringcompare(s1, s2) < 0);
+    SP_TRUE(istringcompare(s0, s2) < 0);
+    
+    SP_TRUE(istringcompare(kstring_empty, kstring_zero) > 0);
+    SP_TRUE(istringcompare(kstring_zero, kstring_empty) < 0);
+    SP_TRUE(istringcompare(kstring_zero, kstring_zero) == 0);
+    SP_TRUE(istringcompare(kstring_empty, kstring_empty) == 0);
+    
+    irelease(s0);
+    irelease(s1);
+    irelease(s2);
+}
+
 SP_CASE(istring, end) {
     SP_TRUE(1);
 }
