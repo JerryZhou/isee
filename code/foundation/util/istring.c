@@ -50,10 +50,12 @@ const char* istringbuf(const istring *s) {
 
 /*set the entry for stack string */
 istring* istringlaw(istring *s) {
-    if (s->array->entry == NULL) {
+    /* the const string should be fill with entry */
+    if (s->array && s->array->entry == NULL) {
         s->array->entry = iarrayentryget(EnumArrayEntryType_Char);
     }
-    s->flag |= EnumSliceFlag_String;
+    /* the flag: string */
+    iflag_add(s->flag, EnumSliceFlag_String);
     return s;
 }
 
