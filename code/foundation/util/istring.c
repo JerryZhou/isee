@@ -51,7 +51,7 @@ const char* istringbuf(const istring *s) {
 /*set the entry for stack string */
 istring* istringlaw(istring *s) {
     if (s->array->entry == NULL) {
-        s->array->entry = iarrayentryget(0);
+        s->array->entry = iarrayentryget(EnumArrayEntryType_Char);
     }
     s->flag |= EnumSliceFlag_String;
     return s;
