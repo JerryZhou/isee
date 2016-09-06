@@ -4,6 +4,11 @@
 ideclarestring(kstring_empty, "");
 istring *kstring_zero = NULL;
 
+/* c-style: ending with zero */
+#define __istring_cstyle(arr) \
+    do { iarrayexpandcapacity(arr, iarraylen(arr)+1); \
+    ((char*)iarraybuffer(arr))[iarraylen(arr)] = 0; } while(0)
+
 /*Make a string by c-style string */
 istring* istringmake(const char* s) {
     icheckret(s, kstring_zero);
@@ -25,7 +30,7 @@ istring* istringmakelen(const char* s, size_t len) {
     
     arr = iarraymakechar(len+1);
     iarrayinsert(arr, 0, s, len);
-    ((char*)iarraybuffer(arr))[len] = 0;
+    __istring_cstyle(arr);
     
     str = islicemake(arr, 0, len, 0);
     irelease(arr);
@@ -370,11 +375,16 @@ int istringfind(const istring *rfs, const char *sub, int len, int index) {
 
 /*sub string*/
 istring* istringsub(const istring *s, int begin, int end) {
-    return istringlaw(islicedby((istring*)s, begin, end));
+    istring *sub = istringlaw(islicedby((istring*)s, begin, end));
+    /* empty sub */
+    if (0==istringlen(sub)) {
+        iassign(sub, kstring_empty);
+    }
+    return sub;
 }
 
 /*return the array of istring*/
-iarray* istringsplit(const istring *s, const char* split, int len) {
+iarray* istringsplit(const istring *s, const char* split, size_t len) {
     int subindex = 0;
     int lastsubindex = 0;
     int i;
@@ -417,7 +427,7 @@ iarray* istringsplit(const istring *s, const char* split, int len) {
 }
 
 /*return the array of sting joined by dealer */
-istring* istringjoin(const iarray* ss, const char* join, int len) {
+istring* istringjoin(const iarray* ss, const char* join, size_t len) {
     iarray *joined = iarraymakechar(8);
     istring *s;
     size_t i = 0;
@@ -433,6 +443,8 @@ istring* istringjoin(const iarray* ss, const char* join, int len) {
         s = iarrayof(ss, istring*, i);
         iarrayinsert(joined, iarraylen(joined), istringbuf(s), istringlen(s));
     }
+    /*set zero-ending */
+    __istring_cstyle(joined);
     
     /*make slice*/
     s = islicemakearg(joined, ":");
@@ -441,20 +453,21 @@ istring* istringjoin(const iarray* ss, const char* join, int len) {
 }
 
 /*return the new istring with new component*/
-istring* istringrepleace(const istring *s, const char* olds, const char* news) {
-    iarray *splits = istringsplit(s, olds, strlen(olds));
-    istring *ns = istringjoin(splits, news, strlen(news));
+istring* istringrepleace(const istring *s, const char* olds, size_t oldslen, const char* news, size_t newlen) {
+    iarray *splits = istringsplit(s, olds, oldslen);
+    istring *ns = istringjoin(splits, news, newlen);
     irelease(splits);
     
     return ns;
 }
 
 /*return the new istring append with value*/
-istring* istringappend(const istring *s, const char* append) {
+istring* istringappend(const istring *s, const char* append, size_t len) {
     istring *ns;
-    iarray *arr = iarraymakechar(istringlen(s) + strlen(append));
+    iarray *arr = iarraymakechar(istringlen(s) + len +1);
     iarrayinsert(arr, 0, istringbuf(s), istringlen(s));
-    iarrayinsert(arr, iarraylen(arr), append, strlen(append));
+    iarrayinsert(arr, iarraylen(arr), append, len);
+    __istring_cstyle(arr);
     
     ns = islicemakearg(arr, ":");
     irelease(arr);

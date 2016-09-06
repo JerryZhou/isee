@@ -70,16 +70,16 @@ int istringfind(const istring *rfs, const char *sub, int len, int index);
 istring* istringsub(const istring *s, int begin, int end);
 
 /*return the array of istring*/
-iarray* istringsplit(const istring *s, const char* split, int len);
+iarray* istringsplit(const istring *s, const char* split, size_t len);
 
 /*return the array of string joined by dealer */
-istring* istringjoin(const iarray* ss, const char* join, int len);
+istring* istringjoin(const iarray* ss, const char* join, size_t len);
 
 /*return the new istring with new component*/
-istring* istringrepleace(const istring *s, const char* olds, const char* news);
+istring* istringrepleace(const istring *s, const char* olds, size_t oldslen, const char* news, size_t newlen);
 
 /*return the new istring append with value*/
-istring* istringappend(const istring *s, const char* append);
+istring* istringappend(const istring *s, const char* append, size_t len);
 
 /*baisc wrap for ::atoi */
 int istringatoi(const istring *s);
