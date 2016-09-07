@@ -24,6 +24,12 @@ typedef union ivec2 {
     } v;
 }ivec2;
 
+/* const useful vectors  */
+extern const ivec2 kivec2_zero;
+extern const ivec2 kivec2_axis_x;
+extern const ivec2 kivec2_axis_y;
+extern const ivec2 kivec2_axis_xy;
+
 /* ipos2 ==> ivec2 */
 ivec2 ivec2subtractpoint(const struct ipos *p0, const struct ipos *p1);
 
@@ -75,11 +81,11 @@ typedef union ivec3 {
 }ivec3;
 
 /* extern const */
-extern const ivec3 kVec3_Axis_X;
-extern const ivec3 kVec3_Axis_Y;
-extern const ivec3 kVec3_Axis_Z;
-extern const ivec3 kVec3_Axis_Neg_Z;
-extern const ivec3 kVec3_Zero;
+extern const ivec3 kvec3_axis_x;
+extern const ivec3 kvec3_axis_y;
+extern const ivec3 kvec3_axis_z;
+extern const ivec3 kvec3_axis_neg_z;
+extern const ivec3 kvec3_zero;
 
 /* almost equal */
 int ivec3isequal(const ivec3 *l, const ivec3 *r);

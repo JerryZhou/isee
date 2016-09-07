@@ -1,5 +1,11 @@
 #include "foundation/math/ivec.h"
 
+/* const useful vectors  */
+const ivec2 kivec2_zero = {{0, 0}};
+const ivec2 kivec2_axis_x    = {{1, 0}};
+const ivec2 kivec2_axis_y    = {{0, 1}};
+const ivec2 kivec2_axis_xy   = {{1, 1}};
+
 /* move point */
 ipos ivec2movepoint(const ivec2 *dir, ireal dist, const ipos *p) {
     ipos to = *p;
@@ -26,8 +32,8 @@ ireal ivec2dot(const ivec2 *l, const ivec2 *r) {
 /* sub */
 ivec2 ivec2subtract(const ivec2 *l, const ivec2 *r) {
     ivec2 vec;
-    vec.v.x = r->v.x - l->v.x;
-    vec.v.y = r->v.y - l->v.y;
+    vec.v.x = l->v.x - r->v.x;
+    vec.v.y = l->v.y - r->v.y;
     return vec;
 }
 
@@ -88,11 +94,11 @@ ivec2 ivec2perpendicular(const ivec2 *l, const ivec2 *r) {
 /*************************************************************/
 
 /* extern const */
-const ivec3 kVec3_Axis_X = {{1.f, 0.f, 0.f}};
-const ivec3 kVec3_Axis_Y = {{0.f, 1.f, 0.f}};
-const ivec3 kVec3_Axis_Z = {{0.f, 0.f, 1.f}};
-const ivec3 kVec3_Axis_Neg_Z = {{0.f, 0.f, -1.f}};
-const ivec3 kVec3_Zero = {{0.f, 0.f, 0.f}};
+const ivec3 kvec3_axis_x = {{1.f, 0.f, 0.f}};
+const ivec3 kvec3_axis_y = {{0.f, 1.f, 0.f}};
+const ivec3 kvec3_axis_z = {{0.f, 0.f, 1.f}};
+const ivec3 kvec3_axis_neg_z = {{0.f, 0.f, -1.f}};
+const ivec3 kvec3_zero = {{0.f, 0.f, 0.f}};
 
 /* almost equal */
 int ivec3isequal(const ivec3 *l, const ivec3 *r) {
@@ -131,9 +137,9 @@ ivec3 ivec3add(const ivec3 *l, const ivec3 *r) {
 /* vector sub */
 ivec3 ivec3subtract(const ivec3 *l, const ivec3 *r) {
     ivec3 vec;
-    vec.v.x = r->v.x - l->v.x;
-    vec.v.y = r->v.y - l->v.y;
-    vec.v.z = r->v.z - l->v.z;
+    vec.v.x = l->v.x - r->v.x;
+    vec.v.y = l->v.y - r->v.y;
+    vec.v.z = l->v.z - r->v.z;
     return vec;
 }
 
