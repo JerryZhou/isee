@@ -101,6 +101,15 @@ int ivec3isequal(const ivec3 *l, const ivec3 *r) {
         ireal_equal(l->values[2], r->values[2]);
 }
 
+/* move dir the dist */
+ipos3 ivec3movepoint(const ivec3 *dir, ireal dist, const ipos3 *p) {
+    ipos3 to = *p;
+    to.x += dir->v.x * dist;
+    to.y += dir->v.y * dist;
+    to.z += dir->v.z * dist;
+    return to;
+}
+
 /* sub point */
 ivec3 ivec3subtractpoint(const ipos3 *p0, const ipos3 *p1) {
     ivec3 v;

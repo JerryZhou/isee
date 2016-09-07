@@ -83,6 +83,10 @@ extern const ivec3 kVec3_Zero;
 
 /* almost equal */
 int ivec3isequal(const ivec3 *l, const ivec3 *r);
+    
+/* move dir the dist */
+ipos3 ivec3movepoint(const ivec3 *dir, ireal dist, const ipos3 *p);
+    
 /* ipos3 ==> ivec3 */
 ivec3 ivec3subtractpoint(const struct ipos3 *p0, const struct ipos3 *p1);
 
