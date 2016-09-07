@@ -79,3 +79,87 @@ SP_CASE(ivec2, basic_funcs) {
 SP_CASE(ivec2, end) {
     SP_TRUE(1);
 }
+
+
+SP_SUIT(ivec3);
+
+SP_CASE(ivec3, base_funcs) {
+    SP_TRUE(iiyes == ivec3isequal(&kivec3_axis_x, &kivec3_axis_x));
+    
+    SP_TRUE(iino == ivec3isequal(&kivec3_axis_x, &kivec3_axis_y));
+    
+    {
+        ipos3 p0 = ivec3movepoint(&kivec3_axis_x, 1, &kipos3_zero);
+    
+        SP_TRUE(ireal_equal(p0.x, 1));
+        SP_TRUE(ireal_equal(p0.y, 0));
+        SP_TRUE(ireal_equal(p0.z, 0));
+    }
+    
+    {
+        ipos3 p0 = {1, 0, 0};
+        ivec3 v0 = ivec3subtractpoint(&p0, &kipos3_zero);
+        SP_TRUE(iiyes == ivec3isequal(&kivec3_axis_x, &v0));
+    }
+    {
+        ivec3 v0 = ivec3add(&kivec3_axis_x, &kivec3_axis_y);
+        SP_TRUE(ireal_equal(v0.v.x, 1));
+        SP_TRUE(ireal_equal(v0.v.y, 1));
+        SP_TRUE(ireal_equal(v0.v.z, 0));
+    }
+    {
+        ivec3 v0 = ivec3subtract(&kivec3_axis_y, &kivec3_axis_x);
+        SP_TRUE(ireal_equal(v0.v.x, -1));
+        SP_TRUE(ireal_equal(v0.v.y, 1));
+        SP_TRUE(ireal_equal(v0.v.z, 0));
+    }
+    {
+        ivec3 v0 = ivec3scale(&kivec3_axis_x, 2);
+        SP_TRUE(ireal_equal(v0.v.x, 2));
+        SP_TRUE(ireal_equal(v0.v.y, 0));
+        SP_TRUE(ireal_equal(v0.v.z, 0));
+    }
+    {
+        ireal v = ivec3dot(&kivec3_axis_x, &kivec3_axis_y);
+        SP_TRUE(ireal_equal(v, 0));
+    }
+    {
+        ivec3 v0 = ivec3cross(&kivec3_axis_x, &kivec3_axis_y);
+        SP_TRUE(iiyes == ivec3isequal(&v0, &kivec3_axis_z));
+        
+    }
+    {
+        ivec3 d = {{1,1,0}};
+        ireal v = ivec3lengthsqr(&d);
+        SP_TRUE(ireal_equal(v, 2));
+        ireal vx = ivec3length(&d);
+        SP_TRUE(ireal_equal(vx*vx, v));
+    }
+    {
+        ivec3 d = {{1,-1,0}};
+        ivec3 v0 = ivec3abs(&d);
+        SP_TRUE(ireal_equal(v0.v.x, 1));
+        SP_TRUE(ireal_equal(v0.v.y, 1));
+        SP_TRUE(ireal_equal(v0.v.z, 0));
+    }
+    {
+        ivec3 d = {{1,-1,0}};
+        ivec3 v0 = ivec3normalize(&d);
+        ireal vx = ivec3length(&d);
+        SP_TRUE(ireal_equal(v0.v.x, 1.0/vx));
+        SP_TRUE(ireal_equal(v0.v.y, -1.0/vx));
+        SP_TRUE(ireal_equal(v0.v.z, 0));
+    }
+    {
+        ivec3 d = {{1,1,0}};
+        ivec3 v0 = ivec3parallel(&d, &kivec3_axis_x);
+        SP_TRUE(iiyes == ivec3isequal(&v0, &kivec3_axis_x));
+        ivec3 v1 = ivec3perpendicular(&d, &kivec3_axis_x);
+        SP_TRUE(iiyes == ivec3isequal(&v1, &kivec3_axis_y));
+    }
+}
+
+
+SP_CASE(ivec3, end) {
+    SP_TRUE(1);
+}
