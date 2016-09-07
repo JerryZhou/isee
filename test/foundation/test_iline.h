@@ -280,6 +280,18 @@ SP_CASE(iline3d, iline3dclosestpoint) {
     SP_TRUE(ireal_equal(pos0.x, 1));
     SP_TRUE(ireal_equal(pos0.y, 1));
     SP_TRUE(ireal_equal(pos0.z, 1));
+    
+    line.end.z = 0;
+    line.end.x = 0;
+    
+    ipos3 px = {1, 0.5f, 1};
+    
+    pos0 = iline3dclosestpoint(&line, &px, iepsilon);
+    
+    SP_TRUE(ireal_equal(pos0.x, 0.0f));
+    SP_TRUE(ireal_equal(pos0.y, 0.5f));
+    SP_TRUE(ireal_equal(pos0.z, 0.0f));
+    
 }
 
 SP_CASE(iline3d, end) {
