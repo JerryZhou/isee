@@ -81,11 +81,11 @@ typedef union ivec3 {
 }ivec3;
 
 /* extern const */
-extern const ivec3 kvec3_axis_x;
-extern const ivec3 kvec3_axis_y;
-extern const ivec3 kvec3_axis_z;
-extern const ivec3 kvec3_axis_neg_z;
-extern const ivec3 kvec3_zero;
+extern const ivec3 kivec3_axis_x;
+extern const ivec3 kivec3_axis_y;
+extern const ivec3 kivec3_axis_z;
+extern const ivec3 kivec3_axis_neg_z;
+extern const ivec3 kivec3_zero;
 
 /* almost equal */
 int ivec3isequal(const ivec3 *l, const ivec3 *r);

@@ -94,11 +94,11 @@ ivec2 ivec2perpendicular(const ivec2 *l, const ivec2 *r) {
 /*************************************************************/
 
 /* extern const */
-const ivec3 kvec3_axis_x = {{1.f, 0.f, 0.f}};
-const ivec3 kvec3_axis_y = {{0.f, 1.f, 0.f}};
-const ivec3 kvec3_axis_z = {{0.f, 0.f, 1.f}};
-const ivec3 kvec3_axis_neg_z = {{0.f, 0.f, -1.f}};
-const ivec3 kvec3_zero = {{0.f, 0.f, 0.f}};
+const ivec3 kivec3_axis_x = {{1.f, 0.f, 0.f}};
+const ivec3 kivec3_axis_y = {{0.f, 1.f, 0.f}};
+const ivec3 kivec3_axis_z = {{0.f, 0.f, 1.f}};
+const ivec3 kivec3_axis_neg_z = {{0.f, 0.f, -1.f}};
+const ivec3 kivec3_zero = {{0.f, 0.f, 0.f}};
 
 /* almost equal */
 int ivec3isequal(const ivec3 *l, const ivec3 *r) {

@@ -201,7 +201,7 @@ void imat4translation(__iout imat4 *mat, ireal tx, ireal ty, ireal tz) {
 
 /* extract the up vector */
 void imat4upvec3(__iin imat4 *mat, __iout ivec3 *vec) {
-    ivec3 v = kvec3_axis_y;
+    ivec3 v = kivec3_axis_y;
     imat4transformvec3(mat, &v);
     v = ivec3normalize(&v);
     __iscaler_copy(ivec3, vec, &v);
@@ -209,7 +209,7 @@ void imat4upvec3(__iin imat4 *mat, __iout ivec3 *vec) {
 
 /* extract the right vector */
 void imat4rightvec3(__iin imat4 *mat, __iout ivec3 *vec) {
-    ivec3 v = kvec3_axis_x;
+    ivec3 v = kivec3_axis_x;
     imat4transformvec3(mat, &v);
     v = ivec3normalize(&v);
     __iscaler_copy(ivec3, vec, &v);
@@ -217,7 +217,7 @@ void imat4rightvec3(__iin imat4 *mat, __iout ivec3 *vec) {
 
 /* extract the forward vector in right-hand coordinate */
 void imat4forwardvec3RH(__iin imat4 *mat, __iout ivec3 *vec) {
-    ivec3 v = kvec3_axis_neg_z;
+    ivec3 v = kivec3_axis_neg_z;
     imat4transformvec3(mat, &v);
     v = ivec3normalize(&v);
     __iscaler_copy(ivec3, vec, &v);
@@ -225,7 +225,7 @@ void imat4forwardvec3RH(__iin imat4 *mat, __iout ivec3 *vec) {
 
 /* extract the forward vector in left-hand coordinate */
 void imat4forwardvec3LH(__iin imat4 *mat, __iout ivec4 *vec) {
-    ivec3 v = kvec3_axis_z;
+    ivec3 v = kivec3_axis_z;
     imat4transformvec3(mat, &v);
     v = ivec3normalize(&v);
     __iscaler_copy(ivec3, vec, &v);
