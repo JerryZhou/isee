@@ -98,7 +98,7 @@ typedef unsigned char ibool;
 typedef float ireal;
     
 /* real default epsilon */
-#define iepsilon 0.1e-6
+#define iepsilon 0.1e-5
     
 /* compartor: equal-eps */
 #define ireal_equal_in(a, b, eps) (fabs((a)-(b)) < (eps))
