@@ -275,11 +275,11 @@ void iquatrotatebetweenvec3(__iout iquat *quat,
         if (fabs(ivec3lengthsqr(fallback)) < iepsilon) {
             iquatrotateaxisangle(quat, fallback, __iPI);
         } else {
-            axis = ivec3cross(&kVec3_Axis_X, vec1);
+            axis = ivec3cross(&kvec3_axis_x, vec1);
             
             /*If axis is zero*/
             if (fabs(ivec3lengthsqr(&axis)) < iepsilon) {
-                axis = ivec3cross(&kVec3_Axis_Y, vec1);
+                axis = ivec3cross(&kvec3_axis_y, vec1);
             }
             
             axis = ivec3normalize(&axis);
@@ -321,7 +321,7 @@ void iquatbetweenvec3(__iout iquat *quat, __iin const ivec3 *u, __iin const ivec
 void iquatlookrotate(__iout iquat *quat, __iin const ivec3 *direction, __iin const ivec3 *up) {
     imat4 lookAt;
     imat3 rot;
-    imat4lookat(&lookAt, &kVec3_Zero, direction, up);
+    imat4lookat(&lookAt, &kvec3_zero, direction, up);
     
     imat4extractrotateimat3(&lookAt, &rot);
     
