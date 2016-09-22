@@ -17,19 +17,21 @@ extern "C" {
 /*************************************************************/
 
 /*
- * A Plane in 3D Space represented in point-normal form (Ax + By + Cz + D = 0).
+ * A Plane in 3D Space represented in point-normal form (Ax + By + Cz = D).
  * The convention for the distance constant D is:
- * D = -(A, B, C) dot (X, Y, Z) */
+ * D = (A, B, C) dot (X, Y, Z) */
 typedef struct iplane {
     ivec3 normal;
     ipos3 pos;
     ireal distance;
 }iplane;
 
-/* Setup Plane object given a clockwise ordering of 3D points */
+/* Setup Plane object given a clockwise ordering of 3D points 
+ https://en.wikipedia.org/wiki/Right-hand_rule 
+ normal: ab X ac */
 void iplaneset(iplane *plane, const ipos3 *a, const ipos3 *b, const ipos3 *c);
 
-/* TODO */
+/* signed distance */
 ireal iplanesigneddistance(const iplane *plane, const ipos3 *p);
 
 /* Given Z and Y, Solve for X on the plane */
