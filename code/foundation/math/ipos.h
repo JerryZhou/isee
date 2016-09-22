@@ -17,6 +17,9 @@ typedef struct ipos {
 
 /* zero point */
 extern const ipos kipos_zero;
+extern const ipos kipos_x;
+extern const ipos kipos_y;
+extern const ipos kipos_xy;
 
 /* distance pow 2 */
 ireal idistancepow2(const ipos *p, const ipos *t);
@@ -30,6 +33,10 @@ typedef struct ipos3 {
 
 /* zero of ipos3 */
 extern const ipos3 kipos3_zero;
+extern const ipos3 kipos3_x;
+extern const ipos3 kipos3_y;
+extern const ipos3 kipos3_z;
+extern const ipos3 kipos3_xz;
 
 /* distance pow2 */
 ireal idistancepow3(const ipos3 *p, const ipos3 *t);
