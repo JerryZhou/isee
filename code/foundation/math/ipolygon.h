@@ -44,9 +44,9 @@ void ipolygon3d_destructor(ithis x, iobj *o);
 
 /* create a polygon 3d*/
 ipolygon3d *ipolygon3dmake(size_t capacity);
-
-/* free a polygon 3d*/
-void ipolygon3dfree(ipolygon3d *);
+   
+/* the pos count */
+size_t ipolygon3dsize(const ipolygon3d *);
 
 /* add ivec3 to polygon*/
 void ipolygon3dadd(ipolygon3d *poly, const ipos3 *v, int nums);
@@ -103,9 +103,9 @@ void ipolygon2d_destructor(ithis x, iobj *o);
 
 /* create a polygon 2d*/
 ipolygon2d *ipolygon2dmake(size_t capacity);
-
-/* free a polygon 2d*/
-void ipolygon2dfree(ipolygon2d *);
+    
+/* the pos count */
+size_t ipolygon2dsize(const ipolygon2d *);
 
 /* add ivec2 to polygon*/
 void ipolygon2dadd(ipolygon2d *poly, const ipos2 *v, int nums);

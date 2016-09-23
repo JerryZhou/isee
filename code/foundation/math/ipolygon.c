@@ -9,10 +9,8 @@
 /* destructor */
 void ipolygon3d_destructor(ithis x, iobj *o) {
     ipolygon3d *poly = icast(ipolygon3d, __irobj(o));
-    irelease(poly->pos);
-    poly->pos = NULL;
+    irefdelete(poly->pos);
 }
-
 
 /* create a polygon 3d*/
 ipolygon3d *ipolygon3dmake(size_t capacity){
@@ -30,9 +28,11 @@ ipolygon3d *ipolygon3dmake(size_t capacity){
     return poly;
 }
 
-/* free a polygon 3d*/
-void ipolygon3dfree(ipolygon3d *poly) {
-    irelease(poly);
+
+/* the count of pos */
+size_t ipolygon3dsize(const ipolygon3d *poly) {
+    icheckret(poly, 0);
+    return islicelen(poly->pos);
 }
 
 /* add ivec3 to polygon*/
@@ -195,9 +195,10 @@ ipolygon2d *ipolygon2dmake(size_t capacity) {
     return poly;
 }
 
-/* free a polygon 2d*/
-void ipolygon2dfree(ipolygon2d *poly) {
-    irelease(poly);
+/* the count of pos */
+size_t ipolygon2dsize(const ipolygon2d *poly) {
+    icheckret(poly, 0);
+    return islicelen(poly->pos);
 }
 
 /* add ivec2 to polygon*/
