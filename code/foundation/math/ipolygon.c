@@ -178,15 +178,18 @@ void ipolygon3dtakerectxz(const ipolygon3d *poly, irect *r) {
 /* destructor */
 void ipolygon2d_destructor(ithis x, iobj *o) {
     ipolygon2d *poly = icast(ipolygon2d, __irobj(o));
-    irelease(poly->slice);
-    poly->slice = NULL;
+    irefdelete(poly->pos);
 }
 
 /* create a polygon 2d*/
 ipolygon2d *ipolygon2dmake(size_t capacity) {
     ipolygon2d *poly = irefnew(ipolygon2d);
     iarray* array = iarraymakeivec2(capacity);
-    poly->slice = isliced(array, 0, 0);
+    poly->pos = isliced(array, 0, 0);
+    
+    /* the min pos */
+    poly->min.x = 0x1.fffffep+127f;
+    poly->min.y = 0x1.fffffep+127f;
     
     irelease(array);
     return poly;
@@ -198,63 +201,83 @@ void ipolygon2dfree(ipolygon2d *poly) {
 }
 
 /* add ivec2 to polygon*/
-void ipolygon2dadd(ipolygon2d *poly, const ivec2 *v, int nums) {
+void ipolygon2dadd(ipolygon2d *poly, const ipos2 *v, int nums) {
     int i;
     int j;
+    ireal *values;
+    ireal *max_values = (ireal*)&(poly->max);
+    ireal *min_values = (ireal*)&(poly->min);
+    ireal *accu_values = (ireal*)&(poly->accumulating);
+    
     icheck(v);
     icheck(poly);
     
     /* update the min and max*/
     for (j=0; j<nums; ++j) {
+        values = (ireal*)(&v[j]);
         for (i=0; i<2; ++i) {
-            if (v[j].values[i] > poly->max.values[i]) {
+            /* accumulating all pos */
+            accu_values[i] += values[i];
+            /* caculating the max and min */
+            if (values[i] > max_values[i]) {
                 /* for max */
-                poly->max.values[i] = v[j].values[i];
-            } else if (v[j].values[i] < poly->min.values[i]) {
+                max_values[i] = values[i];
+            } else if (values[i] < min_values[i]) {
                 /* for min */
-                poly->min.values[i] = v[j].values[i];
+                min_values[i] = values[i];
             }
         }
     }
     
     /* add vec2 */
-    poly->slice = isliceappendvalues(poly->slice, v, nums);
+    poly->pos = isliceappendvalues(poly->pos, v, nums);
+    
+    /* the center */
+    ipolygon2dfinish(poly);
 }
 
 /* if the point in polygon
  * http://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon
  * https://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
  **/
-int ipolygon2dcontains(const ipolygon2d *poly, const ivec2 *v) {
+int ipolygon2dcontains(const ipolygon2d *poly, const ipos2 *v) {
     int inside = iino;
     int i, j, n;
-    ivec2 *ui, *uj;
+    ipos2 *ui, *uj;
     
     icheckret(v, iiok);
     icheckret(poly, iino);
     
     /* beyond the bounding box*/
-    if (v->v.x < poly->min.v.x ||
-        v->v.x > poly->max.v.x ||
-        v->v.y < poly->min.v.y ||
-        v->v.y > poly->max.v.y) {
+    if (v->x < poly->min.x ||
+        v->x > poly->max.x ||
+        v->y < poly->min.y ||
+        v->y > poly->max.y) {
         return iino;
     }
     
     /* https://en.wikipedia.org/wiki/Point_in_polygon
      */
-    n = islicelen(poly->slice);
+    n = islicelen(poly->pos);
     for (i = 0, j = n-1; i<n; j = i++) {
-        ui = (ivec2*)isliceat(poly->slice, i);
-        uj = (ivec2*)isliceat(poly->slice, j);
-        if ((ui->v.y>v->v.y) != (uj->v.y > v->v.y) &&
-            v->v.x < ((uj->v.x - ui->v.x)
-                      * (v->v.y - ui->v.y)
-                      / (uj->v.y - ui->v.y)
-                      + ui->v.x) ) {
+        ui = (ipos2*)isliceat(poly->pos, i);
+        uj = (ipos2*)isliceat(poly->pos, j);
+        if ((ui->y>v->y) != (uj->y > v->y) &&
+            v->x < ((uj->x - ui->x)
+                      * (v->y - ui->y)
+                      / (uj->y - ui->y)
+                      + ui->x) ) {
                 inside = !inside;
             }
     }
     
     return inside;
+}
+
+/* caculating the center of polygon3d  */
+void ipolygon2dfinish(ipolygon2d *poly) {
+    size_t n = islicelen(poly->pos);
+    icheck(n > 1);
+    poly->center.x = poly->accumulating.x / n;
+    poly->center.y = poly->accumulating.y / n;
 }

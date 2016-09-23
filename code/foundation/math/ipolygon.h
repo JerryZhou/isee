@@ -87,9 +87,15 @@ typedef struct ipolygon2d {
     irefdeclare;
     
     /*ivec2 slice*/
-    islice *slice;
-    ivec2 max;
-    ivec2 min;
+    islice *pos;
+    ipos max;
+    ipos min;
+    
+    /* center point */
+    ipos center;
+    
+    /* accumulating the pos */
+    ipos accumulating;
 }ipolygon2d;
     
 /* destructor */
@@ -102,10 +108,13 @@ ipolygon2d *ipolygon2dmake(size_t capacity);
 void ipolygon2dfree(ipolygon2d *);
 
 /* add ivec2 to polygon*/
-void ipolygon2dadd(ipolygon2d *poly, const ivec2 *v, int nums);
+void ipolygon2dadd(ipolygon2d *poly, const ipos2 *v, int nums);
 
 /* if the point in polygon*/
-int ipolygon2dcontains(const ipolygon2d *poly, const ivec2 *v);
+int ipolygon2dcontains(const ipolygon2d *poly, const ipos2 *v);
+    
+/* caculating the center of polygon3d  */
+void ipolygon2dfinish(ipolygon2d *poly);
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
