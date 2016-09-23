@@ -15,6 +15,9 @@ typedef struct ipos {
     ireal x, y;
 }ipos;
 
+/* make type-def ipos2 */
+typedef ipos ipos2;
+
 /* zero point */
 extern const ipos kipos_zero;
 extern const ipos kipos_x;
