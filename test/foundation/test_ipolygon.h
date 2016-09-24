@@ -184,6 +184,29 @@ SP_CASE(ipolygon3d, ipolygon3dincollum) {
     irefdelete(poly);
 }
 
+SP_CASE(ipolygon3d, plane) {
+    ipolygon3d *poly = ipolygon3dmake(10);
+    SP_TRUE(poly->pos != NULL);
+    SP_TRUE(ipolygon3dsize(poly) == 0);
+    SP_TRUE(islicecapacity(poly->pos) == 10);
+    
+    ipos3 pos[]={{0,0,0},{1,0,0},{1,0,1},{0,0,1}};
+    ipolygon3dadd(poly, pos, 4);
+    SP_TRUE(ipolygon3dsize(poly) == 4);
+    
+    ipos3 xpos[]={{0.5,0.5},{1,2},{-2,-1}};
+    SP_TRUE(ipolygon3dincollum(poly, xpos));
+    SP_FALSE(ipolygon3dincollum(poly, xpos+1));
+    SP_FALSE(ipolygon3dincollum(poly, xpos+2));
+    
+    ivec3 normal = {{0, -1, 0}};
+    SP_TRUE(ivec3isequal(&normal, &poly->plane.normal));
+    SP_TRUE(ipos3isequal(&kipos3_zero, &poly->plane.pos));
+    SP_TRUE(ireal_equal(0, poly->plane.distance));
+    
+    irefdelete(poly);
+}
+
 SP_CASE(ipolygon3d, end) {
     SP_TRUE(1);
 }
