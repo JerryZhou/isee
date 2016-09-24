@@ -11,21 +11,24 @@ extern "C" {
 /*************************************************************/
 /* ipos2                                                      */
 /*************************************************************/
-typedef struct ipos {
+typedef struct ipos2 {
     ireal x, y;
-}ipos;
+}ipos2;
 
 /* make type-def ipos2 */
-typedef ipos ipos2;
+typedef ipos2 ipos;
 
 /* zero point */
-extern const ipos kipos_zero;
-extern const ipos kipos_x;
-extern const ipos kipos_y;
-extern const ipos kipos_xy;
+extern const ipos2 kipos_zero;
+extern const ipos2 kipos_x;
+extern const ipos2 kipos_y;
+extern const ipos2 kipos_xy;
 
 /* distance pow 2 */
-ireal idistancepow2(const ipos *p, const ipos *t);
+ireal idistancepow2(const ipos2 *p, const ipos2 *t);
+    
+/* almost equal */
+int ipos2isequal(const ipos2 *l, const ipos2 *r);
 
 /*************************************************************/
 /* ipos3                                                      */
@@ -46,6 +49,9 @@ ireal idistancepow3(const ipos3 *p, const ipos3 *t);
 
 /* get the xy from the p with xz */
 void ipos3takexz(const ipos3 *p, ipos *to);
+    
+/* almost equal */
+int ipos3isequal(const ipos3 *l, const ipos3 *r);
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
