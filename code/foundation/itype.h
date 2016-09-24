@@ -122,7 +122,12 @@ typedef float ireal;
     
 /*greater than 0*/
 #define ireal_greater_zero(a) ireal_greater_than(a, 0, iepsilon)
-    
+  
+/* compare equal real vectors */
+#define ireal_equal_2(a, b) (ireal_equal((a)[0], (b)[0]) && ireal_equal((a)[1], (b)[1]))
+
+/* compare equal real vectors */
+#define ireal_equal_3(a, b) (ireal_equal((a)[0], (b)[0]) && ireal_equal((a)[1], (b)[1]) && ireal_equal((a)[2], (b)[2]))
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
