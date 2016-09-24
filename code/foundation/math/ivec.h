@@ -29,12 +29,15 @@ extern const ivec2 kivec2_zero;
 extern const ivec2 kivec2_axis_x;
 extern const ivec2 kivec2_axis_y;
 extern const ivec2 kivec2_axis_xy;
-
+    
+/* almost equal */
+int ivec2isequal(const ivec2 *l, const ivec2 *r);
+    
 /* ipos2 ==> ivec2 */
-ivec2 ivec2subtractpoint(const struct ipos *p0, const struct ipos *p1);
+ivec2 ivec2subtractpoint(const struct ipos2 *p0, const struct ipos2 *p1);
 
 /* move dir the dist */
-ipos ivec2movepoint(const ivec2 *dir, ireal dist, const ipos *p);
+ipos ivec2movepoint(const ivec2 *dir, ireal dist, const ipos2 *p);
 
 /* add */
 ivec2 ivec2add(const ivec2 *l, const ivec2 *r);

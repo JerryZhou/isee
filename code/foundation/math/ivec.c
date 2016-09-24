@@ -6,6 +6,11 @@ const ivec2 kivec2_axis_x    = {{1, 0}};
 const ivec2 kivec2_axis_y    = {{0, 1}};
 const ivec2 kivec2_axis_xy   = {{1, 1}};
 
+/* almost equal */
+int ivec2isequal(const ivec2 *l, const ivec2 *r) {
+    return ireal_equal_2(l->values, r->values);
+}
+
 /* move point */
 ipos ivec2movepoint(const ivec2 *dir, ireal dist, const ipos *p) {
     ipos to = *p;
@@ -15,7 +20,7 @@ ipos ivec2movepoint(const ivec2 *dir, ireal dist, const ipos *p) {
 }
 
 /* sub */
-ivec2 ivec2subtractpoint(const ipos *p0, const ipos *p1) {
+ivec2 ivec2subtractpoint(const ipos2 *p0, const ipos2 *p1) {
     ivec2 vec;
     vec.v.x = p0->x - p1->x;
     vec.v.y = p0->y - p1->y;
@@ -102,9 +107,7 @@ const ivec3 kivec3_zero = {{0.f, 0.f, 0.f}};
 
 /* almost equal */
 int ivec3isequal(const ivec3 *l, const ivec3 *r) {
-    return ireal_equal(l->values[0], r->values[0]) &&
-        ireal_equal(l->values[1], r->values[1]) &&
-        ireal_equal(l->values[2], r->values[2]);
+    return ireal_equal_3(l->values, r->values);
 }
 
 /* move dir the dist */
