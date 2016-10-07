@@ -52,6 +52,12 @@ typedef union imat4 {
     ireal values[16];
 }imat4;
     
+/* imat4 copy */
+#define __imat4_copy(dst, src) __iscaler_copy(imat4, dst, src)
+
+/* imat4 indexing */
+#define __imat4_v(m, i, j) ((m)->values[i+j*4])
+    
 /* iiyes, iino */
 int imat4isidentity(const imat4 *mat);
 

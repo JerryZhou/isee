@@ -1,13 +1,6 @@
 #include "foundation/math/imat.h"
 #include "foundation/math/imath.h"
 
-
-/* imat4 copy */
-#define __imat4_copy(dst, src) __iscaler_copy(imat4, dst, src)
-
-/* imat4 indexing */
-#define __imat4_v(m, i, j) ((m)->values[i+j*4])
-
 /* iiyes, iino */
 int imat4isidentity(const imat4 *mat) {
     static ireal identity [] = {
@@ -42,6 +35,7 @@ void imat4identity(__ioutin imat4 *mat) {
     mat->values[0] = mat->values[5] = mat->values[10] = mat->values[15] = 1.0f;
 }
 
+/* https://en.wikipedia.org/wiki/Invertible_matrix */
 int imat4invert(__ioutin imat4 *mat) {
     float s[6];
     float c[6];
