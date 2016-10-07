@@ -141,10 +141,10 @@ void imat4lookat(__iout imat4 *mat, const ivec3 *eye, const ivec3 *at, const ive
    
 /* *************************************************************/
 /* extract the rotate */
-void imat4extractrotateimat3(__iin imat4 *mat, __iout union imat3 * rotate);
+void imat4extractrotateimat3(__iin const imat4 *mat, __iout union imat3 * rotate);
 
 /* extract the translation */
-void imat4extracttranslationvec3(__iin imat4 *mat, __iout ivec3 *translation);
+void imat4extracttranslationvec3(__iin const imat4 *mat, __iout ivec3 *translation);
     
 /* *************************************************************/
 /* transform vec3 */
@@ -157,9 +157,12 @@ void imat4transformvec4(const imat4 *mat, __ioutin ivec4 *v);
 /* matrix 3d
  * */
 typedef union imat3 {
-    ireal values[12];
-    ivec4 cols[3];
+    ivec3 cols[3];
+    ireal values[9];
 }imat3;
+
+/**/
+int imat3isequal(__iin const imat3 *mat, __iin const imat3 *other);
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

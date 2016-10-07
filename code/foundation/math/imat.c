@@ -319,7 +319,7 @@ void imat4rotationaxisangle(__iout imat4 *mat, const ivec3 *axis, ireal radians)
 }
 
 /* extract the rotate */
-void imat4extractrotateimat3(__iin imat4 *mat, __iout union imat3 * rotate) {
+void imat4extractrotateimat3(__iin const imat4 *mat, __iout union imat3 * rotate) {
     
 #define __M_n(a, n, i, j) (a)->values[i + j * n]
 #define __M_3(a, i, j) __M_n(a, 3, i, j)
@@ -339,7 +339,7 @@ void imat4extractrotateimat3(__iin imat4 *mat, __iout union imat3 * rotate) {
 }
 
 /* extract the translation */
-void imat4extracttranslationvec3(__iin imat4 *mat, __iout ivec3 *translation) {
+void imat4extracttranslationvec3(__iin const imat4 *mat, __iout ivec3 *translation) {
     translation->v.x = __M(0, 3);
     translation->v.y = __M(1, 3);
     translation->v.z = __M(2, 3);
@@ -373,3 +373,15 @@ void imat4transformvec4(const imat4 *mat, __ioutin ivec4 *v) {
     }
     __iscaler_copy(ivec4, v, &tmp);
 }
+
+/**/
+int imat3isequal(__iin const imat3 *mat, __iin const imat3 *other) {
+    int i=0;
+    for (; i<9; ++i) {
+        if (!ireal_equal(mat->values[i], other->values[i])) {
+            return iino;
+        }
+    }
+    return iiyes;
+}
+
