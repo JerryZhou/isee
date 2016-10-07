@@ -159,6 +159,126 @@ SP_CASE(imat4, imat4translation) {
     SP_TRUE(imat4isequal(&mat, &trans));
 }
 
+SP_CASE(imat4, imat4upvec3ANDimat4rightvec3) {
+    imat4 mat;
+    imat4identity(&mat);
+    
+    ivec3 up, right;
+    imat4upvec3(&mat, &up);
+    imat4rightvec3(&mat, &right);
+    
+    SP_TRUE(ivec3isequal(&up, &kivec3_axis_y));
+    SP_TRUE(ivec3isequal(&right, &kivec3_axis_x));
+}
+
+SP_CASE(imat4, imat4forward) {
+    imat4 mat;
+    imat4identity(&mat);
+    
+    ivec3 forwardRH, forwardLH;
+    imat4forwardvec3RH(&mat, &forwardRH);
+    imat4forwardvec3LH(&mat, &forwardLH);
+    
+    SP_TRUE(ivec3isequal(&forwardLH, &kivec3_axis_z));
+    SP_TRUE(ivec3isequal(&forwardRH, &kivec3_axis_neg_z));
+}
+
+SP_CASE(imat4, imat4transformvec3) {
+    imat4 mat;
+    
+    {
+        /* translation */
+        imat4identity(&mat);
+        
+        ivec4 vec = {{0, 0, 0, 1}};
+        ivec4 kvec = {{1, 2, 3, 1}};
+        imat4translation(&mat, 1, 2, 3);
+        imat4transformvec4(&mat, &vec);
+        SP_TRUE(ivec4isequal(&vec, &kvec));
+    }
+    
+    {
+        /* scale */
+        imat4identity(&mat);
+        
+        ivec3 vec = {{3, 3, 3}};
+        ivec3 kvec = {{1, 6, 3}};
+        imat4scale(&mat, 0.333333, 2, 1);
+        imat4transformvec3(&mat, &vec);
+        SP_TRUE(ivec3isequal(&vec, &kvec));
+    }
+    
+    {
+        /* rotate-x */
+        imat4identity(&mat);
+        imat4rotationx(&mat, idegreestoradians(90));
+        
+        ivec3 vec = {{0, 1, 0}};
+        ivec3 kvec = {{0, 0, 1}};
+        
+        imat4transformvec3(&mat, &vec);
+        SP_TRUE(ivec3isequal(&vec, &kvec));
+    }
+    
+    {
+        /* rotate-y */
+        imat4identity(&mat);
+        imat4rotationy(&mat, idegreestoradians(90));
+        
+        ivec3 vec = {{1, 0, 0}};
+        ivec3 kvec = {{0, 0, -1}};
+        imat4transformvec3(&mat, &vec);
+        SP_TRUE(ivec3isequal(&vec, &kvec));
+    }
+    
+    {
+        /* rotate-z */
+        imat4identity(&mat);
+        imat4rotationz(&mat, idegreestoradians(90));
+        ivec3 vec = {{1, 0, 0}};
+        ivec3 kvec = {{0, 1, 0}};
+        imat4transformvec3(&mat, &vec);
+        SP_TRUE(ivec3isequal(&vec, &kvec));
+    }
+}
+
+SP_CASE(imat4, transformvec4) {
+    imat4 mat;
+    
+    {
+        /* rotate-x */
+        imat4identity(&mat);
+        imat4rotationx(&mat, idegreestoradians(90));
+        
+        ivec4 vec = {{0, 1, 0, 1}};
+        ivec4 kvec = {{0, 0, 1, 1}};
+        
+        imat4transformvec4(&mat, &vec);
+        SP_TRUE(ivec4isequal(&vec, &kvec));
+    }
+    
+    {
+        /* rotate-y */
+        imat4identity(&mat);
+        imat4rotationy(&mat, idegreestoradians(90));
+        
+        ivec4 vec = {{1, 0, 0, 1}};
+        ivec4 kvec = {{0, 0, -1, 1}};
+        imat4transformvec4(&mat, &vec);
+        SP_TRUE(ivec4isequal(&vec, &kvec));
+    }
+    
+    {
+        /* rotate-z */
+        imat4identity(&mat);
+        imat4rotationz(&mat, idegreestoradians(90));
+        ivec4 vec = {{1, 0, 0, 1}};
+        ivec4 kvec = {{0, 1, 0, 1}};
+        imat4transformvec4(&mat, &vec);
+        SP_TRUE(ivec4isequal(&vec, &kvec));
+    }
+}
+
 SP_CASE(imat4, end) {
     SP_TRUE(1);
 }
