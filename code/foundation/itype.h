@@ -104,7 +104,7 @@ typedef float ireal;
 #define iepsilon 0.1e-4
     
 /* compartor: equal-eps */
-#define ireal_equal_in(a, b, eps) (fabs((a)-(b)) < (eps))
+#define ireal_equal_in(a, b, eps) (fabs((a)-(b)) <= (eps))
     
 /*compartor: equal*/
 #define ireal_equal(a, b) ireal_equal_in(a, b, iepsilon)
@@ -113,11 +113,11 @@ typedef float ireal;
 #define ireal_equal_zero(a) ireal_equal(a, 0)
     
 /* compartor: less */
-#define ireal_less_than(a, b, eps) ((a-b) < -eps)
+#define ireal_less_than(a, b, eps) ((a-b) <= -eps)
 #define ireal_less(a, b) ireal_less_than(a, b, iepsilon)
     
 /* compartor: greater */
-#define ireal_greater_than(a, b, eps) ((a-b) > eps)
+#define ireal_greater_than(a, b, eps) ((a-b) >= eps)
 #define ireal_greater(a, b) ireal_greater_than(a, b, iepsilon) 
     
 /*less than 0*/
