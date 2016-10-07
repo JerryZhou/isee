@@ -230,7 +230,7 @@ void imat4forwardvec3RH(__iin imat4 *mat, __iout ivec3 *vec) {
 }
 
 /* extract the forward vector in left-hand coordinate */
-void imat4forwardvec3LH(__iin imat4 *mat, __iout ivec4 *vec) {
+void imat4forwardvec3LH(__iin imat4 *mat, __iout ivec3 *vec) {
     ivec3 v = kivec3_axis_z;
     imat4transformvec3(mat, &v);
     v = ivec3normalize(&v);
@@ -350,10 +350,11 @@ void imat4transformvec3(const imat4 *mat, __ioutin ivec3 *v) {
     ivec3 tmp;
     int i=0;
     for (; i<3; ++i) {
-        tmp.values[i] = __M(0, i) * v->values[i]
-        + __M(1, i) * v->values[i]
-        + __M(2, i) * v->values[i];
+        tmp.values[i] = __M(i, 0) * v->values[0]
+        + __M(i, 1) * v->values[1]
+        + __M(i, 2) * v->values[2];
     }
+    __iscaler_copy(ivec3, v, &tmp);
 }
 
 /* transform vec4 
@@ -365,9 +366,10 @@ void imat4transformvec4(const imat4 *mat, __ioutin ivec4 *v) {
     ivec3 tmp;
     int i=0;
     for (; i<4; ++i) {
-        tmp.values[i] = __M(0, i) * v->values[i]
-        + __M(1, i) * v->values[i]
-        + __M(2, i) * v->values[i]
-        + __M(3, i) * v->values[i];
+        tmp.values[i] = __M(i, 0) * v->values[0]
+        + __M(i, 1) * v->values[1]
+        + __M(i, 2) * v->values[2]
+        + __M(i, 3) * v->values[3];
     }
+    __iscaler_copy(ivec4, v, &tmp);
 }

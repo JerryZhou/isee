@@ -23,6 +23,15 @@ union imat3;
  *
  * Right-hand rule
  * https://en.wikipedia.org/wiki/Right-hand_rule
+ * https://www.evl.uic.edu/ralph/508S98/coordinates.html
+ *
+ *******************************************************
+ * NB!!
+ * HERE WE USE THE LEFT-HANDLE-COORDINATE-SYSTEM
+ *  1. the z pointer to the screen
+ *  2. the rotate in clockwise
+ *  3. the projection z-buffer: (z/w+1)/2
+ *******************************************************
  *
  * column-major
  * col[0].x, col[1].x, col[2].x, col[3].x
@@ -46,6 +55,9 @@ union imat3;
  *          __M(1,0)*x + __M(1,1)*y + __M(1,2)*z + __M(1,3),
  *          __M(2,0)*x + __M(2,1)*y + __M(2,2)*z + __M(3,3)
  *          )
+ *
+ * Z-Buffer and Projection difference between OpenGL And Direct3D
+ * http://blog.csdn.net/Augusdi/article/details/20450691
  */
 typedef union imat4 {
     ivec4 cols[4];
@@ -105,13 +117,16 @@ void imat4upvec3(__iin imat4 *mat, __iout ivec3 *vec);
 void imat4rightvec3(__iin imat4 *mat, __iout ivec3 *vec);
 
 /* *************************************************************/
-/* the forwrad vector: meanings point to the screen */
+/* the forwrad vector: meanings point from the screen 
+ * https://en.wikipedia.org/wiki/Right-hand_rule
+ * * */
 /* extract the forward vector in right-hand coordinate */
 void imat4forwardvec3RH(__iin imat4 *mat, __iout ivec3 *vec);
 
 /* extract the forward vector in left-hand coordinate */
-void imat4forwardvec3LH(__iin imat4 *mat, __iout ivec4 *vec);
+void imat4forwardvec3LH(__iin imat4 *mat, __iout ivec3 *vec);
 
+/* *************************************************************/
 /* make a perspective projection */
 void imat4perspectiveprojection(__iout imat4 *mat,
                                 ireal fovy, ireal aspect, ireal znear, ireal zfar);
@@ -131,6 +146,7 @@ void imat4extractrotateimat3(__iin imat4 *mat, __iout union imat3 * rotate);
 /* extract the translation */
 void imat4extracttranslationvec3(__iin imat4 *mat, __iout ivec3 *translation);
     
+/* *************************************************************/
 /* transform vec3 */
 void imat4transformvec3(const imat4 *mat, __ioutin ivec3 *v);
     
