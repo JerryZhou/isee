@@ -279,6 +279,49 @@ SP_CASE(imat4, transformvec4) {
     }
 }
 
+SP_CASE(imat4, imat4extractrotateimat3) {
+    imat3 roz30 = {{
+        {{0.866025,  0.5,       0}},
+        {{-0.5,      0.866025,  0}},
+        {{0,         0,         1}}
+    }};
+    
+    imat4 mat;
+    imat4identity(&mat);
+    imat4rotationz(&mat, idegreestoradians(30));
+    
+    imat3 roz30extract;
+    imat4extractrotateimat3(&mat, &roz30extract);
+    
+    SP_TRUE(imat3isequal(&roz30extract, &roz30));
+}
+
+SP_CASE(imat4, imat4extracttranslationvec3) {
+    /* translation */
+    imat4 mat;
+    imat4identity(&mat);
+    
+    ivec3 kvec = {{1, 2, 3}};
+    imat4translation(&mat, 1, 2, 3);
+    
+    ivec3 vec;
+    imat4extracttranslationvec3(&mat, &vec);
+    SP_TRUE(ivec3isequal(&kvec, &vec));
+}
+
+// TODOS:
+SP_CASE(imat4, imat4perspectiveprojection) {
+    SP_TRUE(1);
+}
+
+SP_CASE(imat4, imat4orthographicprojection) {
+    SP_TRUE(1);
+}
+
+SP_CASE(imat4, imat4lookat) {
+    SP_TRUE(1);
+}
+
 SP_CASE(imat4, end) {
     SP_TRUE(1);
 }
