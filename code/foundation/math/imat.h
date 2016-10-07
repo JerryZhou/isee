@@ -51,6 +51,9 @@ typedef union imat4 {
     ivec4 cols[4];
     ireal values[16];
 }imat4;
+   
+/* the const identity */
+extern const imat4 kimat4_identity;
     
 /* imat4 copy */
 #define __imat4_copy(dst, src) __iscaler_copy(imat4, dst, src)

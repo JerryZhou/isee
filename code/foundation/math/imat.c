@@ -1,6 +1,14 @@
 #include "foundation/math/imat.h"
 #include "foundation/math/imath.h"
 
+/* the const identity */
+const imat4 kimat4_identity = {{
+    {{1.0f, 0.0f, 0.0f, 0.0f}},
+    {{0.0f, 1.0f, 0.0f, 0.0f}},
+    {{0.0f, 0.0f, 1.0f, 0.0f}},
+    {{0.0f, 0.0f, 0.0f, 1.0f}}
+}};
+
 /* iiyes, iino */
 int imat4isidentity(const imat4 *mat) {
     static ireal identity [] = {
@@ -17,7 +25,7 @@ int imat4isidentity(const imat4 *mat) {
 int imat4isequal(const imat4 *a, const imat4 *b) {
     int i=0;
     for (; i<16; ++i) {
-        if (!ireal_equal(a->values[i], a->values[i])) {
+        if (!ireal_equal(a->values[i], b->values[i])) {
             return iino;
         }
     }
@@ -117,7 +125,8 @@ void imat4multiply(__iout imat4 *mat, const imat4 *a, const imat4 *b) {
     __imat4_copy(mat, &tmp);
 }
 
-/* Matrix Rotation https://en.wikipedia.org/wiki/Rotation_matrix */
+/* Matrix Rotation https://en.wikipedia.org/wiki/Rotation_matrix 
+   counter-clockwise in a right-handed coordinate system by pre-multiplication */
 
 /* a rotate matrix: rotate by x aixs */
 void imat4rotationx(__iout imat4 *mat, ireal radians) {
@@ -161,10 +170,13 @@ void imat4rotationz(__iout imat4 *mat, ireal radians) {
 void imat4yawrollpitch(__iout imat4 *mat, ireal yaw, ireal roll, ireal pitch) {
     imat4 yawmat, rollmat, pitchmat;
     /* y axis : yaw */
+    imat4identity(&yawmat);
     imat4rotationy(&yawmat, yaw);
     /* z axis : roll */
+    imat4identity(&rollmat);
     imat4rotationy(&rollmat, roll);
     /* x axis : pitch */
+    imat4identity(&pitchmat);
     imat4rotationy(&pitchmat, pitch);
     
     imat4multiply(mat, &yawmat, &rollmat);
@@ -179,7 +191,7 @@ void imat4scale(__iout imat4 *mat, ireal sx, ireal sy, ireal sz) {
         {{0.f,  0.f,  sz, 0.f}},
         {{0.f,  0.f, 0.f, 1.f}}
     }};
-    __imat4_copy(mat, &S);
+    imat4multiply(mat, &S, mat);
 }
 
 /* matrix operator: translation */
@@ -190,7 +202,7 @@ void imat4translation(__iout imat4 *mat, ireal tx, ireal ty, ireal tz) {
         {{0.f,  0.f,  1.f, 0.f}},
         {{ tx,   ty,   tz, 1.f}}
     }};
-    __imat4_copy(mat, &T);
+    imat4multiply(mat, &T, mat);
 }
 
 /* extract the up vector */
@@ -344,7 +356,11 @@ void imat4transformvec3(const imat4 *mat, __ioutin ivec3 *v) {
     }
 }
 
-/* transform vec4 */
+/* transform vec4 
+ To perform the rotation using a rotation matrix R,
+ the position of each point must be represented by a column vector v, 
+ containing the coordinates of the point. 
+ A rotated vector is obtained by using the matrix multiplication Rv */
 void imat4transformvec4(const imat4 *mat, __ioutin ivec4 *v) {
     ivec3 tmp;
     int i=0;
