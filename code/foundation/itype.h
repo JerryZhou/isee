@@ -127,7 +127,15 @@ typedef float ireal;
 #define ireal_equal_2(a, b) (ireal_equal((a)[0], (b)[0]) && ireal_equal((a)[1], (b)[1]))
 
 /* compare equal real vectors */
-#define ireal_equal_3(a, b) (ireal_equal((a)[0], (b)[0]) && ireal_equal((a)[1], (b)[1]) && ireal_equal((a)[2], (b)[2]))
+#define ireal_equal_3(a, b) (ireal_equal((a)[0], (b)[0]) \
+    && ireal_equal((a)[1], (b)[1]) \
+    && ireal_equal((a)[2], (b)[2]))
+    
+/* compare equal real vectors */
+#define ireal_equal_4(a, b) (ireal_equal((a)[0], (b)[0]) \
+    && ireal_equal((a)[1], (b)[1]) \
+    && ireal_equal((a)[2], (b)[2]) \
+    && ireal_equal((a)[3], (b)[3]))
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
