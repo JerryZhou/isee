@@ -17,6 +17,9 @@ union imat4;
 /* quat vec4 */
 typedef ivec4 iquat;
 
+/* quat indentity */
+extern const iquat kiquat_identity;
+
 /* quaternion: is equal */
 int iquatisequal(__iin const iquat *a, __iin const iquat *b);
 /* quaternion: is identity */

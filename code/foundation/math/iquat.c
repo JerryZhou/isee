@@ -2,8 +2,10 @@
 #include "foundation/math/imath.h"
 #include "foundation/math/imat.h"
 
-#define __iquat_fill(q, x, y, z, w) \
-    (q)->values[0] = x; (q)->values[1] = y; (q)->values[2] = z; (q)->values[3] = w
+#define __iquat_fill(q, x, y, z, w) __iscaler_fill_4(q, x, y, z, w)
+
+/* quat indentity */
+const iquat kiquat_identity = {{0, 0, 0, 1}};
 
 /* quaternion: is equal */
 int iquatisequal(__iin const iquat *a, __iin const iquat *b) {
@@ -19,19 +21,18 @@ int iquatisequal(__iin const iquat *a, __iin const iquat *b) {
 
 /* quaternion: is identity */
 int iquatisidentity(__iin const iquat *quat) {
-    return quat->values[3] == 1.f &&
-        quat->values[2] == 0.f &&
-        quat->values[1] == 0.f &&
-        quat->values[0] == 0.f;
+    return iquatisequal(quat, &kiquat_identity);
 }
 
 /* quaternion: exp */
 void iquatexp(__iout iquat *quat, __iin const iquat *q) {
     /*todos:*/
+    itodos("not support");
 }
 /* quaternion: ln */
 void iquatln(__iout iquat *quat, __iin const iquat *q) {
     /*todos:*/
+    itodos("not support");
     /*
      A unit quaternion, is defined by:
      Q == (cos(theta), sin(theta) * v) where |v| = 1
