@@ -33,8 +33,8 @@ void iquatln(__iout iquat *quat, __iin const iquat *q);
 
 /* quaternion: identity */
 void iquatidentity(__ioutin iquat *quat);
-/* quaternion: inverse */
-void iquatinverse(__ioutin iquat *quat);
+/* quaternion: invert */
+void iquatinvert(__ioutin iquat *quat);
 /* quaternion: dot */
 ireal iquatdot(__iin const iquat *a, __iin const iquat *b);
 

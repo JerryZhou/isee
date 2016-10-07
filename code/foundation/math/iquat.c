@@ -45,7 +45,7 @@ void iquatidentity(__ioutin iquat *quat) {
     quat->values[3] = 1.f;
 }
 /* quaternion: inverse */
-void iquatinverse(__ioutin iquat *quat) {
+void iquatinvert(__ioutin iquat *quat) {
     ireal l = iquatlength(quat);
     
     if (ireal_less(l, iepsilon)) {
@@ -99,7 +99,7 @@ void iquatmultipy(__iout iquat *quat, __iin const iquat *qu1, __iin const iquat 
 void iquatnormalize(__ioutin iquat *quat) {
     ireal length = iquatlength(quat);
     
-    if (fabs(length) < iepsilon) {
+    if (ireal_equal_zero(length)) {
         quat->v.x = 0.0;
         quat->v.y = 0.0;
         quat->v.z = 0.0;
