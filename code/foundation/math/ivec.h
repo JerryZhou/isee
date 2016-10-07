@@ -142,6 +142,9 @@ typedef union ivec4 {
     }v;
 }ivec4;
     
+/* almost equal */
+int ivec4isequal(const ivec4 *l, const ivec4 *r);
+
 /* scaler type copy */
 #define __iscaler_copy(type, dst, src) memcpy((dst)->values, (src)->values, sizeof(type))
     

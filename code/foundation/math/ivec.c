@@ -212,3 +212,9 @@ ivec3 ivec3perpendicular(const ivec3 *l, const ivec3 *r) {
     return ivec3subtract(l, &p);
 }
 
+/* almost equal */
+int ivec4isequal(const ivec4 *l, const ivec4 *r) {
+    return ireal_equal_4(l->values, r->values); 
+}
+
+
