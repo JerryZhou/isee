@@ -61,7 +61,7 @@ typedef struct iwindow {
     /* attached app */
     iwref *app;
     
-    istring name;   /* window propertys: name */
+    istring *name;   /* window propertys: name */
     
     int width;      /* window propertys: width */
     int height;     /* window propertys: height */
