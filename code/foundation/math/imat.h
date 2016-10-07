@@ -127,6 +127,12 @@ void imat4forwardvec3RH(__iin imat4 *mat, __iout ivec3 *vec);
 void imat4forwardvec3LH(__iin imat4 *mat, __iout ivec3 *vec);
 
 /* *************************************************************/
+/* DX:  x={-1,1},y={-1，1}，z={0,1}
+ * OGL: x={-1,1},y={-1，1}，z={-1,1}
+ * http://www.cnblogs.com/soroman/archive/2006/09/17/509598.html
+ * http://blog.csdn.net/popy007/article/details/4126809
+ * https://msdn.microsoft.com/en-us/library/windows/desktop/bb147302(v=vs.85).aspx
+ */
 /* make a perspective projection */
 void imat4perspectiveprojection(__iout imat4 *mat,
                                 ireal fovy, ireal aspect, ireal znear, ireal zfar);
@@ -136,6 +142,7 @@ void imat4orthographicprojection(__iout imat4 *mat,
                                  ireal left, ireal right, ireal bottom, ireal top,
                                  ireal near, ireal far);
 
+/* https://msdn.microsoft.com/en-us/library/windows/desktop/bb206342(v=vs.85).aspx */
 /* make a camera view matrix */
 void imat4lookat(__iout imat4 *mat, const ivec3 *eye, const ivec3 *at, const ivec3 *up);
    
