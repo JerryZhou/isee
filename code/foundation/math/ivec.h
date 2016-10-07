@@ -146,7 +146,19 @@ typedef union ivec4 {
 int ivec4isequal(const ivec4 *l, const ivec4 *r);
 
 /* scaler type copy */
-#define __iscaler_copy(type, dst, src) memcpy((dst)->values, (src)->values, sizeof(type))
+#define __iscaler_copy(type, dst, src) do { memcpy((dst)->values, (src)->values, sizeof(type)); } while(0)
+   
+/* scaler type fill */
+#define __iscaler_fill_2(dst, x, y) do { (dst)->values[0] = x; (dst)->values[1] = y; } while(0)
+#define __iscaler_fill_3(dst, x, y, z) do { \
+    (dst)->values[0] = x; \
+    (dst)->values[1] = y; \
+    (dst)->values[2] = z; } while(0)
+#define __iscaler_fill_4(dst, x, y, z, w) do { \
+    (dst)->values[0] = x; \
+    (dst)->values[1] = y; \
+    (dst)->values[2] = z; \
+    (dst)->values[3] = w; } while(0)
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
