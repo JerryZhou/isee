@@ -94,6 +94,9 @@ typedef unsigned char ibool;
 #define iunused(v) (void)(v)
 #define ilog(...) printf(__VA_ARGS__)
 
+/* the todos macro */
+#define itodos(...) do { ilog("[ilog-todo](%s, %s, %d)==>   ", __FILE__, __FUNCTION__, __LINE__); ilog(__VA_ARGS__); ilog("\n"); } while(0)
+
 /* 精度 */
 typedef float ireal;
     
