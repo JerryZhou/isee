@@ -272,7 +272,7 @@ void iquatrotatebetweenvec3(__iout iquat *quat,
         return ;
     }
     
-    if (a < (1e-6f - 1.0f))	{
+    if (a < (iepsilon - 1.0f))	{
         if (fabs(ivec3lengthsqr(fallback)) < iepsilon) {
             iquatrotateaxisangle(quat, fallback, __iPI);
         } else {
@@ -322,10 +322,15 @@ void iquatbetweenvec3(__iout iquat *quat, __iin const ivec3 *u, __iin const ivec
 void iquatlookrotate(__iout iquat *quat, __iin const ivec3 *direction, __iin const ivec3 *up) {
     imat4 lookAt;
     imat3 rot;
+    
+    /* the lookat mat */
+    imat4identity(&lookAt);
     imat4lookat(&lookAt, &kivec3_zero, direction, up);
     
+    /* extract the rotate mat */
     imat4extractrotateimat3(&lookAt, &rot);
     
+    /* fetch the quat from mat */
     iquatfromrotatemat3(quat, &rot);
     iquatnormalize(quat);
 }
