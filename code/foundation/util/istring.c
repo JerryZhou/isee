@@ -17,7 +17,6 @@ istring* istringmake(const char* s) {
 
 /*Make a string by s and len*/
 istring* istringmakelen(const char* s, size_t len) {
-    islice *str;
     iarray *arr = NULL;
     
     /* kstring_zero */
@@ -327,10 +326,11 @@ int istringfind(const istring *rfs, const char *sub, int len, int index) {
     
     if (iarraylen(indexs)) {
         index = iarrayof(indexs, int, 0);
-        irelease(indexs);
     }  else {
         index = kindex_invalid;
     }
+    irelease(indexs);
+    
     return index;
 }
 
