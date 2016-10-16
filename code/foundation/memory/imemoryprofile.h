@@ -1,14 +1,29 @@
-//
-//  imemoryprofile.h
-//  isee
-//
-//  Created by jerry on 16/10/16.
-//
-//
 
-#ifndef imemoryprofile_h
-#define imemoryprofile_h
+#ifndef _IMEMORYPROFILE_H
+#define _IMEMORYPROFILE_H
 
-#include <stdio.h>
+#include "foundation/itype.h"
+
+/* Set up for C function definitions, even when using C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* clear all the cached-memory */
+void imemoryglobalclear();
+
+/* current global memory alloced */
+int64_t imemoryglobalalloc();
+
+/* current global memory freed */
+int64_t imemoryglobalfree();
+    
+/* current global memory used */
+int64_t imemoryglobaluse();
+
+/* Ends C function definitions when using C++ */
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* imemoryprofile_h */
