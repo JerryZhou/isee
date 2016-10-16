@@ -52,7 +52,7 @@ __ideclaremetapart(islice, 1000, NULL, islice_destructor),\
 __ideclaremetapart(icmdarg, 0, NULL, icmdarg_destructor),\
 __ideclaremeta(itree),\
 __ideclaremeta(idict),\
-__ideclaremeta(ineighbor),\
+__ideclaremetapart(ineighbor, 0, NULL, ineighbor_destructor),\
 __ideclaremetapart(iringbuffer, 0, NULL, iringbuffer_destructor),\
 __ideclaremetapart(ipolygon3d, 1000, NULL, ipolygon3d_destructor),\
 __ideclaremetapart(ipolygon2d, 1000, NULL, ipolygon2d_destructor),\
