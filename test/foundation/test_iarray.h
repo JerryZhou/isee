@@ -4,10 +4,6 @@
 
 SP_SUIT(iarray);
 
-SP_CASE(iarray, end) {
-    SP_TRUE(1);
-}
-
 typedef struct TChar {
   char chars[4];
 }TChar;
@@ -108,6 +104,8 @@ SP_CASE(iarray, iarraylastANDiarrayfirst) {
     
     iarrayadd(arr, &chars);
     SP_TRUE(iarraylast(arr) != iarrayfirst(arr));
+    
+    irelease(arr);
 }
 
 SP_CASE(iarray, iarraybuffer) {
@@ -343,5 +341,9 @@ SP_CASE(iarray, iarrayforeach) {
     irelease(arr);
 }
 
-
+SP_CASE(iarray, end) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}
 

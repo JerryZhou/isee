@@ -67,3 +67,9 @@ SP_CASE(iobjcache, iobjcachememorysize) {
     SP_TRUE((kind_freed + newsize) == kind_freed_n);
     SP_TRUE(kind_current == kind_current_n);
 }
+
+SP_CASE(iobjcache, end) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}

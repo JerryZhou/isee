@@ -63,6 +63,12 @@ SP_CASE(islice, islicemake) {
     irelease(arr);
 }
 
+SP_CASE(islice, end000) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}
+
 SP_CASE(islice, islicemakeby) {
     /* arr[0:8] */
     iarray *arr = iarraymakeint(8);
@@ -166,6 +172,12 @@ SP_CASE(islice, islicemakeby) {
     irelease(arr);
 }
 
+SP_CASE(islice, end001) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}
+
 #define __slice_arr(arr, ...) islicemakearg(arr, #__VA_ARGS__)
 
 void __slice_print(islice *s) {
@@ -219,6 +231,13 @@ SP_CASE(islice, islicelen_islicecapacity) {
     irelease(slice4);
     
     irelease(arr);
+}
+
+
+SP_CASE(islice, end002) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(islice, isliceparamsparse) {
@@ -297,8 +316,17 @@ SP_CASE(islice, isliceappendvalues) {
     
     __Sn_be_7(slicenew1, 0, 2, 0, 1, 2, 0, 1, 2);
    
+    irelease(slice);
+    irelease(slicenew);
     irelease(slicenew1);
     irelease(arr);
+}
+
+
+SP_CASE(islice, end003) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(islice, isliceset) {
@@ -336,7 +364,15 @@ SP_CASE(islice, isliceset) {
     SP_TRUE(isliceset(slicenew1, 7, &value) == iino);
     __Sn_be_7(slicenew1, 0, 9, 0, 1, 2, 0, 1, 9);
     
+    irelease(slice);
+    irelease(slicenew);
     irelease(slicenew1);
     irelease(arr);
+}
+
+SP_CASE(islice, end) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 

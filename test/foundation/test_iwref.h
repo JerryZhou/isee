@@ -91,10 +91,25 @@ SP_CASE(iwref, iwrefunsafestrong) {
     irelease(wref);
 }
 
+SP_CASE(iwref, wassign) {
+    iwref *wref = iwrefmake(NULL);
+    iwassign(wref, NULL);
+    
+    iref *ref = irefnew(iref);
+    iwassign(wref, ref);
+    iwassign(wref, NULL);
+    
+    irelease(wref);
+    irelease(ref);
+}
+
 SP_CASE(iwref, end) {
     SP_TRUE(1);
     
-    
     /*no memory leak about iwref */
     SP_TRUE(iobjcachestatis(imetaof(iwref))->current == 0)
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

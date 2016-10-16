@@ -87,6 +87,8 @@ SP_CASE(imeta, imetacallocANDimetafree) {
 }
 
 SP_CASE(imeta, imetamemorystate) {
-    SP_TRUE(1);
-    imetamemorystate(); // output logs
+    imemoryglobalclear();
+    imetamemorystate();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

@@ -28,3 +28,9 @@ SP_CASE(imutex, imutexlockANDimutexunlock) {
     
     SP_TRUE(1);
 }
+
+SP_CASE(imutex, end) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}

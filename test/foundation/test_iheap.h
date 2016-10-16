@@ -165,3 +165,9 @@ SP_CASE(iheap, iarraysortheap) {
 SP_CASE(iheap, end) {
     SP_TRUE(1);
 }
+
+SP_CASE(iheap, mend) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}

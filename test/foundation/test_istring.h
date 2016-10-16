@@ -94,6 +94,12 @@ SP_CASE(istring, istringformat) {
     irelease(s1);
 }
 
+SP_CASE(istring, end003) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}
+
 SP_CASE(istring, istringcompare) {
     istring * s0 = istringmake("aba");
     istring * s1 = istringmake("abb");
@@ -114,6 +120,12 @@ SP_CASE(istring, istringcompare) {
     irelease(s2);
 }
 
+SP_CASE(istring, end0031) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}
+
 SP_CASE(istring, istringfind) {
     /* 1-2-3-a-b-c- -1-2-3-  -a -b -c -d -  -1 -2 -3 -4 -  -a - */
     /* 0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21*/
@@ -126,6 +138,12 @@ SP_CASE(istring, istringfind) {
     SP_TRUE(index == kindex_invalid);
     
     irelease(s0);
+}
+
+SP_CASE(istring, end004) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(istring, istringsub) {
@@ -195,6 +213,12 @@ SP_CASE(istring, istringsplit) {
     irelease(sx1d);
     irelease(sx2d);
     irelease(sx3d);
+}
+
+SP_CASE(istring, end005) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(istring, istringjoin) {
@@ -281,5 +305,7 @@ SP_CASE(istring, istringatof) {
 }
 
 SP_CASE(istring, end) {
-    SP_TRUE(1);
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

@@ -112,5 +112,7 @@ SP_CASE(iarraytypes, iarraymakeirefwithentryandcmp) {
 }
 
 SP_CASE(iarraytypes, end) {
-    SP_TRUE(1);
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

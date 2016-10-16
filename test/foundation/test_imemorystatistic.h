@@ -33,3 +33,9 @@ SP_CASE(imemorystatistics, imemorystatisbehavior_free) {
     SP_TRUE(statis.current == 0);
     SP_TRUE(statis.freed == 1);
 }
+
+SP_CASE(imemorystatistics, end) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}

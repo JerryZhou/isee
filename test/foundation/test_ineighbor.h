@@ -18,12 +18,37 @@ static void _inode_prepare_graphics(node_graphics *g) {
     g->E = irefnew(ineighbor);
 }
 
+static void _inode_clean_graphics(node_graphics *g) {
+    ineighborclean(g->A);
+    ineighborclean(g->B);
+    ineighborclean(g->C);
+    ineighborclean(g->D);
+}
+
 static void _inode_free_graphics(node_graphics *g) {
+    _inode_clean_graphics(g);
+    
     irefdelete(g->A);
     irefdelete(g->B);
     irefdelete(g->C);
     irefdelete(g->D);
     irefdelete(g->E);
+}
+
+SP_CASE(ineighbor, graphics) {
+    node_graphics g;
+    _inode_prepare_graphics(&g);
+    
+    ineighboradd(g.A, g.B);
+    
+    _inode_free_graphics(&g);
+}
+
+SP_CASE(ineighbor, end000) {
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 /*
@@ -69,6 +94,12 @@ SP_CASE(ineighbor, ineighboradd) {
     SP_EQUAL(ireflistlen(g.E->neighbors_from), 1);
     
     _inode_free_graphics(&g);
+}
+
+SP_CASE(ineighbor, end001) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(ineighbor, ineighbordel) {
@@ -155,5 +186,7 @@ SP_CASE(ineighbor, ineighborsclean) {
 }
 
 SP_CASE(ineighbor, end) {
-    SP_TRUE(1);
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

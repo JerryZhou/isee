@@ -103,3 +103,10 @@ SP_CASE(iref, irefthis) {
     SP_TRUE(xthis == NULL);
     irelease(ref);
 }
+
+SP_CASE(iref, end) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}
+

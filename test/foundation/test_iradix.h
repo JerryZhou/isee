@@ -100,5 +100,7 @@ SP_CASE(iradixunit, iradixdiff) {
 }
 
 SP_CASE(iradixunit, end) {
-    SP_TRUE(1);
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

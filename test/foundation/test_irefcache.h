@@ -38,6 +38,12 @@ SP_CASE(irefcache, irefcachemake) {
     irelease(cache);
 }
 
+SP_CASE(irefcache, end000) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}
+
 SP_CASE(irefcache, irefcachepoll) {
     irefcache *cache = _t_x_refcache();
     SP_EQUAL(_t_x_refcachenew_cnt, 0);
@@ -91,6 +97,12 @@ SP_CASE(irefcache, irefcachepoll) {
     SP_EQUAL(_t_x_refcacheenvicted_cnt, 1);
     
     irelease(cache);
+}
+
+SP_CASE(irefcache, end001) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(irefcache, irefcachepush) {
@@ -178,5 +190,7 @@ SP_CASE(irefcache, irefcachesize) {
 }
 
 SP_CASE(irefcache, end) {
-    SP_TRUE(1);
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

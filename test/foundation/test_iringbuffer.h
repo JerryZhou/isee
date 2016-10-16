@@ -79,5 +79,7 @@ SP_CASE(iringbuffer, iringbufferfmt) {
 }
 
 SP_CASE(iringbuffer, end) {
-    SP_TRUE(1);
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

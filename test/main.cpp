@@ -3,6 +3,11 @@
 
 #include "simpletest.h"
 
+/* global memory tracing in use  */
+int64_t _g_memory_in_use = 0;
+
+#include "foundation/memory/imemoryprofile.h"
+
 // foundation/core
 #include "foundation/test_iobj.h"
 #include "foundation/test_iobjcache.h"
@@ -24,24 +29,24 @@
 #include "foundation/test_iarray.h"
 #include "foundation/test_idict.h" // TODO:
 #include "foundation/test_iheap.h"
+#include "foundation/test_ireflist.h"
 #include "foundation/test_ineighbor.h"
 #include "foundation/test_irefcache.h"
-#include "foundation/test_ireflist.h"
 #include "foundation/test_islice.h"
 #include "foundation/test_itree.h" // TODO:
 
 // foundation/util
 #include "foundation/test_iarraytypes.h"
 #include "foundation/test_icmdarg.h"
-#include "foundation/test_iradix.h" // TODO:
+#include "foundation/test_iradix.h"
 #include "foundation/test_istring.h"
-#include "foundation/test_iringbuffer.h"    // TODO:
+#include "foundation/test_iringbuffer.h"
 
 // foundation/math
 #include "foundation/test_icircle.h"
 #include "foundation/test_iline.h"
-#include "foundation/test_imat.h"
-#include "foundation/test_iquat.h"
+#include "foundation/test_imat.h"       // test-missing-part
+#include "foundation/test_iquat.h"      // test-missing-part
 #include "foundation/test_imath.h"
 #include "foundation/test_iplane.h"
 #include "foundation/test_ipolygon.h"
@@ -54,6 +59,9 @@ iimplementapplication();
 
 int ISeeMain(const icmdarg *arg) {
     iunused(arg);
+    
+    _g_memory_in_use = imemoryglobaluse();
+    
     runAllTest();
     return 0;
 }

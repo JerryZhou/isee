@@ -24,3 +24,9 @@ SP_CASE(imemory, irealloc) {
     SP_EQUAL(i[2], 0);
     ifree(i);
 }
+
+SP_CASE(imemory, end) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}

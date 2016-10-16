@@ -56,3 +56,9 @@ SP_CASE(iatomic, iatomicdecrement) {
     SP_TRUE(xv == 0);
     SP_TRUE(store == 0);
 }
+
+SP_CASE(iatomic, end) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}
