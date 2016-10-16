@@ -301,7 +301,7 @@ void iarrayforeach(const iarray *arr, iarray_entry_visitor visitor) {
 }
 
 /* array entry of arr */
-const iarrayentry *iarrayentryof(iarray *arr) {
+const iarrayentry *iarrayentryof(const iarray *arr) {
     icheckret(arr, NULL);
     return arr->entry;
 }
