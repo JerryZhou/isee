@@ -32,9 +32,14 @@ istring* istringmakelen(const char* s, size_t len) {
     iarrayinsert(arr, 0, s, len);
     __istring_cstyle(arr);
     
-    str = islicemake(arr, 0, len, 0);
-    irelease(arr);
-    return istringlaw(str);
+    return istringfromraw(arr);
+}
+
+/*Make a string by raw array */
+istring* istringfromraw(iarray *raw) {
+    istring *s = islicemakearg(raw, ":");
+    irelease(raw);
+    return istringlaw(s);
 }
 
 /*Make a copy of s with c-style string*/
@@ -72,80 +77,12 @@ istring* istringlaw(istring *s) {
  * representation stored at 's'. */
 #define _IRB_LLSTR_SIZE 256
 
-size_t _ill2str(char *s, int64_t value) {
-    char *p, aux;
-    uint64_t v;
-    size_t l;
-    
-    /* Generate the string representation, this method produces
-     * an reversed string. */
-    v = (value < 0) ? -value : value;
-    p = s;
-    do {
-        *p++ = '0'+(v%10);
-        v /= 10;
-    } while(v);
-    if (value < 0) *p++ = '-';
-    
-    /* Compute length and add null term. */
-    l = p-s;
-    *p = '\0';
-    
-    /* Reverse the string. */
-    p--;
-    while(s < p) {
-        aux = *s;
-        *s = *p;
-        *p = aux;
-        s++;
-        p--;
-    }
-    return l;
-}
-
-/* Identical _ill2str(), but for unsigned long long type. */
-size_t _iull2str(char *s, uint64_t v) {
-    char *p, aux;
-    size_t l;
-    
-    /* Generate the string representation, this method produces
-     * an reversed string. */
-    p = s;
-    do {
-        *p++ = '0'+(v%10);
-        v /= 10;
-    } while(v);
-    
-    /* Compute length and add null term. */
-    l = p-s;
-    *p = '\0';
-    
-    /* Reverse the string. */
-    p--;
-    while(s < p) {
-        aux = *s;
-        *s = *p;
-        *p = aux;
-        s++;
-        p--;
-    }
-    return l;
-}
-
-size_t _idouble2str(char *s, double d) {
-    size_t n = snprintf(s, 256, "%.4lf", d);
-    s[n] = 0;
-    return n;
-}
-
-/*format the string and return the value*/
-istring* istringformat(const char* fmt, ...) {
-    istring *s;
-    iarray *arr = iarraymakechar(strlen(fmt)*2);
+/* buf- raw va_list format */
+size_t istringvrawformat(iarray *arr, const char *fmt, va_list ap) {
     const char *f = fmt;
+    istring *s;
     size_t i;
     double d;
-    va_list ap;
     
     char next, *str;
     size_t l;
@@ -153,8 +90,10 @@ istring* istringformat(const char* fmt, ...) {
     uint64_t unum;
     
     char buf[_IRB_LLSTR_SIZE];
+    size_t arrsize = iarraylen(arr);
     
-    va_start(ap,fmt);
+    icheckretassert(iarrayentryget(EnumArrayEntryType_Char) == iarrayentryof(arr), 0);
+    
     f = fmt;    /* Next format specifier byte to process. */
     i = 0;
     while(*f) {
@@ -182,7 +121,7 @@ istring* istringformat(const char* fmt, ...) {
                     case 'f':
                     case 'F':
                         d = va_arg(ap, double);
-                        l = _idouble2str(buf, d);
+                        l = idouble2string(buf, d);
                         iarrayinsert(arr, iarraylen(arr), buf, l);
                         i += l;
                         break;
@@ -193,7 +132,7 @@ istring* istringformat(const char* fmt, ...) {
                         else
                             num = va_arg(ap,int64_t);
                     {
-                        l = _ill2str(buf, num);
+                        l = ill2string(buf, num);
                         iarrayinsert(arr, iarraylen(arr), buf, l);
                         i += l;
                     }
@@ -205,7 +144,7 @@ istring* istringformat(const char* fmt, ...) {
                         else
                             unum = va_arg(ap,uint64_t);
                     {
-                        l = _iull2str(buf, unum);
+                        l = iull2string(buf, unum);
                         iarrayinsert(arr, iarraylen(arr), buf, l);
                         i += l;
                     }
@@ -221,6 +160,28 @@ istring* istringformat(const char* fmt, ...) {
         }
         f++;
     }
+    return iarraylen(arr)-arrsize;
+}
+
+/* buf - raw format */
+size_t istringrawformat(iarray *arr, const char *fmt, ...) {
+    va_list ap;
+    size_t arrsize;
+    
+    va_start(ap,fmt);
+    arrsize = istringvrawformat(arr, fmt, ap);
+    va_end(ap);
+    return arrsize;
+}
+
+/*format the string and return the value*/
+istring* istringformat(const char* fmt, ...) {
+    istring *s;
+    iarray *arr = iarraymakechar(strlen(fmt)*2);
+    va_list ap;
+    
+    va_start(ap,fmt);
+    istringvrawformat(arr, fmt, ap);
     va_end(ap);
     
     s = islicemakearg(arr, ":");

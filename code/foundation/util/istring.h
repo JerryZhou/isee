@@ -26,6 +26,9 @@ istring* istringmake(const char* s);
 /*Make a string by s and len*/
 istring* istringmakelen(const char* s, size_t len);
 
+/*Make a string by raw array, will release the reference of raw */
+istring* istringfromraw(iarray *raw);
+
 /*Make a copy of s with c-style string*/
 istring* istringdup(const istring *s);
 
@@ -58,7 +61,14 @@ istring* istringlaw(istring *s);
  * %F - double
  * %% - Verbatim "%" character.
  */
+    
 istring* istringformat(const char* format, ...);
+
+/* buf- raw format */
+size_t istringrawformat(iarray *buf, const char *format, ...);
+
+/* buf- raw va_list format */
+size_t istringvrawformat(iarray *buf, const char *format, va_list ap);
 
 /*compare the two istring*/
 int istringcompare(const istring *lfs, const istring *rfs);
