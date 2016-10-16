@@ -184,11 +184,14 @@ islice* isliceappendvalues(islice* slice, const void *values, int count) {
         /*make new slice*/
         newslice = islicemake(newarray, 0, needcapacity, newcapacity);
         
-        /* free the new array ref*/
-        irelease(newarray);
         /* set slice to return*/
         /* free the old slice*/
         iassign(slice, newslice);
+        
+        /* free the new array ref*/
+        irelease(newarray);
+        /* free the new slice */
+        irelease(newslice);
     }
     return slice;
 }
