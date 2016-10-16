@@ -56,6 +56,9 @@ typedef enum EnumArrayFlag {
     
     /* the array userdata is malloc by dynamic */
     EnumArrayFlagNeedFreeUserData = 1<<7,
+    
+    /* the array is the const-array */
+    EnumArrayConst = 1<<8,
 }EnumArrayFlag;
 
 /* the array sencond-meta information */

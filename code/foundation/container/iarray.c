@@ -116,6 +116,8 @@ int iarrayremove(iarray *arr, int index) {
     icheckret(index>=0 && index<arr->len, iino);
     /* sliced array can not be removed */
     icheckret(!iarrayisflag(arr, EnumArrayFlagSliced), iino);
+    /* const array */
+    icheckret(!iarrayisflag(arr, EnumArrayConst), iino);
     
     if (!(arr->entry->flag & EnumArrayFlagSimple)) {
         arr->entry->swap(arr, index, kindex_invalid);
@@ -194,6 +196,8 @@ int iarrayappend(iarray *arr, const void *value, int nums) {
 int iarrayinsert(iarray *arr, int index, const void *value, int nums) {
     int i;
     
+    /* const array */
+    icheckret(!iarrayisflag(arr, EnumArrayConst), iino);
     /* check if we need do insert */
     icheckret(nums > 0, iiok);
     /* check if the index belong to [0, arr->len] */
@@ -231,7 +235,11 @@ int iarrayinsert(iarray *arr, int index, const void *value, int nums) {
 
 /* operators: set value at index */
 int iarrayset(iarray *arr, int index, const void *value) {
+    /* length-rang-check */
     icheckret(index >=0 && index<arr->len, iino);
+    /* const array */
+    icheckret(!iarrayisflag(arr, EnumArrayConst), iino);
+    
     arr->entry->assign(arr, index, value, 1);
     return iiok;
 }
@@ -249,6 +257,8 @@ void iarraytruncate(iarray *arr, size_t len) {
     icheck(arr->len > len);
     /* sliced array can not be truncate */
     icheck(!iarrayisflag(arr, EnumArrayFlagSliced));
+    /* const array */
+    icheck(!iarrayisflag(arr, EnumArrayConst));
     
     if (arr->entry->flag & EnumArrayFlagSimple) {
         /* direct set the length*/
@@ -268,6 +278,8 @@ void iarraytruncate(iarray *arr, size_t len) {
 /* shrink the capacity  */
 size_t iarrayshrinkcapacity(iarray *arr, size_t capacity) {
     icheckret(arr->capacity > capacity, arr->capacity);
+    /* const array */
+    icheckret(!iarrayisflag(arr, EnumArrayConst), arr->capacity);
     
     /* sliced array can not be shrink */
     icheckret(!iarrayisflag(arr, EnumArrayFlagSliced), arr->capacity);
@@ -279,6 +291,8 @@ size_t iarrayshrinkcapacity(iarray *arr, size_t capacity) {
 /* expand the capacity */
 size_t iarrayexpandcapacity(iarray *arr, size_t capacity) {
     icheckret(arr->capacity < capacity, arr->capacity);
+    /* const array */
+    icheckret(!iarrayisflag(arr, EnumArrayConst), arr->capacity);
     
     return _iarray_just_capacity(arr, capacity);
 }
@@ -286,6 +300,8 @@ size_t iarrayexpandcapacity(iarray *arr, size_t capacity) {
 /* sort */
 void iarraysort(iarray *arr) {
     icheck(arr->len);
+    /* const array */
+    icheck(!iarrayisflag(arr, EnumArrayConst));
     
     /* algorithm: heap-sort */
     iarraysortheap(arr, 0, arr->len-1);
