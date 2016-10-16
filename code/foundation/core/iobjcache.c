@@ -68,8 +68,7 @@ static void _imetadirectfree(iobjcache *xthis, iobj *obj) {
 }
 
 /**
- * 尝试从缓冲区拿对象
- */
+ * try to allocate the obj from cache first */
 static iobj *_icachepoll(iobjcache *cache, imeta *meta) {
     iobj *obj = NULL;
     
@@ -174,6 +173,7 @@ void iobjcacheclear(imeta *meta) {
     iobjcache *cache = iobjcacheget(meta);
     iobj *next = NULL;
     iobj *cur = NULL;
+    icheck(cache);
     icheck(cache->num);
     
     _imeta_lock;
