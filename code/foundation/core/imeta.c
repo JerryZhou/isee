@@ -18,6 +18,7 @@
 #include "foundation/container/itree.h"     /* tree-node */
 #include "foundation/container/ineighbor.h" /* graph-node */
 #include "foundation/util/icmdarg.h"
+#include "foundation/util/iringbuffer.h"
 #include "foundation/math/ipolygon.h"
 
 
