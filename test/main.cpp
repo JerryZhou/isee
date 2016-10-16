@@ -27,20 +27,20 @@ int64_t _g_memory_in_use = 0;
 
 // foundation/container
 #include "foundation/test_iarray.h"
-#include "foundation/test_idict.h" // TODO:
+#include "foundation/test_islice.h"
 #include "foundation/test_iheap.h"
 #include "foundation/test_ireflist.h"
 #include "foundation/test_ineighbor.h"
 #include "foundation/test_irefcache.h"
-#include "foundation/test_islice.h"
+#include "foundation/test_idict.h" // TODO:
 #include "foundation/test_itree.h" // TODO:
 
 // foundation/util
 #include "foundation/test_iarraytypes.h"
-#include "foundation/test_icmdarg.h"
+#include "foundation/test_iringbuffer.h"
 #include "foundation/test_iradix.h"
 #include "foundation/test_istring.h"
-#include "foundation/test_iringbuffer.h"
+#include "foundation/test_icmdarg.h"
 
 // foundation/math
 #include "foundation/test_icircle.h"
