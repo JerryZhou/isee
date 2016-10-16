@@ -147,6 +147,9 @@ void iarraysort(iarray *arr);
 
 /* for each */
 void iarrayforeach(const iarray *arr, iarray_entry_visitor visitor);
+    
+/* array entry of arr */
+const iarrayentry *iarrayentryof(iarray *arr);
 
 /* macro: indexing */
 #define __arr_i(arr, i) ((void*)((arr)->buffer + (i) * (arr)->entry->size))

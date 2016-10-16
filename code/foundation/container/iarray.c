@@ -299,3 +299,10 @@ void iarrayforeach(const iarray *arr, iarray_entry_visitor visitor) {
         visitor(arr, idx, iarrayat(arr, idx));
     }
 }
+
+/* array entry of arr */
+const iarrayentry *iarrayentryof(iarray *arr) {
+    icheckret(arr, NULL);
+    return arr->entry;
+}
+
