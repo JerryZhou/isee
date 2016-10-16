@@ -95,6 +95,15 @@ int istringatoi(const istring *s);
  */
 double istringatof(const istring *s);
 
+/* */
+size_t ill2string(char *s, int64_t value);
+
+/* */
+size_t iull2string(char *s, uint64_t value);
+
+/* */
+size_t idouble2string(char *s, double value);
+    
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }

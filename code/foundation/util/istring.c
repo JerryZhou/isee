@@ -509,3 +509,71 @@ double istringatof(const istring *s) {
     
     return atof(buf);
 }
+
+/* */
+size_t ill2string(char *s, int64_t value) {
+    char *p, aux;
+    uint64_t v;
+    size_t l;
+    
+    /* Generate the string representation, this method produces
+     * an reversed string. */
+    v = (value < 0) ? -value : value;
+    p = s;
+    do {
+        *p++ = '0'+(v%10);
+        v /= 10;
+    } while(v);
+    if (value < 0) *p++ = '-';
+    
+    /* Compute length and add null term. */
+    l = p-s;
+    *p = '\0';
+    
+    /* Reverse the string. */
+    p--;
+    while(s < p) {
+        aux = *s;
+        *s = *p;
+        *p = aux;
+        s++;
+        p--;
+    }
+    return l;
+}
+
+/* */
+size_t iull2string(char *s, uint64_t value) {
+    char *p, aux;
+    size_t l;
+    
+    /* Generate the string representation, this method produces
+     * an reversed string. */
+    p = s;
+    do {
+        *p++ = '0'+(value%10);
+        value /= 10;
+    } while(value);
+    
+    /* Compute length and add null term. */
+    l = p-s;
+    *p = '\0';
+    
+    /* Reverse the string. */
+    p--;
+    while(s < p) {
+        aux = *s;
+        *s = *p;
+        *p = aux;
+        s++;
+        p--;
+    }
+    return l;
+}
+
+/* */
+size_t idouble2string(char *s, double value) {
+    size_t n = snprintf(s, 256, "%.4lf", value);
+    s[n] = 0;
+    return n;
+}
