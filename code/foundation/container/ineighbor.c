@@ -1,5 +1,11 @@
 #include "foundation/container/ineighbor.h"
 
+/* ineighbor destructor */
+void ineighbor_destructor(ithis x, iobj *o) {
+    ineighbor *neighbor = icast(ineighbor, __irobj(o));
+    ineighborclean(neighbor);
+}
+
 /* set the relation entry in graphics */
 void ineighborbuild(ineighbor *neighbors, ientryrefjointresrelease entry) {
     icheck(neighbors);

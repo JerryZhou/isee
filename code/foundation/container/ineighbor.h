@@ -36,6 +36,9 @@ typedef struct ineighbor {
     ireflist *neighbors_to; \
     ientryrefjointresrelease neighbors_resfree
     
+/* ineighbor destructor */
+void ineighbor_destructor(ithis x, iobj *o);
+    
 /* set the relation entry in graphics */
 void ineighborbuild(ineighbor *neighbors, ientryrefjointresrelease entry);
 
