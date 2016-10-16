@@ -75,6 +75,67 @@ SP_CASE(iquat, iquatnormalize) {
     SP_TRUE(ireal_equal(len, 1));
 }
 
+SP_CASE(iquat, iquatrotateaxisangle) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatslerp) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatextractaxisangle) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatextractrotatearoundaxis) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatscale) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatassign) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatadd) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatsubtract) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatmultipyvec3) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatrotatebetweenvec3) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatlookrotate) {
+    SP_TRUE(1);
+}
+
+SP_CASE(iquat, iquatfromrotatemat3) {
+    iquat quat;
+    iquatrotateaxisangle(&quat, &kivec3_axis_x, idegreestoradians(30));
+   
+    imat4 mat;
+    imat4identity(&mat);
+    imat4rotationx(&mat, idegreestoradians(30));
+    
+    imat3 rotmat;
+    imat4extractrotateimat3(&mat, &rotmat);
+    
+    iquat rotquat;
+    iquatfromrotatemat3(&rotquat, &rotmat);
+    
+    SP_TRUE(iquatisequal(&quat, &rotquat));
+}
+
 SP_CASE(iquat, end) {
     SP_TRUE(1);
 }
