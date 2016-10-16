@@ -41,7 +41,6 @@ typedef void (*ientrywatch)(struct irefwatcher *watcher, struct iref *ref);
 typedef struct irefwatcher {
     irefwatcherdeclare;
 }irefwatcher;
-   
 
 /* basic iref-struct */
 typedef struct iref {
