@@ -143,6 +143,30 @@ iarray* iarraymakeint64(size_t capacity) {
     return iarraymake(capacity, &_arr_entry_int64);
 }
 
+/* compare uint64 */
+static int _iarray_entry_cmp_uint64(struct iarray *arr,
+                                   int i, int j) {
+    uint64_t *arrs = (uint64_t *)arr->buffer;
+    return arrs[i] - arrs[j];
+}
+
+/* array-uint64 config */
+static const iarrayentry _arr_entry_uint64 = {
+    EnumArrayFlagAutoShirk |
+    EnumArrayFlagSimple |
+    EnumArrayFlagKeepOrder |
+    EnumArrayFlagMemsetZero,
+    sizeof(uint64_t),
+    _iarray_entry_swap_copy,
+    _iarray_entry_assign_copy,
+    _iarray_entry_cmp_uint64,
+};
+
+/* array-uint64 */
+iarray* iarraymakeuint64(size_t capacity) {
+    return iarraymake(capacity, &_arr_entry_uint64);
+}
+
 /* compare char */
 static int _iarray_entry_cmp_char(struct iarray *arr,
                                   int i, int j) {
@@ -320,6 +344,9 @@ const iarrayentry* iarrayentryget(int type) {
             break;
         case EnumArrayEntryType_Int64:
             return &_arr_entry_int64;
+            break;
+        case EnumArrayEntryType_UInt64:
+            return &_arr_entry_uint64;
             break;
         case EnumArrayEntryType_Real:
             return &_arr_entry_ireal;

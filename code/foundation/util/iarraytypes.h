@@ -47,6 +47,9 @@ iarray* iarraymakeireal(size_t capacity);
 
 /* array-int64 */
 iarray* iarraymakeint64(size_t capacity);
+    
+/* array-uint64 */
+iarray* iarraymakeuint64(size_t capacity);
 
 /* array-char */
 iarray* iarraymakechar(size_t capacity);
@@ -56,6 +59,7 @@ typedef enum EnumArrayEntryType {
     EnumArrayEntryType_Char,
     EnumArrayEntryType_Int,
     EnumArrayEntryType_Int64,
+    EnumArrayEntryType_UInt64,
     EnumArrayEntryType_Real,
 }EnumArrayEntryType;
     
