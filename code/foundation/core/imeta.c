@@ -170,3 +170,8 @@ void imetamemorystate() {
     }
     ilog("[AOI-Memory] *************************************************************** End\n");
 }
+
+/* return current max meta-index */
+int imetaindexcur() {
+    return __g_meta_index;
+}

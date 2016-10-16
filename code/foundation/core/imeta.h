@@ -126,6 +126,9 @@ void imetafree(void *p);
 /* log all the memory state in meta-system */
 void imetamemorystate();
 
+/* return current max meta-index */
+int imetaindexcur();
+
 /* meta-index */
 #define imetaindex(type)    imeta_##type##_index
 /* meta-get by meta-index */
