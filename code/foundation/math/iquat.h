@@ -15,6 +15,10 @@ union imat3;
 union imat4;
     
 /* quat vec4 */
+/* q = [qv, qs] = [a*sin(ø/2), cons(ø/2)]
+ * the rotate axis normalized vector
+ * ø is the roated angle
+ * */
 typedef ivec4 iquat;
 
 /* quat indentity */

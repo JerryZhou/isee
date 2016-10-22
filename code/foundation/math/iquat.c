@@ -44,18 +44,20 @@ void iquatidentity(__ioutin iquat *quat) {
     quat->values[0] = quat->values[1] = quat->values[2] = 0.f;
     quat->values[3] = 1.f;
 }
-/* quaternion: inverse */
+/* quaternion: inverse 
+ * q` = q¯ = [-qv, ps] ; |q| = 1
+ * */
 void iquatinvert(__ioutin iquat *quat) {
-    ireal l = iquatlength(quat);
+    ireal l = iquatlengthsqr(quat);
     
     if (ireal_less(l, iepsilon)) {
         quat->values[0]=quat->values[1]=quat->values[2]=quat->values[3] = 0.f;
         return;
     }
-    quat->v.x = -quat->v.x;
-    quat->v.y = -quat->v.y;
-    quat->v.z = -quat->v.z;
-    quat->v.w = -quat->v.w;
+    quat->v.x = -quat->v.x / l;
+    quat->v.y = -quat->v.y / l;
+    quat->v.z = -quat->v.z / l;
+    quat->v.w = quat->v.w / l;
 }
 /* quaternion: dot */
 ireal iquatdot(__iin const iquat *q1, __iin const iquat *q2) {
@@ -77,7 +79,8 @@ ireal iquatlengthsqr(__iin const iquat *quat) {
     return iquatdot(quat, quat);
 }
 
-/* quaternion: multiply */
+/* quaternion: multiply , grassmann product
+ * pq = [(ps*qv + qs*pv + pv (cross) qv), (ps*qs - pv · qv)] */
 void iquatmultipy(__iout iquat *quat, __iin const iquat *qu1, __iin const iquat *qu2) {
     iquat* q1 = NULL;
     iquat* q2 = NULL;
