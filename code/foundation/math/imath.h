@@ -9,6 +9,9 @@
 extern "C" {
 #endif
     
+/* matrix and quaternion aticles 
+ * http://www.j3d.org/matrix_faq/matrfaq_latest.html */
+    
 /* mathmatics consts */
 #define __iPI 3.14159265358979323846f
 #define __iPIOver180  (__iPI / 180.0f)
