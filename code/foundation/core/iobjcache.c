@@ -30,6 +30,11 @@ static imutex *_imeta_mutex() {
 /* statics-for-global: alloc and free */
 static imemorystatistics _g_global_statis;
 
+/* * * */
+/* todos: */
+/* alloc-flag-alignment */
+/* * * */
+
 /* iobj: direct alloc */
 static iobj *_imetadirectalloc(iobjcache *xthis, imeta *meta) {
     size_t newsize = sizeof(struct iobj) + meta->size;

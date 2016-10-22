@@ -65,6 +65,15 @@ typedef struct imetaallocator {
 
 /* should be register with allocator */
 typedef imetaallocator* (*ientrymake_allocator)(struct imeta* meta, ithis i);
+ 
+/* * * */
+/* todos: */
+/* alloc-flag-alignment */
+/* * * */
+    
+typedef enum EnumMetaFlag {
+    EnumMetaFlag_MemoryAligned = 1, /* memory-alignment */
+} EnumMetaFlag;
     
 /* type-meta-information */
 typedef struct imeta {
