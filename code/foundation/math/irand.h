@@ -10,7 +10,8 @@ extern "C" {
 #endif
 
 /* George Marsaglia's The mother of all random number generators
- * ftp://ftp.forth.org/pub/C/mother.c   */
+ * ftp://ftp.forth.org/pub/C/mother.c   
+ * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/index.html */
 typedef struct irand {
     short mother1[10];
     short mother2[10];
