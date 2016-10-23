@@ -32,8 +32,9 @@ SP_CASE(iquat, iquatinvert) {
     iquat quat;
     __iscaler_fill_4(&quat, 1, 2, 3, 4);
     
+    ireal lensrc = iquatlengthsqr(&quat);
     iquat quatinvert;
-    __iscaler_fill_4(&quatinvert, -1, -2, -3, -4);
+    __iscaler_fill_4(&quatinvert, -1/lensrc, -2/lensrc, -3/lensrc, 4/lensrc);
     
     iquatinvert(&quat);
     SP_TRUE(iquatisequal(&quat, &quatinvert));
