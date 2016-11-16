@@ -9,6 +9,23 @@
 extern "C" {
 #endif
 
+/*
+ * http://www.cnblogs.com/jzhlin/archive/2012/07/23/Quorum.html
+ * https://en.wikipedia.org/wiki/Quorum_(distributed_computing)
+ * V(r) + V(w) > V
+ * V(w) > V/2
+ * */
+typedef struct iquorum {
+    size_t q;
+    size_t qr;
+    size_t qw;
+} iquorum;
+
+typedef struct iquorumvalue {
+    uint32_t version;
+    iarray *data;
+} iquorumvalue;
+
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
