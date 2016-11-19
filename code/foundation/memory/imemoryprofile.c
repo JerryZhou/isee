@@ -7,7 +7,7 @@
 /* clear all the cached-memory */
 void imemoryglobalclear() {
     int cur = imetaindexcur()-1;
-    imeta *meta;
+    const imeta *meta;
     for (; cur>=0; --cur) {
         meta = imetaget(cur);
         iobjcacheclear(meta);

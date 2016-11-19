@@ -166,7 +166,7 @@ void imetafree(void *p) {
 /* print-the-memory-state */
 void imetamemorystate() {
     int i=0;
-    imeta *meta=NULL;
+    const imeta *meta=NULL;
     imemorystatistics *statis=iobjcachestatis(meta);
     ilog("[AOI-Memory] *************************************************************** Begin\n");
     ilog("[AOI-Memory] Total"__istatis_format"\n", __istatis_value(statis));

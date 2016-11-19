@@ -24,7 +24,7 @@ typedef int (*ientryobjhash)(iptr i, struct iobj *obj);
 typedef int (*ientryobjcompare)(iptr i, struct iobj *lfs, struct iobj *rfs);
     
 /* entry for calloc iobj: i default point to struct iobjcache */
-typedef void* (*ientryobjcalloc)(iptr i, struct imeta *meta); /* alloc the iobj */
+typedef void* (*ientryobjcalloc)(iptr i, const struct imeta *meta); /* alloc the iobj */
 /* entry for free iobj: i default point to struct iobjcache */
 typedef void (*ientryobjfree)(iptr i, void *ptr); /* free the iobj */
     
@@ -64,7 +64,7 @@ typedef struct imetaallocator {
 } imetaallocator;
 
 /* should be register with allocator */
-typedef imetaallocator* (*ientrymake_allocator)(struct imeta* meta, iptr i);
+typedef imetaallocator* (*ientrymake_allocator)(const struct imeta* meta, iptr i);
  
 /* * * */
 /* todos: */

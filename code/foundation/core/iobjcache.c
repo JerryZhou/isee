@@ -18,8 +18,8 @@ static imutex *_imeta_mutex() {
 }
 #define _imeta_global_lock imutexlock(_imeta_mutex())
 #define _imeta_global_unlock imutexunlock(_imeta_mutex())
-#define _imeta_lock imutexlock(&meta->mutex)
-#define _imeta_unlock imutexunlock(&meta->mutex)
+#define _imeta_lock imutexlock((imutex*)&meta->mutex)
+#define _imeta_unlock imutexunlock((imutex*)&meta->mutex)
 #else
 #define _imeta_global_lock (void)0
 #define _imeta_global_unlock (void)0
@@ -36,7 +36,7 @@ static imemorystatistics _g_global_statis;
 /* * * */
 
 /* iobj: direct alloc */
-static iobj *_imetadirectalloc(iobjcache *xthis, imeta *meta) {
+static iobj *_imetadirectalloc(iobjcache *xthis, const imeta *meta) {
     size_t newsize = sizeof(struct iobj) + meta->size;
     iobj *obj = (iobj*)icalloc(1, newsize);
     obj->meta = meta;
@@ -56,7 +56,7 @@ static iobj *_imetadirectalloc(iobjcache *xthis, imeta *meta) {
 
 /* iobj: direct free */
 static void _imetadirectfree(iobjcache *xthis, iobj *obj) {
-    imeta *meta = obj->meta;
+    const imeta *meta = obj->meta;
     size_t newsize = obj->meta->size + sizeof(iobj);
     
     /* meta-statis */
@@ -74,7 +74,7 @@ static void _imetadirectfree(iobjcache *xthis, iobj *obj) {
 
 /**
  * try to allocate the obj from cache first */
-static iobj *_icachepoll(iobjcache *cache, imeta *meta) {
+static iobj *_icachepoll(iobjcache *cache, const imeta *meta) {
     iobj *obj = NULL;
     
     _imeta_lock;
@@ -102,7 +102,7 @@ static iobj *_icachepoll(iobjcache *cache, imeta *meta) {
 
 /* Meta -Cache: Managing */
 static void _icachepush(iobjcache *cache, iobj *obj) {
-    imeta *meta = obj->meta;
+    const imeta *meta = obj->meta;
     
     /* tracing the free */
     if (meta->funcs && meta->funcs->destructor) {
@@ -124,7 +124,7 @@ static void _icachepush(iobjcache *cache, iobj *obj) {
 }
 
 /* cache-allocator: allocate from obj-cache */
-static void* _iobjcache_ientryobjcalloc(iptr i, struct imeta *meta) {
+static void* _iobjcache_ientryobjcalloc(iptr i, const struct imeta *meta) {
     iobjcache *xthis = (iobjcache*)(i);
     iobj *obj = _icachepoll(xthis, meta);
     return obj->addr;

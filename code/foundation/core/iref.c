@@ -12,7 +12,7 @@ enum {
 
 /* make a new iref with meta-index */
 iref* irefmalloc(int index) {
-    imeta *meta = imetaget(index);
+    const imeta *meta = imetaget(index);
     iref *ref = (iref*)(imetacalloc(meta));
     return irefassistretain(ref);
 }

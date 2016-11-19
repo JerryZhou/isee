@@ -13,7 +13,7 @@ struct imeta;
 
 /* basic memory-obj */
 typedef struct iobj {
-    struct imeta *meta;     /* description of iobj */
+    const struct imeta *meta;     /* description of iobj */
     struct iobj *next;      /* next object in cache */
     iptr othis;            /* store the self-explain instance, values extends danymics */
     
