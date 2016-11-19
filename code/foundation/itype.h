@@ -72,7 +72,8 @@ typedef unsigned int  irune;
 typedef struct ipod {
     size_t size;
     size_t align;
-    void   *ptr;
+    void    *ptr;
+    char    stbuf[16]; /* default 16 alignment */
 }ipod;
  
 /* the foundation bool */
