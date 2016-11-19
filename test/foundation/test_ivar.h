@@ -79,6 +79,48 @@ SP_CASE(ivar, ivarissimple) {
     
 }
 
+SP_CASE(ivar, ivardup) {
+    {
+        iref *ref = irefnew(iref);
+        ivar *var = ivarmakeref(ref);
+        SP_TRUE(!ivarissimple(var));
+        
+        ivar *nvar = ivardup(var);
+        SP_EQUAL(nvar->v.ref, var->v.ref);
+        SP_EQUAL(nvar->v.ref, ref);
+        irefdelete(nvar);
+        
+        irefdelete(var);
+        irefdelete(ref);
+    }
+
+    {
+        ivar *var = ivarmakeint(88);
+        SP_EQUAL(var->v.i, 88);
+        
+        ivar *nvar = ivardup(var);
+        SP_EQUAL(nvar->v.i, 88);
+        
+        irefdelete(var);
+        irefdelete(nvar);
+    }
+}
+
+SP_CASE(ivar, ivarhashcode) {
+    {
+        ivar *var = ivarmakeint(88);
+        SP_EQUAL(var->v.i, 88);
+        
+        ivar *nvar = ivardup(var);
+        SP_EQUAL(nvar->v.i, 88);
+        
+        SP_EQUAL(ivarhashcode(var), 88);
+        
+        irefdelete(var);
+        irefdelete(nvar);
+    }
+}
+
 SP_CASE(ivar, end) {
     imemoryglobalclear();
     
