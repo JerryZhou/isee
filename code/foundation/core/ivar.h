@@ -12,17 +12,6 @@ extern "C" {
 /* forward -declares */
 struct imeta;
    
-/* enum -type -index */
-typedef enum EnumIvarType {
-    EnumIvarType_Int,
-    EnumIvarType_I64,
-    EnumIvarType_U64,
-    EnumIvarType_Real,
-    EnumIvarType_Ref,
-    EnumIvarType_Ptr,
-    EnumIvarType_POD,
-} EnumIvarType;
-   
 /* the ivar wrap all couldbeable */
 typedef struct ivar {
     irefdeclare;
@@ -33,18 +22,36 @@ typedef struct ivar {
         ireal real;
         iref *ref;
         void *ptr;
+        ipod pod;
     } v ;
-    struct imeta *meta; /* type-meta */
+    const struct imeta *meta; /* type-meta */
 } ivar;
     
-/* ivar type */
+/* ivar type: meta-index */
 int ivartype(const ivar *var);
+/* ivar type: meta */
+const struct imeta *ivarmeta(const ivar *var);
     
+/* ivar is right-meta-type */
 ibool ivaris(const ivar *var, const struct imeta *meta);
+    
+/* ivar copy */
+ivar *ivardup(const ivar *var);
+  
+/* ivar hash code */
+uint64_t *ivarhashcode(const ivar *var);
+
+/* ivar make functions  */
+ivar *ivarmakeint(int i);
+ivar *ivarmakei64(int64_t i64);
+ivar *ivarmakeu64(uint64_t u64);
+ivar *ivarmakereal(ireal real);
+ivar *ivarmakeptr(iptr *ptr);
+ivar *ivarmakepod(ipod pod);
+ivar *ivarmakeref(iref *ref);
     
 /* ivar destructor */
 void ivar_destructor(iptr x, iobj *o);
-   
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
