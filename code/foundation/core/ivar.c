@@ -80,8 +80,16 @@ ivar *ivardup(const ivar *var) {
 }
   
 /* ivar hash code */
-uint64_t *ivarhashcode(const ivar *var) {
-    return var->v.u64;
+uint64_t ivarhashcode(const ivar *var) {
+    if (ivarissimple(var)) {
+        return var->v.u64;
+    } else if (ivaris(var, imetaof(ipod))) {
+        /* todo hash in pod: md5 */
+        return (uint64_t)(var->v.pod.ptr);
+    } else {
+        /* todo hash in ref-method */
+        return (uint64_t)(var->v.ref);
+    }
 }
 
 /* ivar make functions: int  */

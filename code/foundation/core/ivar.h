@@ -42,7 +42,7 @@ ibool ivaris(const ivar *var, const struct imeta *meta);
 ivar *ivardup(const ivar *var);
   
 /* ivar hash code */
-uint64_t *ivarhashcode(const ivar *var);
+uint64_t ivarhashcode(const ivar *var);
 
 /* ivar make functions  */
 ivar *ivarmakeint(int i);
