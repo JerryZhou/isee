@@ -2,7 +2,7 @@
 #include "foundation/core/imetatypes.h"
 
 /* free slice and slice-array */
-void islice_destructor(ithis x, iobj *o ) {
+void islice_destructor(iptr x, iobj *o ) {
     islice *slice = icast(islice, __iref(o));
     irelease(slice->array);
 }

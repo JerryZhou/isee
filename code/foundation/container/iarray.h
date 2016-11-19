@@ -88,7 +88,7 @@ typedef struct iarray {
 }iarray;
 
 /* array destructor */
-void iarray_destructor(ithis x, iobj *o);
+void iarray_destructor(iptr x, iobj *o);
     
 /* make array with type entry */
 iarray *iarraymake(size_t capacity, const iarrayentry *entry);

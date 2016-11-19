@@ -37,7 +37,7 @@ typedef struct ineighbor {
     ientryrefjointresrelease neighbors_resfree
     
 /* ineighbor destructor */
-void ineighbor_destructor(ithis x, iobj *o);
+void ineighbor_destructor(iptr x, iobj *o);
     
 /* set the relation entry in graphics */
 void ineighborbuild(ineighbor *neighbors, ientryrefjointresrelease entry);

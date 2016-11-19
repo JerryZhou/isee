@@ -94,7 +94,7 @@ static iobj *_icachepoll(iobjcache *cache, imeta *meta) {
     
     /* tracing */
     if (meta->funcs && meta->funcs->constructor) {
-        meta->funcs->constructor((ithis)cache, obj);
+        meta->funcs->constructor((iptr)cache, obj);
     }
     
     return obj;
@@ -106,7 +106,7 @@ static void _icachepush(iobjcache *cache, iobj *obj) {
     
     /* tracing the free */
     if (meta->funcs && meta->funcs->destructor) {
-        meta->funcs->destructor((ithis)cache, obj);
+        meta->funcs->destructor((iptr)cache, obj);
     }
     
     _imeta_lock;
@@ -124,7 +124,7 @@ static void _icachepush(iobjcache *cache, iobj *obj) {
 }
 
 /* cache-allocator: allocate from obj-cache */
-static void* _iobjcache_ientryobjcalloc(ithis i, struct imeta *meta) {
+static void* _iobjcache_ientryobjcalloc(iptr i, struct imeta *meta) {
     iobjcache *xthis = (iobjcache*)(i);
     iobj *obj = _icachepoll(xthis, meta);
     return obj->addr;
@@ -132,7 +132,7 @@ static void* _iobjcache_ientryobjcalloc(ithis i, struct imeta *meta) {
 
 
 /* cache-allocator: free to obj-cache */
-static void _iobjcache_ientryobjfree(ithis i, void *ptr) {
+static void _iobjcache_ientryobjfree(iptr i, void *ptr) {
     iobjcache *xthis = (iobjcache*)(i);
     _icachepush(xthis, __iobj(ptr));
 }

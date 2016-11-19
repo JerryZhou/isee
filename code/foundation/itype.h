@@ -22,7 +22,7 @@ extern "C" {
 #define iithreadsafe (1)
     
 /* this pointer */
-typedef void* ithis;
+typedef void* iptr;
 
 /* default name with 32 bits */
 typedef char iname[32];
@@ -66,6 +66,14 @@ typedef _uint32 uint32_t;
 /* type define */
 typedef unsigned char ibyte;
 typedef unsigned char ibool;
+typedef unsigned int  irune;
+
+/* plan of data */
+typedef struct ipod {
+    size_t size;
+    size_t align;
+    void   *ptr;
+}ipod;
  
 /* the foundation bool */
 #define iiyes 1

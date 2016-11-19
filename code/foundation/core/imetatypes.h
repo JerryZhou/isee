@@ -38,10 +38,24 @@ extern "C" {
 #define __ideclaremetafull(type, capacity, constructor, destructor, hash, compare) imetaindex(type)
 
 #define __iallmeta                            \
+__ideclaremeta(int),\
+__ideclaremeta(int32_t),\
+__ideclaremeta(uint32_t),\
+__ideclaremeta(int64_t),\
+__ideclaremeta(uint64_t),\
+__ideclaremeta(ireal),\
+__ideclaremeta(float),\
+__ideclaremeta(double),\
+__ideclaremeta(ibyte),\
+__ideclaremeta(ibool),\
+__ideclaremeta(iptr),\
+__ideclaremeta(ipod),\
+__ideclaremeta(irune),\
 __ideclaremeta(iobj),\
 __ideclaremeta(iobjcache),\
 __ideclaremeta(iref),\
 __ideclaremeta(iwref),\
+__ideclaremetapart(ivar, 0, NULL, ivar_destructor),\
 __ideclaremetapart(irefcache, 0, NULL, irefcache_destructor),\
 __ideclaremetapart(irefjoint, 0, NULL, irefjoint_destructor),\
 __ideclaremetapart(ireflist, 0, NULL, ireflist_destructor),\

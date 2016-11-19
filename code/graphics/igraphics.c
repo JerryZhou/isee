@@ -19,7 +19,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
 }
 
-void igraphicsapp_destructor(ithis x, iobj *o) {
+void igraphicsapp_destructor(iptr x, iobj *o) {
     igraphicsapp *app = icast(igraphicsapp, __irobj(o));
     irelease(app->windows);
     irelease(app->asyncremoves);
@@ -74,7 +74,7 @@ iwindow *igraphicsappcreatewindow(igraphicsapp *app,
     win->name = istringmake(name);
     win->width = w;
     win->height = h;
-    win->wthis = (ithis)glfxwin;
+    win->wthis = (iptr)glfxwin;
     
     glfwSetKeyCallback(glfxwin, key_callback);
     glfwSetWindowUserPointer(glfxwin, win);
@@ -198,7 +198,7 @@ static void _iwindow_glfx_current(iwindow *win) {
     glfwMakeContextCurrent(glfxwin);
 }
 
-void iwindow_destructor(ithis x, iobj *o) {
+void iwindow_destructor(iptr x, iobj *o) {
     iwindow *win = icast(iwindow, __irobj(o));
     _iwindow_glfx_destroy(win);
 }
@@ -253,7 +253,7 @@ typedef struct ishader_private {
     GLuint program;
 }ishader_private;
 
-void ishader_destructor(ithis x, iobj *o) {
+void ishader_destructor(iptr x, iobj *o) {
     ishader *shader = icast(ishader, __irobj(o));
     ishader_private *rthis = irefthis(ishader_private, shader);
     glDeleteProgram(rthis->program);
@@ -304,7 +304,7 @@ int ishadergetattriloc(ishader *shader, const char* name) {
 }
 
 /* destructor */
-void ilayoutvertex_destructor(ithis x, iobj *o) {
+void ilayoutvertex_destructor(iptr x, iobj *o) {
     ilayoutvertex *layout = icast(ilayoutvertex, __irobj(o));
     irelease(layout->layouts);
 }
@@ -349,7 +349,7 @@ typedef struct ibuffervertex_private {
 }ibuffervertex_private;
 
 /* destructor */
-void ibuffervertex_destructor(ithis x, iobj *o) {
+void ibuffervertex_destructor(iptr x, iobj *o) {
     ibuffervertex *vertex = icast(ibuffervertex, __irobj(o));
     ibuffervertex_private *rthis = icast(ibuffervertex_private, vertex->_rthis);
     

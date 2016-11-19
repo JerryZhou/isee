@@ -43,6 +43,7 @@ typedef struct icanon {
 /* raw-method-definition */
 typedef struct imethod {
     const char *name;
+    void *call;
 } imethod;
 
 /* raw-field-definition */
@@ -51,6 +52,24 @@ typedef struct ifield {
     struct itype *type;
     size_t offset;
 } ifield;
+    
+    typedef struct ievent {
+        int fd;
+    } ievent;
+    
+    
+    
+    typedef struct iblock {
+        int bid;
+    }iblock;
+    
+    typedef struct ichannel {
+        int nid;
+    }ichannel;
+    
+    typedef struct iselect {
+        int fd;
+    } iselect;
     
     
 /* Ends C function definitions when using C++ */

@@ -51,7 +51,7 @@ int _t_x_y_iarray_entry_cmp (struct iarray *arr, int i, int j) {
     return st0->z - st1->z;
 }
 
-void test_iref_st_destructor(ithis x, iobj *o) {
+void test_iref_st_destructor(iptr x, iobj *o) {
     test_iref_st *st = icast(test_iref_st, __irobj(o));
     ilog("##destructor##: %d\n", st->xid);
 }
@@ -64,7 +64,7 @@ SP_CASE(iarraytypes, register_test_iref) {
     imetaindex(test_iref_st) = imetaregisterwithconfig(&config);
 }
 
-static void _t_x_irefarray_index_change (ithis x, iarray *arr, iref *ref, int index) {
+static void _t_x_irefarray_index_change (iptr x, iarray *arr, iref *ref, int index) {
     test_iref_st *st = icast(test_iref_st, ref);
     st->index = index;
 }

@@ -37,8 +37,13 @@ typedef struct ivar {
     struct imeta *meta; /* type-meta */
 } ivar;
     
+/* ivar type */
+int ivartype(const ivar *var);
+    
+ibool ivaris(const ivar *var, const struct imeta *meta);
+    
 /* ivar destructor */
-void ivar_destructor(ithis x, iobj *o);
+void ivar_destructor(iptr x, iobj *o);
    
 
 /* Ends C function definitions when using C++ */

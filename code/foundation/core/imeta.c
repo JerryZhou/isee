@@ -10,6 +10,7 @@
 /* all internal types should declare here */
 #include "foundation/core/iref.h"
 #include "foundation/core/iwref.h"
+#include "foundation/core/ivar.h"
 #include "foundation/container/irefcache.h"
 #include "foundation/container/ireflist.h"
 #include "foundation/container/iarray.h"
@@ -128,9 +129,9 @@ int imetaregisterwithconfig(const imetaconfig *config) {
 
 /* register a type with cache, return the meta-index */
 int imetaregisterwith(const char* name, size_t size,
-                      ientrymake_funcs funs, ithis funsthis,
-                      ientrymake_allocator allocator, ithis allocatorthis,
-                      ithis mthis) {
+                      ientrymake_funcs funs, iptr funsthis,
+                      ientrymake_allocator allocator, iptr allocatorthis,
+                      iptr mthis) {
     int index = _imeta_gen_index();
     imeta *meta = &__g_all_metas[index];
     meta->name = name;

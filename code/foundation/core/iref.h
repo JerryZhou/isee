@@ -14,7 +14,7 @@ extern "C" {
     volatile uint32_t _ref; \
     volatile struct iwref * _wref;\
     volatile uint32_t _flag; \
-    ithis _rthis; \
+    iptr _rthis; \
     struct iwref * _watcher
 
 /* iref cast target */

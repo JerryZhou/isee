@@ -47,7 +47,7 @@ typedef struct iringbuffer {
 } iringbuffer;
     
 /* destructor */
-void iringbuffer_destructor(ithis x, iobj *o);
+void iringbuffer_destructor(iptr x, iobj *o);
     
 /* Make a ring buffer */
 iringbuffer *iringbuffermake(size_t capacity, int flag);

@@ -7,7 +7,7 @@
 
 /* free resouces of polygon3d */
 /* destructor */
-void ipolygon3d_destructor(ithis x, iobj *o) {
+void ipolygon3d_destructor(iptr x, iobj *o) {
     ipolygon3d *poly = icast(ipolygon3d, __irobj(o));
     irefdelete(poly->pos);
 }
@@ -176,7 +176,7 @@ void ipolygon3dtakerectxz(const ipolygon3d *poly, irect *r) {
 
 /* free resouces of polygon3d */
 /* destructor */
-void ipolygon2d_destructor(ithis x, iobj *o) {
+void ipolygon2d_destructor(iptr x, iobj *o) {
     ipolygon2d *poly = icast(ipolygon2d, __irobj(o));
     irefdelete(poly->pos);
 }

@@ -40,7 +40,7 @@ typedef void (*islice_entry_visitor)(const islice *slice,
 int i, const void *value);
 
 /* destructor */
-void islice_destructor(ithis x, iobj *o);
+void islice_destructor(iptr x, iobj *o);
 
 /* the section [begin, end) */
 islice *islicemake(iarray *arr, int begin, int end, int capacity);

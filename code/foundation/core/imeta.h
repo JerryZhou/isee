@@ -14,26 +14,26 @@ struct imeta;
 struct iobj;
     
 /* tracing the iobj alloc: i default point to struct imetafuncs  */
-typedef void (*ientryobjconstructor)(ithis i, struct iobj *obj);
+typedef void (*ientryobjconstructor)(iptr i, struct iobj *obj);
 /* tracing the iobj free: i default point to struct imetafuncs */
-typedef void (*ientryobjdestructor)(ithis i, struct iobj *obj);
+typedef void (*ientryobjdestructor)(iptr i, struct iobj *obj);
     
 /* make all iobj has the hash values: i default point to struct imetafuncs */
-typedef int (*ientryobjhash)(ithis i, struct iobj *obj);
+typedef int (*ientryobjhash)(iptr i, struct iobj *obj);
 /* make all iobj can be compare with each other: i default point to struct imetafuncs  */
-typedef int (*ientryobjcompare)(ithis i, struct iobj *lfs, struct iobj *rfs);
+typedef int (*ientryobjcompare)(iptr i, struct iobj *lfs, struct iobj *rfs);
     
 /* entry for calloc iobj: i default point to struct iobjcache */
-typedef void* (*ientryobjcalloc)(ithis i, struct imeta *meta); /* alloc the iobj */
+typedef void* (*ientryobjcalloc)(iptr i, struct imeta *meta); /* alloc the iobj */
 /* entry for free iobj: i default point to struct iobjcache */
-typedef void (*ientryobjfree)(ithis i, void *ptr); /* free the iobj */
+typedef void (*ientryobjfree)(iptr i, void *ptr); /* free the iobj */
     
 /* all internal meta-config informations */
 typedef struct imetaconfig {
     const char* name;       /* config the type name */
     size_t size;            /* config the type size in bytes */
     size_t capacity;        /* config the type cache in count */
-    ithis mthis;            /* config the type-meta-mthis */
+    iptr mthis;            /* config the type-meta-mthis */
     
     ientryobjconstructor constructor;   /* config the type-constructor */
     ientryobjdestructor destructor;     /* config the type-destructor */
@@ -53,7 +53,7 @@ typedef struct imetafuncs {
 }imetafuncs;
 
 /* should be register with funcs */
-typedef imetafuncs* (*ientrymake_funcs)(struct imeta* meta, ithis i);
+typedef imetafuncs* (*ientrymake_funcs)(struct imeta* meta, iptr i);
     
 /* declare the meta-allocator */
 #define ideclaremetaallocator ientryobjcalloc fcalloc; ientryobjfree ffree
@@ -64,7 +64,7 @@ typedef struct imetaallocator {
 } imetaallocator;
 
 /* should be register with allocator */
-typedef imetaallocator* (*ientrymake_allocator)(struct imeta* meta, ithis i);
+typedef imetaallocator* (*ientrymake_allocator)(struct imeta* meta, iptr i);
  
 /* * * */
 /* todos: */
@@ -89,7 +89,7 @@ typedef struct imeta {
     imutex mutex; /*will never release resouce until program ended */
 #endif
     int index;                  /* global meta index */
-    ithis mthis;                /* store the self-explan meta-mthis meanings */
+    iptr mthis;                /* store the self-explan meta-mthis meanings */
 }imeta;
     
 /*Hepler Macro for log*/
@@ -122,9 +122,9 @@ int imetaregisterwithconfig(const imetaconfig *config);
 
 /* register a type with cache, return the meta-index */
 int imetaregisterwith(const char* name, size_t size,
-                      ientrymake_funcs funs, ithis funsthis,
-                      ientrymake_allocator allocator, ithis allocatorthis,
-                      ithis mthis);
+                      ientrymake_funcs funs, iptr funsthis,
+                      ientrymake_allocator allocator, iptr allocatorthis,
+                      iptr mthis);
 
 /* calloc a obj by meta-system */
 void *imetacalloc(imeta *meta);

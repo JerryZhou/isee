@@ -3,7 +3,7 @@
 #include "foundation/util/iarraytypes.h"
 
 /* destructor */
-void icmdarg_destructor(ithis x, iobj *o) {
+void icmdarg_destructor(iptr x, iobj *o) {
     icmdarg *arg = icast(icmdarg, __irobj(o));
     iassign(arg->args, NULL);
     iassign(arg->origin, NULL);
