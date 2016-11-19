@@ -11,11 +11,16 @@ void ivar_destructor(iptr x, iobj *o) {
     if (ivarissimple(var)) {
         /* nothing todo: pod */
     } else if (var->meta == imetaof(ipod)) {
-        if (var->v.pod.ptr != var->v.pod.stbuf) {
+        if (var->v.pod.ptr && var->v.pod.ptr != var->v.pod.stbuf) {
             ifree(var->v.pod.ptr);
+            var->v.pod.ptr = var->v.pod.stbuf;
+            var->v.pod.size = 0;
+            var->v.pod.align = 0;
         }
     } else {
+        /* the meta ref */
         irefdelete(var->v.ref);
+        var->meta = NULL;
     }
 }
  
@@ -44,6 +49,7 @@ int ivarissimple(const ivar *var) {
         meta == imetaof(ibyte) ||
         meta == imetaof(ibool) ||
         meta == imetaof(irune) ||
+        meta == imetaof(iptr) ||
         meta == imetaof(inull)) {
         return iiok;
     }
@@ -122,7 +128,7 @@ ivar *ivarmakepod(ipod pod) {
     var->v.pod = pod;
     var->meta = imetaof(ipod);
     /* the expanded pod */
-    if (pod.ptr != pod.stbuf) {
+    if (pod.ptr && pod.ptr != pod.stbuf) {
         var->v.pod.ptr = icalloc(1, pod.size);
         memcpy(var->v.pod.ptr, pod.ptr, pod.size);
     }
