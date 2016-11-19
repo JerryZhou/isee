@@ -38,6 +38,7 @@ extern "C" {
 #define __ideclaremetafull(type, capacity, constructor, destructor, hash, compare) imetaindex(type)
 
 #define __iallmeta                            \
+__ideclaremeta(inull),\
 __ideclaremeta(int),\
 __ideclaremeta(int32_t),\
 __ideclaremeta(uint32_t),\

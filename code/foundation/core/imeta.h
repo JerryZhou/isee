@@ -103,7 +103,10 @@ typedef enum IMetaFlag {
 } IMetaFlag;
 
 /* get meta information by meta-index */
-imeta *imetaget(int idx);
+const imeta *imetaget(int idx);
+    
+/* get meta-index */
+int imetaindexof(const imeta *meta);
 
 /* register a type with cache, return the meta-index */
 int imetaregister(const char* name, size_t size);
@@ -127,7 +130,7 @@ int imetaregisterwith(const char* name, size_t size,
                       iptr mthis);
 
 /* calloc a obj by meta-system */
-void *imetacalloc(imeta *meta);
+void *imetacalloc(const imeta *meta);
 
 /* free the object to right meta-system */
 void imetafree(void *p);

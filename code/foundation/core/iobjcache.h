@@ -29,7 +29,7 @@ typedef struct iobjcache {
 #define __iobjcache_value(cache) (cache)->num,(cache)->capacity,__istatis_value(&((cache)->statis))
    
 /* make a cache able allocator */
-imetaallocator *imakecacheableallocator(imeta *meta, size_t capacity);
+imetaallocator *imakecacheableallocator(const imeta *meta, size_t capacity);
     
 /* free the memory taken by allocator */
 void iobjcachefree(imetaallocator *allocator);
@@ -41,10 +41,10 @@ iobjcache* iobjcacheget(const imeta *meta);
 void iobjcachesetcapacity(iobjcache *cache, size_t capacity);
     
 /* get the memory for objcache, if meta is null then return the global-memory-statis */
-imemorystatistics *iobjcachestatis(imeta *meta);
+imemorystatistics *iobjcachestatis(const imeta *meta);
     
 /* free all the cached object in the meta-system with the right meta */
-void iobjcacheclear(imeta *meta);
+void iobjcacheclear(const imeta *meta);
 
 /* Trace the memory size */
 typedef enum EnumObjCacheMemoerySizeKind {

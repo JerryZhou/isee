@@ -7,7 +7,7 @@
 SP_SUIT(imeta);
 
 SP_CASE(imeta, imetaget) {
-    imeta *meta = imetaget(imetaindex(iobj));
+    const imeta *meta = imetaget(imetaindex(iobj));
     SP_TRUE(meta != NULL);
     SP_TRUE(strcmp(meta->name, "iobj") == 0);
     SP_TRUE(meta->size == sizeof(iobj));
@@ -17,7 +17,7 @@ int _buf_meta_index = 0;
 SP_CASE(imeta, imetaregister) {
     _buf_meta_index = imetaregisterwithcapacity("--buf--", 100, 1);
     SP_TRUE(_buf_meta_index > 0);
-    imeta *meta = imetaget(_buf_meta_index);
+    const imeta *meta = imetaget(_buf_meta_index);
     SP_TRUE(meta != NULL);
     SP_TRUE(meta->size == 100);
     
@@ -26,7 +26,7 @@ SP_CASE(imeta, imetaregister) {
 }
 
 SP_CASE(imeta, imetacallocANDimetafree) {
-    imeta *meta = imetaget(_buf_meta_index);
+    const imeta *meta = imetaget(_buf_meta_index);
     void *p = imetacalloc(meta);
     SP_TRUE(p != NULL);
     char *pbuf = (char*)p;

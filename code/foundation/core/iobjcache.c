@@ -138,7 +138,7 @@ static void _iobjcache_ientryobjfree(iptr i, void *ptr) {
 }
 
 /* cache-allocator: make one */
-imetaallocator *imakecacheableallocator(imeta *meta, size_t capacity) {
+imetaallocator *imakecacheableallocator(const imeta *meta, size_t capacity) {
     iobjcache *cache = (iobjcache*)icalloc(1, sizeof(iobjcache));
     cache->fcalloc = _iobjcache_ientryobjcalloc;
     cache->ffree = _iobjcache_ientryobjfree;
@@ -168,13 +168,13 @@ void iobjcachesetcapacity(iobjcache *cache, size_t capacity) {
 }
 
 /* get the memory for objcache, if meta is null then return the global-memory-statis */
-imemorystatistics *iobjcachestatis(imeta *meta) {
+imemorystatistics *iobjcachestatis(const imeta *meta) {
     iobjcache *cache = iobjcacheget(meta);
     return cache ? &cache->statis : &_g_global_statis;
 }
 
 /* free all the cached object in the meta-system with the right meta */
-void iobjcacheclear(imeta *meta) {
+void iobjcacheclear(const imeta *meta) {
     iobjcache *cache = iobjcacheget(meta);
     iobj *next = NULL;
     iobj *cur = NULL;

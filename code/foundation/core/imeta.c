@@ -88,13 +88,19 @@ static void _imeta_init(imeta *meta, int index) {
 }
 
 /* get meta information by meta-index */
-imeta *imetaget(int idx) {
+const imeta *imetaget(int idx) {
     imeta *meta = NULL;
     icheckret(idx>=0 && idx <__g_meta_index, meta);
     meta = &__g_all_metas[idx];
     _imeta_init(meta, idx);
     
     return meta;
+}
+
+/* get meta-index */
+int imetaindexof(const imeta *meta) {
+    icheckret(meta, 0);
+    return meta->index;
 }
 
 /* register a type with cache, return the meta-index */
@@ -145,7 +151,7 @@ int imetaregisterwith(const char* name, size_t size,
 }
 
 /* calloc a obj by meta-system */
-void *imetacalloc(imeta *meta) {
+void *imetacalloc(const imeta *meta) {
     icheckret(meta, NULL);
     return meta->allocator->fcalloc(meta->allocator, meta);
 }

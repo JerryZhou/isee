@@ -14,6 +14,7 @@ int64_t _g_memory_in_use = 0;
 #include "foundation/test_iref.h"
 #include "foundation/test_iwref.h"
 #include "foundation/test_imeta.h"
+#include "foundation/test_ivar.h"
 
 // foundation/memory
 #include "foundation/test_imemorystatistic.h"

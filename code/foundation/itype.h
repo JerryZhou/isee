@@ -63,6 +63,9 @@ typedef _uint32 uint32_t;
 #include <pthread.h>
 #endif /* end of: _WIN32 */
    
+/* inull */
+typedef int inull;
+   
 /* type define */
 typedef unsigned char ibyte;
 typedef unsigned char ibool;

@@ -29,17 +29,20 @@ void ivar_destructor(iptr x, iobj *o) {
  
 /* ivar type */
 int ivartype(const ivar *var) {
+    icheckret(var && var->meta, 0);
     return var->meta->index;
 }
 
 /* ivar type: meta */
 const struct imeta *ivarmeta(const ivar *var) {
+    icheckret(var, imetaof(inull));
+    icheckret(var->meta, imetaof(inull));
     return var->meta;
 }
 
 /* ivar is right-meta-type */
 ibool ivaris(const ivar *var, const struct imeta *meta) {
-    return ivarmeta(var) == meta;
+    return ivartype(var) == imetaindexof(meta);
 }
     
 /* ivar copy */
