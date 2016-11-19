@@ -4,6 +4,6 @@
     
 /* ivar destructor */
 void ivar_destructor(ithis x, iobj *o) {
-    
+    ivar *var = icast(ivar, __irobj(o))
 }
  
