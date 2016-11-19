@@ -8,15 +8,7 @@
 /* ivar destructor */
 void ivar_destructor(iptr x, iobj *o) {
     ivar *var = icast(ivar, __irobj(o));
-    if (var->meta == imetaof(int) ||
-        var->meta == imetaof(int64_t) ||
-        var->meta == imetaof(uint64_t) ||
-        var->meta == imetaof(ireal) ||
-        var->meta == imetaof(float) ||
-        var->meta == imetaof(double) ||
-        var->meta == imetaof(ibyte) ||
-        var->meta == imetaof(ibool) ||
-        var->meta == imetaof(irune) ) {
+    if (ivarissimple(var)) {
         /* nothing todo: pod */
     } else if (var->meta == imetaof(ipod)) {
         if (var->v.pod.ptr != var->v.pod.stbuf) {
@@ -40,6 +32,24 @@ const struct imeta *ivarmeta(const ivar *var) {
     return var->meta;
 }
 
+/* simple ivar */
+int ivarissimple(const ivar *var) {
+    const struct imeta *meta = ivarmeta(var);
+    if (meta == imetaof(int) ||
+        meta == imetaof(int64_t) ||
+        meta == imetaof(uint64_t) ||
+        meta == imetaof(ireal) ||
+        meta == imetaof(float) ||
+        meta == imetaof(double) ||
+        meta == imetaof(ibyte) ||
+        meta == imetaof(ibool) ||
+        meta == imetaof(irune) ||
+        meta == imetaof(inull)) {
+        return iiok;
+    }
+    return iino;
+}
+
 /* ivar is right-meta-type */
 ibool ivaris(const ivar *var, const struct imeta *meta) {
     return ivartype(var) == imetaindexof(meta);
@@ -48,15 +58,7 @@ ibool ivaris(const ivar *var, const struct imeta *meta) {
 /* ivar copy */
 ivar *ivardup(const ivar *var) {
     ivar *nvar = nvar = irefnew(ivar);
-    if (var->meta == imetaof(int) ||
-        var->meta == imetaof(int64_t) ||
-        var->meta == imetaof(uint64_t) ||
-        var->meta == imetaof(ireal) ||
-        var->meta == imetaof(float) ||
-        var->meta == imetaof(double) ||
-        var->meta == imetaof(ibyte) ||
-        var->meta == imetaof(ibool) ||
-        var->meta == imetaof(irune) ) {
+    if (ivarissimple(var)) {
         nvar->meta = var->meta;
         nvar->v = var->v;
     } else if (var->meta == imetaof(ipod)) {

@@ -32,6 +32,9 @@ int ivartype(const ivar *var);
 /* ivar type: meta */
 const struct imeta *ivarmeta(const ivar *var);
     
+/* simple ivar */
+int ivarissimple(const ivar *var);
+    
 /* ivar is right-meta-type */
 ibool ivaris(const ivar *var, const struct imeta *meta);
     
