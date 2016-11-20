@@ -57,7 +57,7 @@ __ideclaremeta(iobjcache),\
 __ideclaremeta(iref),\
 __ideclaremeta(iwref),\
 __ideclaremeta(imd5),\
-__ideclaremetapart(ivar, 0, NULL, ivar_destructor),\
+__ideclaremetafull(ivar, 0, NULL, ivar_destructor, ivar_hash, ivar_compare),\
 __ideclaremetapart(irefcache, 0, NULL, irefcache_destructor),\
 __ideclaremetapart(irefjoint, 0, NULL, irefjoint_destructor),\
 __ideclaremetapart(ireflist, 0, NULL, ireflist_destructor),\
