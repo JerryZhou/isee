@@ -23,6 +23,52 @@ void ivar_destructor(iptr x, iobj *o) {
         var->meta = NULL;
     }
 }
+
+/* ivar meta-funcs: hashcode */
+uint64_t ivar_hash(iptr x, iobj *o) {
+    ivar *var = icast(ivar, __irobj(o));
+    return ivarhashcode(var);
+}
+
+/* ivar meta-funcs: compare 
+ * todos: may be problems in compare with 64 bit
+ */
+int ivar_compare(iptr x, iobj *lfs, iobj *rfs) {
+    ivar *l = icast(ivar, __irobj(lfs));
+    ivar *r = icast(ivar, __irobj(rfs));
+    const struct imeta* lmeta = iobjgetmeta(l);
+    const struct imeta* rmeta = iobjgetmeta(r);
+    const struct imeta* meta = lmeta ? lmeta : rmeta;
+    if (meta == imetaof(int)) {
+        return l->v.i - r->v.i;
+    } else if (meta == imetaof(int64_t)) {
+        return l->v.i64 - r->v.i64;
+    } else if (meta == imetaof(uint64_t)) {
+        return l->v.u64 - r->v.u64;
+    } else if (meta == imetaof(ireal)) {
+        return l->v.real - r->v.real > 0;
+    } else if (meta == imetaof(float)) {
+        return l->v.real - r->v.real > 0;
+    } else if (meta == imetaof(double)) {
+        return l->v.real - r->v.real > 0;
+    } else if (meta == imetaof(ibyte)) {
+        return l->v.i64 - r->v.i64;
+    } else if (meta == imetaof(ibool)) {
+        return l->v.i64 - r->v.i64;
+    } else if (meta == imetaof(irune)) {
+        return l->v.i64 - r->v.i64;
+    } else if (meta == imetaof(iptr)) {
+        return l->v.i64 - r->v.i64;
+    } else if (meta == imetaof(inull)) {
+        return l->v.i64 - r->v.i64;
+    }
+    if (meta->funcs && meta->funcs->compare) {
+        return meta->funcs->compare(meta->funcs,
+                                    __iobj(l->v.ref),
+                                    __iobj(r->v.ref));
+    }
+    return (int)(lfs - rfs);
+}
  
 /* ivar type */
 int ivartype(const ivar *var) {
