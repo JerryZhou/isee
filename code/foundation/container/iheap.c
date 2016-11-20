@@ -40,11 +40,11 @@ void iarraysortheap(iarray *arr, int start, int end) {
     /* build heap */
     _iarray_heap_build(arr, start, end);
     
-    for (i=start; i<=end; ++i) {
+    for (i=0; i<=end-start; ++i) {
         /* minisize the heap: swap the biggest to last */
-        arr->entry->swap(arr, start, end-start-i);
+        arr->entry->swap(arr, start, end-i);
         /* adjust the heap to find the biggest one */
-        _iarray_heap_shift(arr, start, end - start - i - 1);
+        _iarray_heap_shift(arr, start, end - i - 1);
     }
 }
 
