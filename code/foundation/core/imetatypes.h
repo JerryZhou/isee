@@ -65,6 +65,7 @@ __ideclaremetapart(iarray, 1000, NULL, iarray_destructor),\
 __ideclaremetacapacity(iarrayentry, 1000),\
 __ideclaremetacapacity(irefarrayentry, 1000),\
 __ideclaremetapart(islice, 1000, NULL, islice_destructor),\
+__ideclaremetafull(istring, 1000, NULL, islice_destructor, istring_hash, istring_compare),\
 __ideclaremetapart(icmdarg, 0, NULL, icmdarg_destructor),\
 __ideclaremeta(itree),\
 __ideclaremeta(idict),\

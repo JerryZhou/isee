@@ -7,8 +7,8 @@
 #undef __ideclaremetapart
 #undef __ideclaremetafull
 /* name, size, capacity, mthis, constructor, destructor, hash, compare */
-#define __ideclaremetafull(type, cap, mthis, constructor, destructor, hash, compare) {#type, sizeof(type), cap, mthis, constructor, destructor, hash, compare }
-#define __ideclaremetapart(type, cap, constructor, destructor) __ideclaremetafull(type, cap, NULL, constructor, destructor, NULL, NULL)
+#define __ideclaremetafull(type, cap, constructor, destructor, hash, compare) {#type, sizeof(type), cap, NULL, constructor, destructor, hash, compare }
+#define __ideclaremetapart(type, cap, constructor, destructor) __ideclaremetafull(type, cap, constructor, destructor, NULL, NULL)
 #define __ideclaremetacapacity(type, cap) __ideclaremetapart(type, cap, NULL, NULL)
 #define __ideclaremeta(type) __ideclaremetacapacity(type, 0)
 

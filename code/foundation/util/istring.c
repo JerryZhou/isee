@@ -61,6 +61,11 @@ const char* istringbuf(const istring *s) {
 
 /*set the entry for stack string */
 istring* istringlaw(istring *s) {
+    iobj *o = __iobj(s);
+    /* should be with the string meta */
+    if (o->meta != imetaof(istring)) {
+        o->meta = imetaof(istring);
+    }
     /* the const string should be fill with entry */
     if (s->array && s->array->entry == NULL) {
         s->array->entry = iarrayentryget(EnumArrayEntryType_Char);
@@ -549,4 +554,9 @@ uint64_t istring_hash(iptr i, iobj *o) {
     imd5reset(&d);
     imd5write(&d, (unsigned char*)istringbuf(s), istringlen(s));
     return imd5sum(&d);
+}
+
+/* the meta funcs: compare with literal order */
+int istring_compare(iptr i, struct iobj *lfs, struct iobj *rfs) {
+    return istringcompare(icast(istring, __irobj(lfs)), icast(istring, __irobj(rfs)));
 }
