@@ -21,6 +21,7 @@
 #include "foundation/util/icmdarg.h"
 #include "foundation/util/iringbuffer.h"
 #include "foundation/math/ipolygon.h"
+#include "foundation/math/imd5.h"
 
 
 /******************************************/

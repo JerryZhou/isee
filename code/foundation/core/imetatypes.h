@@ -56,6 +56,7 @@ __ideclaremeta(iobj),\
 __ideclaremeta(iobjcache),\
 __ideclaremeta(iref),\
 __ideclaremeta(iwref),\
+__ideclaremeta(imd5),\
 __ideclaremetapart(ivar, 0, NULL, ivar_destructor),\
 __ideclaremetapart(irefcache, 0, NULL, irefcache_destructor),\
 __ideclaremetapart(irefjoint, 0, NULL, irefjoint_destructor),\

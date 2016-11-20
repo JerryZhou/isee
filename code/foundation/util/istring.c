@@ -1,5 +1,7 @@
 #include "foundation/util/istring.h"
 #include "foundation/util/iarraytypes.h"
+#include "foundation/math/imd5.h"
+#include "foundation/core/imetatypes.h"
 
 ideclarestring(kstring_empty, "");
 istring *kstring_zero = NULL;
@@ -537,4 +539,14 @@ size_t idouble2string(char *s, double value) {
     size_t n = snprintf(s, 256, "%.4lf", value);
     s[n] = 0;
     return n;
+}
+
+/* the md5 code */
+uint64_t istring_hash(iptr i, iobj *o) {
+    istring *s = icast(istring, __irobj(o));
+    imd5 d;
+    
+    imd5reset(&d);
+    imd5write(&d, (unsigned char*)istringbuf(s), istringlen(s));
+    return imd5sum(&d);
 }

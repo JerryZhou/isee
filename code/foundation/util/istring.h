@@ -113,6 +113,9 @@ size_t iull2string(char *s, uint64_t value);
 
 /* */
 size_t idouble2string(char *s, double value);
+
+/* the md5 code */
+uint64_t istring_hash(iptr i, iobj *o);
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

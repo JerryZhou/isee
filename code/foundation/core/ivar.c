@@ -87,6 +87,10 @@ uint64_t ivarhashcode(const ivar *var) {
         /* todo hash in pod: md5 */
         return (uint64_t)(var->v.pod.ptr);
     } else {
+        /* have a hash funcs */
+        if (var->meta && var->meta->funcs && var->meta->funcs->hash) {
+            return (uint64_t)(var->meta->funcs->hash(var->meta->funcs, __iobj(var->v.ref)));
+        }
         /* todo hash in ref-method */
         return (uint64_t)(var->v.ref);
     }

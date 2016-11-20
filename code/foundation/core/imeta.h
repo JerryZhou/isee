@@ -19,7 +19,7 @@ typedef void (*ientryobjconstructor)(iptr i, struct iobj *obj);
 typedef void (*ientryobjdestructor)(iptr i, struct iobj *obj);
     
 /* make all iobj has the hash values: i default point to struct imetafuncs */
-typedef int (*ientryobjhash)(iptr i, struct iobj *obj);
+typedef int64_t (*ientryobjhash)(iptr i, struct iobj *obj);
 /* make all iobj can be compare with each other: i default point to struct imetafuncs  */
 typedef int (*ientryobjcompare)(iptr i, struct iobj *lfs, struct iobj *rfs);
     
