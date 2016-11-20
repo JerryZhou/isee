@@ -142,14 +142,18 @@ SP_CASE(iheap, iarraysortheap) {
     int heap_values[] = {0, 1, 4, 3, 2, 5, 6};
     
     iarrayappend(heap, heap_values, icountof(heap_values));
-    /*
     irangearray(heap, int,
                 ilog("%s%d%s", __key == 0 ? "arr=[" :"", __value, __key == 6 ? "]\n" :", ");
                 );
-     */
     
     iarraysortheap(heap, 2, 4);
+    irangearray(heap, int,
+                ilog("%s%d%s", __key == 0 ? "arr=[" :"", __value, __key == 6 ? "]\n" :", ");
+                );
     iarraysortheap(heap, 0, 6);
+    irangearray(heap, int,
+                ilog("%s%d%s", __key == 0 ? "arr=[" :"", __value, __key == 6 ? "]\n" :", ");
+                );
     
     SP_EQUAL(iarrayof(heap, int, 0), 0);
     SP_EQUAL(iarrayof(heap, int, 1), 1);
