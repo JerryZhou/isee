@@ -139,17 +139,26 @@ SP_CASE(iheap, iheapdelete) {
 SP_CASE(iheap, iarraysortheap) {
     
     iheap *heap = iarraymakeint(10);
-    int heap_values[] = {0, 1, 4, 3, 2, 5, 6};
+    int heap_values[] = {0, 1, 4, 6, 2, 3, 5};
     
     iarrayappend(heap, heap_values, icountof(heap_values));
     irangearray(heap, int,
                 ilog("%s%d%s", __key == 0 ? "arr=[" :"", __value, __key == 6 ? "]\n" :", ");
                 );
     
-    iarraysortheap(heap, 2, 4);
+    /* partial sort in heap */
+    iarraysortheap(heap, 2, 5);
     irangearray(heap, int,
                 ilog("%s%d%s", __key == 0 ? "arr=[" :"", __value, __key == 6 ? "]\n" :", ");
                 );
+    SP_EQUAL(iarrayof(heap, int, 0), 0);
+    SP_EQUAL(iarrayof(heap, int, 1), 1);
+    SP_EQUAL(iarrayof(heap, int, 2), 2);
+    SP_EQUAL(iarrayof(heap, int, 3), 3);
+    SP_EQUAL(iarrayof(heap, int, 4), 4);
+    SP_EQUAL(iarrayof(heap, int, 5), 6);
+    SP_EQUAL(iarrayof(heap, int, 6), 5);
+    
     iarraysortheap(heap, 0, 6);
     irangearray(heap, int,
                 ilog("%s%d%s", __key == 0 ? "arr=[" :"", __value, __key == 6 ? "]\n" :", ");
