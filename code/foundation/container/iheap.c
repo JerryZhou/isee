@@ -3,19 +3,20 @@
 
 /* heap-sort */
 static void _iarray_heap_shift(iarray *arr,
-                               int ind, int end) {
+                               int ind, int end, int offset) {
     
-    int i = ind;
+    int i = ind - offset;
+    int offend = end - offset;
     int c = 2 * i + 1;
     
-    while(c <= end) {
-        if (c+1 <=end && arr->cmp(arr, c, c+1) < 0 ) {
+    while(c <= offend) {
+        if (c+1 <=offend && arr->cmp(arr, c+offset, c+1+offset) < 0 ) {
             c++;
         }
-        if (arr->cmp(arr, i, c) > 0) {
+        if (arr->cmp(arr, i+offset, c+offset) > 0) {
             break;
         } else {
-            arr->entry->swap(arr, i, c);
+            arr->entry->swap(arr, i+offset, c+offset);
             
             i = c;
             c = 2*i + 1;
@@ -26,8 +27,8 @@ static void _iarray_heap_shift(iarray *arr,
 /* build heap betwween [start, end] */
 static void _iarray_heap_build(iarray *arr, int start, int end) {
     int i;
-    for (i=(end-1)/2; i>=start; i--) {
-        _iarray_heap_shift(arr, i, end);
+    for (i=(end-start-1)/2; i>=0; i--) {
+        _iarray_heap_shift(arr, i+start, end, start);
     }
 }
 
@@ -44,7 +45,7 @@ void iarraysortheap(iarray *arr, int start, int end) {
         /* minisize the heap: swap the biggest to last */
         arr->entry->swap(arr, start, end-i);
         /* adjust the heap to find the biggest one */
-        _iarray_heap_shift(arr, start, end - i - 1);
+        _iarray_heap_shift(arr, start, end - i - 1, start);
     }
 }
 
@@ -74,7 +75,7 @@ static void _iheapadjustup(iheap *heap, int start, int index) {
 
 /* adjust heap donw-side */
 static void _iheapadjustdown(iheap *heap, int index, int end) {
-    _iarray_heap_shift(heap, index, end);
+    _iarray_heap_shift(heap, index, end, 0);
 }
 
 /* heap-operators: add element */
@@ -125,6 +126,6 @@ void iheapdelete(iheap *heap, int index) {
     
     /*adjust the heap to be still on*/
     if (iarraylen(heap) > 0 ) {
-        _iarray_heap_shift(heap, index, iarraylen(heap)-1);
+        _iarray_heap_shift(heap, index, iarraylen(heap)-1, 0);
     }
 }
