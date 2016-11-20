@@ -263,6 +263,14 @@ static void _iarray_entry_swap_iref(struct iarray *arr,
 static int _iarray_entry_cmp_iref(struct iarray *arr,
                                   int i, int j) {
     iref* *arrs = (iref* *)arr->buffer;
+    /* the meta compare-funcs */
+    const imeta *lfsmeta = iobjgetmeta(arrs[i]);
+    const imeta *rfsmeta = iobjgetmeta(arrs[j]);
+    const imeta *meta = lfsmeta?lfsmeta:rfsmeta;
+    if (meta->funcs && meta->funcs->compare) {
+        return meta->funcs->compare(meta->funcs, __iobj(arrs[i]), __iobj(arrs[j]));
+    }
+    /* raw the meta compare with pointer */
     return arrs[i] - arrs[j];
 }
 
