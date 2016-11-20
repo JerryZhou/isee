@@ -111,6 +111,40 @@ SP_CASE(iarraytypes, iarraymakeirefwithentryandcmp) {
     irelease(arr);
 }
 
+SP_CASE(iarraytypes, istringcompare) {
+    iarray *arr = iarraymakeiref(5);
+    istring *sa = istringmake("a");
+    istring *sb = istringmake("b");
+    istring *sc = istringmake("c");
+    
+    iarrayadd(arr, &sb);
+    iarrayadd(arr, &sa);
+    iarrayadd(arr, &sc);
+    
+    irangearray(arr, istring*,
+                ilog("arr[%d]=%s\n", __key, istringbuf(__value));
+                );
+    
+    SP_TRUE(iarrayof(arr, istring*, 0) == sb);
+    SP_TRUE(iarrayof(arr, istring*, 1) == sa);
+    SP_TRUE(iarrayof(arr, istring*, 2) == sc);
+    
+    iarraysort(arr);
+    
+    SP_TRUE(iarrayof(arr, istring*, 0) == sa);
+    SP_TRUE(iarrayof(arr, istring*, 1) == sb);
+    SP_TRUE(iarrayof(arr, istring*, 2) == sc);
+    
+    irangearray(arr, istring*,
+                ilog("arr[%d]=%s\n", __key, istringbuf(__value));
+                );
+    
+    irefdelete(sa);
+    irefdelete(sb);
+    irefdelete(sc);
+    irefdelete(arr);
+}
+
 SP_CASE(iarraytypes, end) {
     imemoryglobalclear();
     
