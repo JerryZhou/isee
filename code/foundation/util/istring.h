@@ -114,6 +114,9 @@ size_t iull2string(char *s, uint64_t value);
 /* */
 size_t idouble2string(char *s, double value);
 
+/* the hash-code in md5 */
+uint64_t istringhashcode(const istring *s);
+
 /* the meta funcs: hash with md5 code */
 uint64_t istring_hash(iptr i, iptr o);
 

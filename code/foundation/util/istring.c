@@ -546,6 +546,12 @@ size_t idouble2string(char *s, double value) {
     return n;
 }
 
+/* the hash-code in md5 */
+uint64_t istringhashcode(const istring *s) {
+    icheckret(s, 0);
+    return istring_hash(NULL, (iptr)s);
+}
+
 /* the md5 code */
 uint64_t istring_hash(iptr i, iptr o) {
     istring *s = icast(istring, o);
