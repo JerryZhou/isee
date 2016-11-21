@@ -68,6 +68,10 @@ typedef struct iarrayentry{
     iarray_entry_swap swap;
     iarray_entry_assign assign;
     iarray_entry_cmp cmp;
+    
+    /* todos: */
+    /* element-meta */
+    const struct imeta *elemeta;
 } iarrayentry;
 
 /* generated array */
@@ -88,7 +92,7 @@ typedef struct iarray {
 }iarray;
 
 /* array destructor */
-void iarray_destructor(iptr x, iobj *o);
+void iarray_destructor(iptr x, iptr o);
     
 /* make array with type entry */
 iarray *iarraymake(size_t capacity, const iarrayentry *entry);

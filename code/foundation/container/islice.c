@@ -2,8 +2,8 @@
 #include "foundation/core/imetatypes.h"
 
 /* free slice and slice-array */
-void islice_destructor(iptr x, iobj *o ) {
-    islice *slice = icast(islice, __iref(o));
+void islice_destructor(iptr x, iptr o ) {
+    islice *slice = icast(islice, o);
     irelease(slice->array);
 }
 

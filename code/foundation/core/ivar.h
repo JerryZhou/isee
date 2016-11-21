@@ -54,13 +54,13 @@ ivar *ivarmakepod(ipod pod);
 ivar *ivarmakeref(iref *ref);
     
 /* ivar destructor */
-void ivar_destructor(iptr x, iobj *o);
+void ivar_destructor(iptr x, iptr o);
 
 /* ivar meta-funcs: hashcode */
-uint64_t ivar_hash(iptr x, iobj *o);
+uint64_t ivar_hash(iptr x, iptr o);
 
 /* ivar meta-funcs: compare */
-int ivar_compare(iptr x, iobj *lfs, iobj *rfs);
+int ivar_compare(iptr x, iptr lfs, iptr rfs);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

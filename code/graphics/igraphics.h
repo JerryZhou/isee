@@ -111,7 +111,7 @@ typedef struct igraphicsapp {
 }igraphicsapp;
 
 /* app destructor */
-void igraphicsapp_destructor(iptr x, iobj *o);
+void igraphicsapp_destructor(iptr x, iptr o);
 
 /* make a app */
 igraphicsapp *igraphicsappmake();
@@ -150,7 +150,7 @@ typedef struct ishader {
 }ishader;
 
 /* shader destructor  */
-void ishader_destructor(iptr x, iobj *o);
+void ishader_destructor(iptr x, iptr o);
 
 /* create shader */
 ishader *ishadercreate(const char* vs, const char* fs);
@@ -227,7 +227,7 @@ typedef struct ilayoutvertex {
 }ilayoutvertex;
 
 /* destructor */
-void ilayoutvertex_destructor(iptr x, iobj *o);
+void ilayoutvertex_destructor(iptr x, iptr o);
 
 /* ilayout make */
 ilayoutvertex* ilayoutvertexmake();
@@ -247,7 +247,7 @@ typedef struct ibuffervertex {
 }ibuffervertex;
 
 /* destructor */
-void ibuffervertex_destructor(iptr x, iobj *o);
+void ibuffervertex_destructor(iptr x, iptr o);
 
 /* make a vertex buffer */
 ibuffervertex* ibuffervertexmake(int layout);

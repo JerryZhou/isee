@@ -50,8 +50,8 @@ static void _irefjoint_release_it(irefjoint *joint) {
     iassign(joint->list, NULL);
 }
 /* irefjoint destructor */
-void irefjoint_destructor(iptr x, iobj *o) {
-    irefjoint *joint = icast(irefjoint, __iref(o));
+void irefjoint_destructor(iptr x, iptr o) {
+    irefjoint *joint = icast(irefjoint, o);
     _irefjoint_release_it(joint);
 }
 
@@ -70,8 +70,8 @@ void irefjointfree(irefjoint* joint) {
 }
 
 /* reflist entry for free */
-void ireflist_destructor(iptr x, iobj *o) {
-    ireflist *list = icast(ireflist, __iref(o));
+void ireflist_destructor(iptr x, iptr o) {
+    ireflist *list = icast(ireflist, o);
     
     /* remove all the joint */
     ireflistremoveall(list);

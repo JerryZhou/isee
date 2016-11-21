@@ -18,7 +18,7 @@ typedef struct icmdarg {
 } icmdarg;
 
 /* destructor */
-void icmdarg_destructor(iptr x, iobj *o);
+void icmdarg_destructor(iptr x, iptr o);
 
 /* make a icmdarg from command lines */
 icmdarg *icmdargmake(int argc, const char **argv);

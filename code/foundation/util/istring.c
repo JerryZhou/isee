@@ -547,8 +547,8 @@ size_t idouble2string(char *s, double value) {
 }
 
 /* the md5 code */
-uint64_t istring_hash(iptr i, iobj *o) {
-    istring *s = icast(istring, __irobj(o));
+uint64_t istring_hash(iptr i, iptr o) {
+    istring *s = icast(istring, o);
     imd5 d;
     
     imd5reset(&d);
@@ -557,6 +557,6 @@ uint64_t istring_hash(iptr i, iobj *o) {
 }
 
 /* the meta funcs: compare with literal order */
-int istring_compare(iptr i, struct iobj *lfs, struct iobj *rfs) {
-    return istringcompare(icast(istring, __irobj(lfs)), icast(istring, __irobj(rfs)));
+int istring_compare(iptr i, iptr lfs, iptr rfs) {
+    return istringcompare(icast(istring, lfs), icast(istring, rfs));
 }

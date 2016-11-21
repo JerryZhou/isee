@@ -51,8 +51,8 @@ int _t_x_y_iarray_entry_cmp (struct iarray *arr, int i, int j) {
     return st0->z - st1->z;
 }
 
-void test_iref_st_destructor(iptr x, iobj *o) {
-    test_iref_st *st = icast(test_iref_st, __irobj(o));
+void test_iref_st_destructor(iptr x, iptr o) {
+    test_iref_st *st = icast(test_iref_st, o);
     ilog("##destructor##: %d\n", st->xid);
 }
 

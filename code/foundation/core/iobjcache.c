@@ -94,7 +94,7 @@ static iobj *_icachepoll(iobjcache *cache, const imeta *meta) {
     
     /* tracing */
     if (meta->funcs && meta->funcs->constructor) {
-        meta->funcs->constructor((iptr)cache, obj);
+        meta->funcs->constructor((iptr)cache, __irobj(obj));
     }
     
     return obj;
@@ -106,7 +106,7 @@ static void _icachepush(iobjcache *cache, iobj *obj) {
     
     /* tracing the free */
     if (meta->funcs && meta->funcs->destructor) {
-        meta->funcs->destructor((iptr)cache, obj);
+        meta->funcs->destructor((iptr)cache, __irobj(obj));
     }
     
     _imeta_lock;
@@ -132,7 +132,7 @@ static void* _iobjcache_ientryobjcalloc(iptr i, const struct imeta *meta) {
 
 
 /* cache-allocator: free to obj-cache */
-static void _iobjcache_ientryobjfree(iptr i, void *ptr) {
+static void _iobjcache_ientryobjfree(iptr i, iptr ptr) {
     iobjcache *xthis = (iobjcache*)(i);
     _icachepush(xthis, __iobj(ptr));
 }

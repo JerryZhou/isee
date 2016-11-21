@@ -13,20 +13,22 @@ extern "C" {
 struct imeta;
 struct iobj;
     
-/* tracing the iobj alloc: i default point to struct imetafuncs  */
-typedef void (*ientryobjconstructor)(iptr i, struct iobj *obj);
-/* tracing the iobj free: i default point to struct imetafuncs */
-typedef void (*ientryobjdestructor)(iptr i, struct iobj *obj);
+/* tracing the alloc: i default point to struct imetafuncs  */
+typedef void (*ientryobjconstructor)(iptr i, iptr obj);
+/* tracing the free: i default point to struct imetafuncs */
+typedef void (*ientryobjdestructor)(iptr i, iptr obj);
     
-/* make all iobj has the hash values: i default point to struct imetafuncs */
-typedef uint64_t (*ientryobjhash)(iptr i, struct iobj *obj);
-/* make all iobj can be compare with each other: i default point to struct imetafuncs  */
-typedef int (*ientryobjcompare)(iptr i, struct iobj *lfs, struct iobj *rfs);
+/* make all has the hash values: i default point to struct imetafuncs */
+typedef uint64_t (*ientryobjhash)(iptr i, iptr obj);
+/* make all can be compare with each other: i default point to struct imetafuncs  */
+typedef int (*ientryobjcompare)(iptr i, iptr lfs, iptr rfs);
     
-/* entry for calloc iobj: i default point to struct iobjcache */
-typedef void* (*ientryobjcalloc)(iptr i, const struct imeta *meta); /* alloc the iobj */
-/* entry for free iobj: i default point to struct iobjcache */
-typedef void (*ientryobjfree)(iptr i, void *ptr); /* free the iobj */
+/* entry for calloc : i default point to struct iobjcache */
+typedef void* (*ientryobjcalloc)(iptr i, const struct imeta *meta); /* alloc the default iobj */
+/* entry for free : i default point to struct iobjcache */
+typedef void (*ientryobjfree)(iptr i, iptr ptr); /* free the value */
+/* entry for free : i default point to struct iobjcache */
+typedef void (*ientryobjcopy)(iptr i, iptr value); /* copy the value */
     
 /* all internal meta-config informations */
 typedef struct imetaconfig {
@@ -48,6 +50,8 @@ typedef struct imetafuncs {
     
     ientryobjhash hash;                     /* all iobj can be do hash */
     ientryobjcompare compare;               /* all iobj can be do compare */
+    
+    ientryobjcopy copy;                     /* all iobj can be do copy */
     
     /* should we add anthor contructor and destructor here ?? */
 }imetafuncs;

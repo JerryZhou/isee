@@ -1,8 +1,8 @@
 #include "foundation/container/ineighbor.h"
 
 /* ineighbor destructor */
-void ineighbor_destructor(iptr x, iobj *o) {
-    ineighbor *neighbor = icast(ineighbor, __irobj(o));
+void ineighbor_destructor(iptr x, iptr o) {
+    ineighbor *neighbor = icast(ineighbor, o);
     ineighborclean(neighbor);
 }
 

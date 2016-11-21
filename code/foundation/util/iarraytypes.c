@@ -268,7 +268,7 @@ static int _iarray_entry_cmp_iref(struct iarray *arr,
     const imeta *rfsmeta = iobjgetmeta(arrs[j]);
     const imeta *meta = lfsmeta?lfsmeta:rfsmeta;
     if (meta->funcs && meta->funcs->compare) {
-        return meta->funcs->compare(meta->funcs, __iobj(arrs[i]), __iobj(arrs[j]));
+        return meta->funcs->compare(meta->funcs, arrs[i], arrs[j]);
     }
     /* raw the meta compare with pointer */
     return arrs[i] - arrs[j];

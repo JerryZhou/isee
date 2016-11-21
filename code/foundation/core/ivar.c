@@ -6,8 +6,8 @@
 
     
 /* ivar destructor */
-void ivar_destructor(iptr x, iobj *o) {
-    ivar *var = icast(ivar, __irobj(o));
+void ivar_destructor(iptr x, iptr o) {
+    ivar *var = icast(ivar, o);
     if (ivarissimple(var)) {
         /* nothing todo: pod */
     } else if (var->meta == imetaof(ipod)) {
@@ -25,17 +25,17 @@ void ivar_destructor(iptr x, iobj *o) {
 }
 
 /* ivar meta-funcs: hashcode */
-uint64_t ivar_hash(iptr x, iobj *o) {
-    ivar *var = icast(ivar, __irobj(o));
+uint64_t ivar_hash(iptr x, iptr o) {
+    ivar *var = icast(ivar, o);
     return ivarhashcode(var);
 }
 
 /* ivar meta-funcs: compare 
  * todos: may be problems in compare with 64 bit
  */
-int ivar_compare(iptr x, iobj *lfs, iobj *rfs) {
-    ivar *l = icast(ivar, __irobj(lfs));
-    ivar *r = icast(ivar, __irobj(rfs));
+int ivar_compare(iptr x, iptr lfs, iptr rfs) {
+    ivar *l = icast(ivar, lfs);
+    ivar *r = icast(ivar, rfs);
     const struct imeta* lmeta = iobjgetmeta(l);
     const struct imeta* rmeta = iobjgetmeta(r);
     const struct imeta* meta = lmeta ? lmeta : rmeta;
@@ -64,10 +64,10 @@ int ivar_compare(iptr x, iobj *lfs, iobj *rfs) {
     }
     if (meta->funcs && meta->funcs->compare) {
         return meta->funcs->compare(meta->funcs,
-                                    __iobj(l->v.ref),
-                                    __iobj(r->v.ref));
+                                    l->v.ref,
+                                    r->v.ref);
     }
-    return (int)(lfs - rfs);
+    return (int)((char*)lfs - (char*)rfs);
 }
  
 /* ivar type */

@@ -7,8 +7,8 @@
 const int kindex_invalid = -1;
 
 /* release all resources hold by the array */
-void iarray_destructor(iptr x, iobj *o) {
-    iarray *array = icast(iarray, __iref(o));
+void iarray_destructor(iptr x, iptr o) {
+    iarray *array = icast(iarray, o);
     iarrayentry *entry = (iarrayentry*)array->entry;
     
     /* unset the autoshirnk flag */

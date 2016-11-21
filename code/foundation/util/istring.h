@@ -115,10 +115,10 @@ size_t iull2string(char *s, uint64_t value);
 size_t idouble2string(char *s, double value);
 
 /* the meta funcs: hash with md5 code */
-uint64_t istring_hash(iptr i, iobj *o);
+uint64_t istring_hash(iptr i, iptr o);
 
 /* the meta funcs: compare with literal order */
-int istring_compare(iptr i, struct iobj *lfs, struct iobj *rfs);
+int istring_compare(iptr i, iptr lfs, iptr rfs);
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
