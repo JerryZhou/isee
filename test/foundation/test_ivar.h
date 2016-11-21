@@ -1,4 +1,5 @@
 #include "foundation/core/ivar.h"
+#include "foundation/util/istring.h"
 
 SP_SUIT(ivar);
 
@@ -116,6 +117,13 @@ SP_CASE(ivar, ivarhashcode) {
         
         SP_EQUAL(ivarhashcode(var), 88);
         
+        istring *s = istringmake("abc");
+        uint64_t scode = istringhashcode(s);
+        ivar *svar = ivarmakeref(irefcast(s));
+        SP_EQUAL(ivarhashcode(svar), scode);
+        
+        irefdelete(svar);
+        irefdelete(s);
         irefdelete(var);
         irefdelete(nvar);
     }
