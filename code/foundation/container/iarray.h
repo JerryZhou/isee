@@ -11,6 +11,7 @@ extern "C" {
     
 /* forward declares */
 struct iarray;
+struct imeta;
 
 /* if swap with kindex_invalid, should reset element to zero */
 /* invalid index */
@@ -157,6 +158,12 @@ void iarrayforeach(const iarray *arr, iarray_entry_visitor visitor);
     
 /* array entry of arr */
 const iarrayentry *iarrayentryof(const iarray *arr);
+    
+/* arrayentry linking with right imeta */
+int iarrayentryset(const iarrayentry *entry, const struct imeta *meta);
+    
+/* get the array element meta */
+const struct imeta *iarrayelementmeta(const iarray *arr);
 
 /* macro: indexing */
 #define __arr_i(arr, i) ((void*)((arr)->buffer + (i) * (arr)->entry->size))

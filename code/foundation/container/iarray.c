@@ -321,4 +321,21 @@ const iarrayentry *iarrayentryof(const iarray *arr) {
     icheckret(arr, NULL);
     return arr->entry;
 }
+ 
+/* array linking with right imeta */
+int iarrayentryset(const iarrayentry *entry, const struct imeta *meta) {
+    iarrayentry* nentry = (iarrayentry*)entry;
+    icheckret(entry, iino);
+    icheckret(entry->elemeta != meta, iino);
+    
+    nentry->elemeta = meta;
+    return iiok;
+}
+
+/* get the array element meta */
+const struct imeta *iarrayelementmeta(const iarray *arr) {
+    icheckret(arr, imetaof(inull));
+    return arr->entry->elemeta;
+}
+
 
