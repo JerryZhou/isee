@@ -71,6 +71,28 @@ iarray* iarraymakecopyablewith(size_t capacity, size_t size, iarray_entry_cmp cm
     return iarraymake(capacity, entry);
 }
 
+/* with meta in array-entry */
+static int _iarray_entry_copy_cmp(struct iarray *arr, int i, int j) {
+    return arr->entry->elemeta->funcs->compare(arr->entry->elemeta->funcs,
+                                               __arr_i(arr, i),
+                                               __arr_i(arr, j));
+}
+
+/* the copyable array with meta */
+iarray* iarraymakecopyablewithmeta(size_t capacity, const struct imeta *elem) {
+    iarrayentry *entry = iobjmalloc(iarrayentry);
+    entry->flag = EnumArrayFlagAutoShirk |
+    EnumArrayFlagSimple |
+    EnumArrayFlagKeepOrder |
+    EnumArrayFlagMemsetZero |
+    EnumArrayFlagNeedFreeEntry;
+    entry->size = elem->size;
+    entry->swap = _iarray_entry_swap_copy;
+    entry->assign = _iarray_entry_assign_copy;
+    entry->cmp = _iarray_entry_copy_cmp;
+    return iarraymake(capacity, entry);
+}
+
 /* compare */
 static int _iarray_entry_cmp_int(struct iarray *arr,
                                  int i, int j) {

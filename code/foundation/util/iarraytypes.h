@@ -8,6 +8,11 @@
 extern "C" {
 #endif
     
+/* forward declares */
+struct imeta;
+     
+
+
 /*************************************************************/
 /* iarray: int, ireal, int64, char,                          */
 /* iarray: iref                                              */
@@ -18,7 +23,10 @@ iarray* iarraymakecopyable(size_t capacity, size_t size);
     
 /* the copyable array with cmp */
 iarray* iarraymakecopyablewith(size_t capacity, size_t size, iarray_entry_cmp cmp);
-
+    
+/* the copyable array with meta */
+iarray* iarraymakecopyablewithmeta(size_t capacity, const struct imeta *elem);
+    
 /* tracing the index change in array with ref */
 typedef void (*irefarray_index_change) (iptr x, iarray *arr, iref *ref, int index);
 
