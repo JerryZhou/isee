@@ -8,6 +8,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
+/*
+ * todos:  
+ *      meta-flag: support-the-rawtypes: ref and pod
+ *      memory-alignment
+ */
 
 /* forward declares */
 struct imeta;
@@ -35,7 +41,7 @@ typedef struct imetaconfig {
     const char* name;       /* config the type name */
     size_t size;            /* config the type size in bytes */
     size_t capacity;        /* config the type cache in count */
-    iptr mthis;            /* config the type-meta-mthis */
+    iptr mthis;             /* config the type-meta-mthis */
     
     ientryobjconstructor constructor;   /* config the type-constructor */
     ientryobjdestructor destructor;     /* config the type-destructor */
@@ -76,7 +82,12 @@ typedef imetaallocator* (*ientrymake_allocator)(const struct imeta* meta, iptr i
 /* * * */
     
 typedef enum EnumMetaFlag {
+    /* memory bit */
     EnumMetaFlag_MemoryAligned = 1, /* memory-alignment */
+    
+    /* type-kind-bit [2-4]*/
+    EnumMetaFlag_Ref = 1<<1,    /* ref-type value: sub-class of iref */
+    EnumMetaFlag_Copyable = 1<<2,   /* the copyable value: plain-of-data */
 } EnumMetaFlag;
     
 /* type-meta-information */
