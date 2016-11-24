@@ -553,7 +553,7 @@ uint64_t istringhashcode(const istring *s) {
 }
 
 /* the md5 code */
-uint64_t istring_hash(iptr i, iptr o) {
+uint64_t istring_hash(const struct imeta* i, iptr o) {
     istring *s = icast(istring, o);
     imd5 d;
     
@@ -563,6 +563,6 @@ uint64_t istring_hash(iptr i, iptr o) {
 }
 
 /* the meta funcs: compare with literal order */
-int istring_compare(iptr i, iptr lfs, iptr rfs) {
+int istring_compare(const imeta* meta, iptr lfs, iptr rfs) {
     return istringcompare(icast(istring, lfs), icast(istring, rfs));
 }

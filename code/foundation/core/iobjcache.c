@@ -124,16 +124,16 @@ static void _icachepush(iobjcache *cache, iobj *obj) {
 }
 
 /* cache-allocator: allocate from obj-cache */
-static void* _iobjcache_ientryobjcalloc(iptr i, const struct imeta *meta) {
-    iobjcache *xthis = (iobjcache*)(i);
+static void* _iobjcache_ientryobjcalloc(const struct imeta *meta) {
+    iobjcache *xthis = (iobjcache*)(meta->allocator);
     iobj *obj = _icachepoll(xthis, meta);
     return obj->addr;
 }
 
 
 /* cache-allocator: free to obj-cache */
-static void _iobjcache_ientryobjfree(iptr i, iptr ptr) {
-    iobjcache *xthis = (iobjcache*)(i);
+static void _iobjcache_ientryobjfree(const struct imeta *meta, iptr ptr) {
+    iobjcache *xthis = (iobjcache*)(meta->allocator);
     _icachepush(xthis, __iobj(ptr));
 }
 

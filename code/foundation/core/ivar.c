@@ -6,7 +6,7 @@
 
     
 /* ivar destructor */
-void ivar_destructor(iptr x, iptr o) {
+void ivar_destructor(const imeta* meta, iptr o) {
     ivar *var = icast(ivar, o);
     if (ivarissimple(var)) {
         /* nothing todo: pod */
@@ -25,7 +25,7 @@ void ivar_destructor(iptr x, iptr o) {
 }
 
 /* ivar meta-funcs: hashcode */
-uint64_t ivar_hash(iptr x, iptr o) {
+uint64_t ivar_hash(const imeta* meta, iptr o) {
     ivar *var = icast(ivar, o);
     return ivarhashcode(var);
 }
@@ -33,7 +33,7 @@ uint64_t ivar_hash(iptr x, iptr o) {
 /* ivar meta-funcs: compare 
  * todos: may be problems in compare with 64 bit
  */
-int ivar_compare(iptr x, iptr lfs, iptr rfs) {
+int ivar_compare(const imeta* varmeta, iptr lfs, iptr rfs) {
     ivar *l = icast(ivar, lfs);
     ivar *r = icast(ivar, rfs);
     const struct imeta* lmeta = iobjgetmeta(l);
@@ -63,7 +63,7 @@ int ivar_compare(iptr x, iptr lfs, iptr rfs) {
         return l->v.i64 - r->v.i64;
     }
     if (meta->funcs && meta->funcs->compare) {
-        return meta->funcs->compare(meta->funcs,
+        return meta->funcs->compare(meta,
                                     l->v.ref,
                                     r->v.ref);
     }
@@ -135,7 +135,7 @@ uint64_t ivarhashcode(const ivar *var) {
     } else {
         /* have a hash funcs */
         if (var->meta && var->meta->funcs && var->meta->funcs->hash) {
-            return (uint64_t)(var->meta->funcs->hash(var->meta->funcs, var->v.ref));
+            return (uint64_t)(var->meta->funcs->hash(var->meta, var->v.ref));
         }
         /* todo hash in ref-method */
         return (uint64_t)(var->v.ref);

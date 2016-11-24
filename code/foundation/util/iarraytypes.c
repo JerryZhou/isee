@@ -73,7 +73,7 @@ iarray* iarraymakecopyablewith(size_t capacity, size_t size, iarray_entry_cmp cm
 
 /* with meta in array-entry */
 static int _iarray_entry_copy_cmp(struct iarray *arr, int i, int j) {
-    return arr->entry->elemeta->funcs->compare(arr->entry->elemeta->funcs,
+    return arr->entry->elemeta->funcs->compare(arr->entry->elemeta,
                                                __arr_i(arr, i),
                                                __arr_i(arr, j));
 }
@@ -290,7 +290,7 @@ static int _iarray_entry_cmp_iref(struct iarray *arr,
     const imeta *rfsmeta = iobjgetmeta(arrs[j]);
     const imeta *meta = lfsmeta?lfsmeta:rfsmeta;
     if (meta->funcs && meta->funcs->compare) {
-        return meta->funcs->compare(meta->funcs, arrs[i], arrs[j]);
+        return meta->funcs->compare(meta, arrs[i], arrs[j]);
     }
     /* raw the meta compare with pointer */
     return arrs[i] - arrs[j];

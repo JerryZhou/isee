@@ -20,21 +20,22 @@ struct imeta;
 struct iobj;
     
 /* tracing the alloc: i default point to struct imetafuncs  */
-typedef void (*ientryobjconstructor)(iptr i, iptr obj);
+typedef void (*ientryobjconstructor)(const struct imeta *meta, iptr ptr);
 /* tracing the free: i default point to struct imetafuncs */
-typedef void (*ientryobjdestructor)(iptr i, iptr obj);
+typedef void (*ientryobjdestructor)(const struct imeta *meta, iptr ptr);
     
 /* make all has the hash values: i default point to struct imetafuncs */
-typedef uint64_t (*ientryobjhash)(iptr i, iptr obj);
+typedef uint64_t (*ientryobjhash)(const struct imeta *meta, iptr ptr);
 /* make all can be compare with each other: i default point to struct imetafuncs  */
-typedef int (*ientryobjcompare)(iptr i, iptr lfs, iptr rfs);
+typedef int (*ientryobjcompare)(const struct imeta *meta, iptr lfs, iptr rfs);
     
 /* entry for calloc : i default point to struct iobjcache */
-typedef void* (*ientryobjcalloc)(iptr i, const struct imeta *meta); /* alloc the default iobj */
+typedef iptr (*ientryobjcalloc)(const struct imeta *meta); /* alloc the default iobj */
 /* entry for free : i default point to struct iobjcache */
-typedef void (*ientryobjfree)(iptr i, iptr ptr); /* free the value */
+typedef void (*ientryobjfree)(const struct imeta *meta, iptr ptr); /* free the value */
+    
 /* entry for free : i default point to struct iobjcache */
-typedef void (*ientryobjcopy)(iptr i, iptr value); /* copy the value */
+typedef void (*ientryobjcopy)(const struct imeta *meta, iptr dst, iptr src); /* copy the value */
     
 /* all internal meta-config informations */
 typedef struct imetaconfig {
@@ -47,6 +48,7 @@ typedef struct imetaconfig {
     ientryobjdestructor destructor;     /* config the type-destructor */
     ientryobjhash hash;                 /* config the type-hash */
     ientryobjcompare compare;           /* config the type-compare */
+    ientryobjcopy copy;                 /* config the type-copy */
 }imetaconfig;
 
 /* type meta functions */
@@ -94,6 +96,7 @@ typedef enum EnumMetaFlag {
 typedef struct imeta {
     const char* name;           /* type name */
     size_t size;                /* type size in bytes */
+    size_t align;               /* type align in bytes */
     int32_t flag;               /* type flag mark the meta state */
 
     imetafuncs *funcs;          /* type meta-funcs */

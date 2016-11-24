@@ -34,7 +34,7 @@ typedef struct irefcache{
 }irefcache;
 
 /* irefcache release all the memory */
-void irefcache_destructor(iptr x, iptr o);
+void irefcache_destructor(const struct imeta*, iptr o);
 
 /* make a ref cache with capacity */
 irefcache *irefcachemake(size_t capacity, icachenewentry newentry);

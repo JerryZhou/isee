@@ -28,7 +28,7 @@ typedef struct irefjoint {
 }irefjoint;
 
 /* refjoint destructor */
-void irefjoint_destructor(iptr x, iptr o);
+void irefjoint_destructor(const struct imeta* x, iptr o);
     
 /* make a joint */
 irefjoint* irefjointmake(iref *value);
@@ -54,7 +54,7 @@ typedef struct ireflist {
 }ireflist;
 
 /* destructor for ireflist */
-void ireflist_destructor(iptr x, iptr o);
+void ireflist_destructor(const struct imeta*, iptr o);
 
 /* make a default reflist with resource NULL */
 ireflist *ireflistmake();

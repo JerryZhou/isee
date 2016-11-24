@@ -155,14 +155,14 @@ int imetaregisterwith(const char* name, size_t size,
 /* calloc a obj by meta-system */
 void *imetacalloc(const imeta *meta) {
     icheckret(meta, NULL);
-    return meta->allocator->fcalloc(meta->allocator, meta);
+    return meta->allocator->fcalloc(meta);
 }
 
 /* free the object to right meta-system */
 void imetafree(void *p) {
     iobj *newp = __iobj(p);
     icheck(newp);
-    newp->meta->allocator->ffree(newp->meta->allocator, p);
+    newp->meta->allocator->ffree(newp->meta, p);
 }
 
 /* print-the-memory-state */

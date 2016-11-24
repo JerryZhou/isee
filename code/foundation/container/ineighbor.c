@@ -1,7 +1,7 @@
 #include "foundation/container/ineighbor.h"
 
 /* ineighbor destructor */
-void ineighbor_destructor(iptr x, iptr o) {
+void ineighbor_destructor(const imeta* meta, iptr o) {
     ineighbor *neighbor = icast(ineighbor, o);
     ineighborclean(neighbor);
 }

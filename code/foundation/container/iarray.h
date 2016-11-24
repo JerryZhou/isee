@@ -93,7 +93,7 @@ typedef struct iarray {
 }iarray;
 
 /* array destructor */
-void iarray_destructor(iptr x, iptr o);
+void iarray_destructor(const struct imeta*, iptr o);
     
 /* make array with type entry */
 iarray *iarraymake(size_t capacity, const iarrayentry *entry);

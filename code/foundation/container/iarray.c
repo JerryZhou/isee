@@ -7,7 +7,7 @@
 const int kindex_invalid = -1;
 
 /* release all resources hold by the array */
-void iarray_destructor(iptr x, iptr o) {
+void iarray_destructor(const struct imeta *meta, iptr o) {
     iarray *array = icast(iarray, o);
     iarrayentry *entry = (iarrayentry*)array->entry;
     

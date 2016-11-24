@@ -50,7 +50,7 @@ static void _irefjoint_release_it(irefjoint *joint) {
     iassign(joint->list, NULL);
 }
 /* irefjoint destructor */
-void irefjoint_destructor(iptr x, iptr o) {
+void irefjoint_destructor(const imeta* meta, iptr o) {
     irefjoint *joint = icast(irefjoint, o);
     _irefjoint_release_it(joint);
 }
@@ -70,7 +70,7 @@ void irefjointfree(irefjoint* joint) {
 }
 
 /* reflist entry for free */
-void ireflist_destructor(iptr x, iptr o) {
+void ireflist_destructor(const struct imeta* meta, iptr o) {
     ireflist *list = icast(ireflist, o);
     
     /* remove all the joint */

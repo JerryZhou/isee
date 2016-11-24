@@ -6,7 +6,7 @@
 size_t ksize_invalid = -1;
 
 /* destructor */
-void iringbuffer_destructor(iptr x, iptr o) {
+void iringbuffer_destructor(const imeta* meta, iptr o) {
     iringbuffer *r = icast(iringbuffer, o);
     irefdelete(r->buf);
 }

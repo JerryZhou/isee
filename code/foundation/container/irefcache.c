@@ -3,7 +3,7 @@
 #include "foundation/core/imetatypes.h"
 
 /* destructor for flag */
-void irefcache_destructor(iptr x, iptr o) {
+void irefcache_destructor(const imeta* meta, iptr o) {
     irefcache *cache = icast(irefcache, o);
     irefcacheclear(cache);
     irefdelete(cache->cache);

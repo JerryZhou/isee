@@ -3,7 +3,7 @@
 #include "foundation/util/iarraytypes.h"
 
 /* destructor */
-void icmdarg_destructor(iptr x, iptr o) {
+void icmdarg_destructor(const struct imeta* meta, iptr o) {
     icmdarg *arg = icast(icmdarg, o);
     iassign(arg->args, NULL);
     iassign(arg->origin, NULL);

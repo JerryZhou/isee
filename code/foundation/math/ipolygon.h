@@ -40,7 +40,7 @@ typedef struct ipolygon3d {
 }ipolygon3d;
     
 /* destructor */
-void ipolygon3d_destructor(iptr x, iptr o);
+void ipolygon3d_destructor(const struct imeta* x, iptr o);
 
 /* create a polygon 3d*/
 ipolygon3d *ipolygon3dmake(size_t capacity);
@@ -99,7 +99,7 @@ typedef struct ipolygon2d {
 }ipolygon2d;
     
 /* destructor */
-void ipolygon2d_destructor(iptr x, iptr o);
+void ipolygon2d_destructor(const struct imeta* x, iptr o);
 
 /* create a polygon 2d*/
 ipolygon2d *ipolygon2dmake(size_t capacity);
