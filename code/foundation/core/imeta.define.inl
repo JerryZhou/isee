@@ -9,4 +9,4 @@
 
 /* for user types */
 #undef __iudeclaremeta
-#define __iudeclaremeta(type) irealdeclareregister(type)
+#define __iudeclaremeta(type, xsize, xalign, xflag, xcapacity,  xmptr, xconstructor, xdestructor, xhash, xcompare, xcopy)  irealdeclareregister(type)

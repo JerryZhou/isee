@@ -17,12 +17,12 @@ extern "C" {
 #define iideclareregister(type) extern irealdeclareregister(type)
 /* meta-index registing */
 #define irealimplementregister(type, capacity) imetaindex(type) = iregister(type, capacity)
-#define irealimplementregisterfull(type, align, flag, \
-        xcapacity, xconstructor, xdestructor, xhash, xcompare, xassign) \
-    config.name = #type; config.size=sizeof(type); config.align = align; config.flag = flag;\
+#define irealimplementregisterfull(type, xsize, xalign, xflag, \
+        xcapacity, xmptr, xconstructor, xdestructor, xhash, xcompare, xassign) \
+    config.name = #type; config.size=xsize; config.align = xalign; config.flag = xflag;\
     config.capacity=xcapacity; \
     config.constructor = xconstructor; config.destructor=xdestructor;\
-    config.hash = xhash; config.compare = xcompare; config.assign = xassign\
+    config.hash = xhash; config.compare = xcompare; config.assign = xassign;\
     imetaindex(type) = imetaregisterwithconfig(&config)
 /* meta-index registing in runtime */
 #define iimplementregister(type, capacity) int irealimplementregister(type, capacity)
