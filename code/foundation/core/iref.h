@@ -77,6 +77,9 @@ iref *irefassistretain(iref *ref);
 /* get the private pointer */
 #define irefthis(type, ref) icast(type, (ref)->_rthis)
     
+/* ref-assign: dst ==> iref**; src ==> iref** */
+void iref_assign(const struct imeta*, iptr dst, const iptr src);
+    
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }

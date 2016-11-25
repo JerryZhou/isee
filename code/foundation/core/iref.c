@@ -80,3 +80,12 @@ iref *irefassistretain(iref *ref) {
     iretain(ref);
     return ref;
 }
+    
+/* ref-assign: dst ==> iref**; src ==> iref** */
+void iref_assign(const struct imeta* meta, iptr dst, const iptr src) {
+    iref **reff = icast(iref*, dst);
+    iref **reff_src = icast(iref*, src);
+    icheck(dst);
+    icheck(src);
+    iassign(reff[0], reff_src[0]);
+}
