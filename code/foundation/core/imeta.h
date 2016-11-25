@@ -167,6 +167,9 @@ int imetaindexcur();
 #define imetaindex(type)    imeta_##type##_index
 /* meta-get by meta-index */
 #define imetaof(type) imetaget(imetaindex(type))
+    
+/* meta-call */
+#define imetacall(meta, fun, ...) do { if( (meta) && (meta)->funcs && (meta)->funcs->##fun ) { (meta)->funcs->##fun##((meta), __VA_ARGS__) } while(0)
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
