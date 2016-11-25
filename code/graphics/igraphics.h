@@ -266,13 +266,13 @@ void ibuffervertexenableto(ibuffervertex *vertex, ishader *shader);
 
 
 #define __iallmeta_graphics \
-    __iudeclaremeta(iwindow);\
-    __iudeclaremeta(ishader);\
-    __iudeclaremeta(ishader_private);\
-    __iudeclaremetapart(ilayoutvertex, 0, NULL, ilayoutvertex_destructor);\
-    __iudeclaremetapart(ibuffervertex, 0, NULL, ibuffervertex_destructor);\
-    __iudeclaremeta(ibuffervertex_private);\
-    __iudeclaremetapart(igraphicsapp, 0, NULL, igraphicsapp_destructor)
+    __iudeclaremeta(iwindow, sizeof(iwindow), 0, EnumMetaFlag_Ref, 0, NULL, NULL, NULL, NULL, NULL, NULL);\
+    __iudeclaremeta(ishader, sizeof(ishader), 0, EnumMetaFlag_Ref, 0, NULL, NULL, NULL, NULL, NULL, NULL);\
+    __iudeclaremeta(ishader_private, sizeof(ishader_private), 0, EnumMetaFlag_POD, 0, NULL, NULL, NULL, NULL, NULL, NULL);\
+    __iudeclaremeta(ilayoutvertex, sizeof(ilayoutvertex), 0, EnumMetaFlag_Ref, 0, NULL, NULL, ilayoutvertex_destructor, NULL, NULL, NULL);\
+    __iudeclaremeta(ibuffervertex, sizeof(ishader), 0, EnumMetaFlag_Ref, 0, NULL, NULL, ibuffervertex_destructor, NULL, NULL, NULL);\
+    __iudeclaremeta(ibuffervertex_private, sizeof(ibuffervertex_private), 0, EnumMetaFlag_POD, 0, NULL, NULL, NULL, NULL, NULL, NULL);\
+    __iudeclaremeta(igraphicsapp, sizeof(igraphicsapp), 0, EnumMetaFlag_Ref, 0, NULL, NULL, igraphicsapp_destructor, NULL, NULL, NULL)
 
 /* declare all the meta-indexs */
 __iallmeta_graphics;

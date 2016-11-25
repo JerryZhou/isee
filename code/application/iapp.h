@@ -13,7 +13,7 @@ typedef struct iapplication {
 iapplication *iapplicationmake();
 
 #define __imeta_all_application \
-    __iudeclaremeta(iapplication)
+    __iudeclaremeta(iapplication, sizeof(iapplication), 0, EnumMetaFlag_Ref, 0, NULL, NULL, NULL, NULL, NULL, NULL)
 
 __imeta_all_application;
 
