@@ -1,5 +1,5 @@
 # c89
-set(CMAKE_C_FLAGS "-Wall -Werror=declaration-after-statement -std=c89 -pedantic -Dinline='' -Wno-c99-extensions -Wno-variadic-macros -Wno-unused-function")
+set(CMAKE_C_FLAGS "-Wall -Werror=declaration-after-statement -std=c99 -pedantic -Wno-c99-extensions -Wno-variadic-macros -Wno-unused-function")
 
 # library-foundation
 add_subdirectory(foundation)
