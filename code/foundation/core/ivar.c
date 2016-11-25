@@ -3,6 +3,7 @@
 #include "foundation/core/imetatypes.h"
 #include "foundation/core/iobj.h"
 #include "foundation/memory/imemory.h"
+#include "foundation/math/imd5.h"
 
     
 /* ivar destructor */
@@ -133,7 +134,12 @@ ibool ivaris(const ivar *var, const struct imeta *meta) {
 /* ivar copy */
 ivar *ivardup(const ivar *var) {
     ivar *nvar = irefnew(ivar);
-    ivar_assign(nvar->meta, nvar, var);
+    /* constructor */
+    if (var && var->meta && var->meta->funcs && var->meta->funcs->constructor) {
+        var->meta->funcs->constructor(var->meta, (iptr)(&var->v));
+    }
+    /* ivar_assign */
+    ivar_assign(nvar->meta, nvar, (const iptr)var);
     return nvar;
 }
   
@@ -143,7 +149,10 @@ uint64_t ivarhashcode(const ivar *var) {
         return var->v.u64;
     } else if (ivaris(var, imetaof(ipod))) {
         /* todo hash in pod: md5 */
-        return (uint64_t)(var->v.pod.ptr);
+        imd5 md5;
+        imd5reset(&md5);
+        imd5write(&md5, (unsigned char*)var->v.pod.ptr, var->v.pod.size);
+        return imd5sum(&md5);
     } else {
         /* have a hash funcs */
         if (var->meta && var->meta->funcs && var->meta->funcs->hash) {
