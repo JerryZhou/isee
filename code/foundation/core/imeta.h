@@ -30,36 +30,39 @@ typedef void (*ientryobjconstructor)(const struct imeta *meta, iptr ptr);
 typedef void (*ientryobjdestructor)(const struct imeta *meta, iptr ptr);
     
 /* make all has the hash values: i default point to struct imetafuncs */
-typedef uint64_t (*ientryobjhash)(const struct imeta *meta, iptr ptr);
+typedef uint64_t (*ientryobjhash)(const struct imeta *meta, const iptr ptr);
 /* make all can be compare with each other: i default point to struct imetafuncs  */
-typedef int (*ientryobjcompare)(const struct imeta *meta, iptr lfs, iptr rfs);
+typedef int (*ientryobjcompare)(const struct imeta *meta, const iptr lfs, const iptr rfs);
     
 /* entry for free : i default point to struct iobjcache */
-typedef void (*ientryobjcopy)(const struct imeta *meta, iptr dst, iptr src); /* copy the value */
+typedef void (*ientryobjassign)(const struct imeta *meta, iptr dst, const iptr src); /* copy the value */
     
 /* all internal meta-config informations */
 typedef struct imetaconfig {
     const char* name;       /* config the type name */
     size_t size;            /* config the type size in bytes */
+    size_t align;           /* config the type align in bytes */
     size_t capacity;        /* config the type cache in count */
+    int32_t flag;           /* config the type flag */
+    
     iptr mthis;             /* config the type-meta-mthis */
     
     ientryobjconstructor constructor;   /* config the type-constructor */
     ientryobjdestructor destructor;     /* config the type-destructor */
+    ientryobjassign assign;             /* config the type-assign */
+    
     ientryobjhash hash;                 /* config the type-hash */
     ientryobjcompare compare;           /* config the type-compare */
-    ientryobjcopy copy;                 /* config the type-copy */
 }imetaconfig;
 
 /* type meta functions */
 typedef struct imetafuncs {
     ientryobjconstructor constructor;       /* trace all obj calloc */
     ientryobjdestructor destructor;         /* trace all obj free */
+    ientryobjassign assign;                 /* all iobj can be do copy */
     
     ientryobjhash hash;                     /* all iobj can be do hash */
     ientryobjcompare compare;               /* all iobj can be do compare */
-    
-    ientryobjcopy copy;                     /* all iobj can be do copy */
     
     /* should we add anthor contructor and destructor here ?? */
 }imetafuncs;
@@ -89,7 +92,8 @@ typedef enum EnumMetaFlag {
     
     /* type-kind-bit [2-4]*/
     EnumMetaFlag_Ref = 1<<1,    /* ref-type value: sub-class of iref */
-    EnumMetaFlag_Copyable = 1<<2,   /* the copyable value: plain-of-data */
+    EnumMetaFlag_POD = 1<<2,    /* the value: plain-of-data */
+    EnumMetaFlag_Complex = 1<<3,
 } EnumMetaFlag;
     
 /* type-meta-information */

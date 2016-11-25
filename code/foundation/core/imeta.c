@@ -115,14 +115,17 @@ int imetaregisterwithdetails(const char *name, size_t size,
                              size_t capacity,
                              ientryobjconstructor constructor,
                              ientryobjconstructor destructor) {
-    imetaconfig config = {name, size, capacity, NULL, constructor, destructor };
+    imetaconfig config = {.name=name, .size=size,
+        .capacity=capacity, .align=0, .flag=0, .mthis=NULL,
+        .constructor=constructor,
+        .destructor=destructor,
+        .hash=NULL, .assign=NULL, .compare=NULL};
     return imetaregisterwithconfig(&config);
 }
 
 /* register a type with capacity, return the meta-index */
 int imetaregisterwithcapacity(const char* name, size_t size, size_t capacity) {
-    imetaconfig config = {name, size, capacity};
-    return imetaregisterwithconfig(&config);
+    return imetaregisterwithdetails(name, size, capacity, NULL, NULL);
 }
 
 /* register a type with config, return the meta-index */

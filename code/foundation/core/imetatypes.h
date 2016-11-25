@@ -17,70 +17,66 @@ extern "C" {
 #define iideclareregister(type) extern irealdeclareregister(type)
 /* meta-index registing */
 #define irealimplementregister(type, capacity) imetaindex(type) = iregister(type, capacity)
-#define irealimplementregisterfull(type, xcapacity, xconstructor, xdestructor, xhash, xcompare) \
-    config.name = #type; config.size=sizeof(type); config.capacity=xcapacity; \
+#define irealimplementregisterfull(type, align, flag, \
+        xcapacity, xconstructor, xdestructor, xhash, xcompare, xassign) \
+    config.name = #type; config.size=sizeof(type); config.align = align; config.flag = flag;\
+    config.capacity=xcapacity; \
     config.constructor = xconstructor; config.destructor=xdestructor;\
-    config.hash = xhash; config.compare = xcompare;\
+    config.hash = xhash; config.compare = xcompare; config.assign = xassign\
     imetaindex(type) = imetaregisterwithconfig(&config)
 /* meta-index registing in runtime */
 #define iimplementregister(type, capacity) int irealimplementregister(type, capacity)
 
 /* declare all the types for user defines */
-#define __iudeclaremeta(type) iideclareregister(type)
-#define __iudeclaremetacapacity(type, capacity) iideclareregister(type)
-#define __iudeclaremetapart(type, capacity, constructor, destructor) iideclareregister(type)
-#define __iudeclaremetafull(type, capacity, constructor, destructor, hash, compare) iideclareregister(type)
+#define __iudeclaremeta(type, xsize, xalign, xflag, xcapacity,  xmptr, xconstructor, xdestructor, xhash, xcompare, xcopy) iideclareregister(type)
 
 /* declare all the foundation types meta */
-#define __ideclaremeta(type) imetaindex(type)
-#define __ideclaremetacapacity(type, capacity) imetaindex(type)
-#define __ideclaremetapart(type, capacity, constructor, destructor) imetaindex(type)
-#define __ideclaremetafull(type, capacity, constructor, destructor, hash, compare) imetaindex(type)
+#define __ideclaremeta(type, xsize, xalign, xflag, xcapacity,  xmptr, xconstructor, xdestructor, xhash, xcompare, xassign) imetaindex(type)
 
-#define __iallmeta                            \
-__ideclaremeta(inull),\
-__ideclaremeta(int),\
-__ideclaremeta(int32_t),\
-__ideclaremeta(uint32_t),\
-__ideclaremeta(int64_t),\
-__ideclaremeta(uint64_t),\
-__ideclaremeta(ireal),\
-__ideclaremeta(float),\
-__ideclaremeta(double),\
-__ideclaremeta(ibyte),\
-__ideclaremeta(ibool),\
-__ideclaremeta(iptr),\
-__ideclaremeta(ipod),\
-__ideclaremeta(irune),\
-__ideclaremeta(iobj),\
-__ideclaremeta(iobjcache),\
-__ideclaremeta(iref),\
-__ideclaremeta(iwref),\
-__ideclaremeta(imd5),\
-__ideclaremetafull(ivar, 0, NULL, ivar_destructor, ivar_hash, ivar_compare),\
-__ideclaremetapart(irefcache, 0, NULL, irefcache_destructor),\
-__ideclaremetapart(irefjoint, 0, NULL, irefjoint_destructor),\
-__ideclaremetapart(ireflist, 0, NULL, ireflist_destructor),\
-__ideclaremetapart(iarray, 1000, NULL, iarray_destructor),\
-__ideclaremetacapacity(iarrayentry, 1000),\
-__ideclaremetacapacity(irefarrayentry, 1000),\
-__ideclaremetapart(islice, 1000, NULL, islice_destructor),\
-__ideclaremetafull(istring, 1000, NULL, islice_destructor, istring_hash, istring_compare),\
-__ideclaremetapart(icmdarg, 0, NULL, icmdarg_destructor),\
-__ideclaremeta(itree),\
-__ideclaremeta(idict),\
-__ideclaremetapart(ineighbor, 0, NULL, ineighbor_destructor),\
-__ideclaremetapart(iringbuffer, 0, NULL, iringbuffer_destructor),\
-__ideclaremetapart(ipolygon3d, 1000, NULL, ipolygon3d_destructor),\
-__ideclaremetapart(ipolygon2d, 1000, NULL, ipolygon2d_destructor),\
-__ideclaremeta(imeta)
+#define __iallmeta    \
+__ideclaremeta(inull,    sizeof(inull),    sizeof(inull),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(int,      sizeof(int),      sizeof(int),     EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(int32_t,  sizeof(int32_t),  sizeof(int32_t), EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(uint32_t, sizeof(uint32_t), sizeof(uint32_t),EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(int64_t,  sizeof(int64_t),  sizeof(int64_t), EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(uint64_t, sizeof(uint64_t), sizeof(uint64_t),EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(ireal,    sizeof(ireal),    sizeof(ireal),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(float,    sizeof(float),    sizeof(float),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(double,   sizeof(double),   sizeof(double),  EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(ibyte,    sizeof(ibyte),    sizeof(ibyte),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(ibool,    sizeof(ibool),    sizeof(ibool),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(iptr,     sizeof(iptr),     sizeof(iptr),    EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(ipod,     sizeof(ipod),     0,               EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(irune,    sizeof(irune),    sizeof(irune),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(imd5,     sizeof(imd5),     0,               EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(iobj,     sizeof(iobj),     0,               EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(iobjcache,sizeof(iobjcache),0,               EnumMetaFlag_Ref,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(iref,     sizeof(iref),     0,               EnumMetaFlag_Ref,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(iwref,    sizeof(iwref),    0,               EnumMetaFlag_Ref,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(ivar,     sizeof(ivar),     0,               EnumMetaFlag_Ref,0, NULL, NULL, ivar_destructor, ivar_hash, ivar_compare, ivar_assign),\
+__ideclaremeta(irefcache,sizeof(irefcache),0,               EnumMetaFlag_Ref,0, NULL, NULL, irefcache_destructor, NULL, NULL, NULL),\
+__ideclaremeta(irefjoint,sizeof(irefjoint),0,               EnumMetaFlag_Ref,0, NULL, NULL, irefjoint_destructor, NULL, NULL, NULL),\
+__ideclaremeta(ireflist, sizeof(ireflist),0,                EnumMetaFlag_Ref,0, NULL, NULL, ireflist_destructor, NULL, NULL, NULL),\
+__ideclaremeta(iarray,   sizeof(iarray),0,            EnumMetaFlag_Ref,  10000, NULL, NULL, iarray_destructor, NULL, NULL, NULL),\
+__ideclaremeta(iarrayentry,sizeof(iarrayentry),           0,EnumMetaFlag_POD,1000, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(irefarrayentry,sizeof(irefarrayentry),     0,EnumMetaFlag_POD,1000, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(islice, sizeof(islice),0, EnumMetaFlag_Ref, 10000, NULL, NULL, islice_destructor, NULL, NULL, NULL),\
+__ideclaremeta(istring,sizeof(istring),0,EnumMetaFlag_Ref,10000, NULL, NULL, islice_destructor, istring_hash, istring_compare, NULL),\
+__ideclaremeta(icmdarg,  sizeof(icmdarg),    0,  EnumMetaFlag_Ref,   0, NULL, NULL, icmdarg_destructor, NULL, NULL, NULL),\
+__ideclaremeta(itree,    sizeof(itree),0,        EnumMetaFlag_Ref,   0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(idict,   sizeof(idict),0,         EnumMetaFlag_Ref,   0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(ineighbor,sizeof(ineighbor),    0,EnumMetaFlag_Ref,   0, NULL, NULL, ineighbor_destructor, NULL, NULL, NULL),\
+__ideclaremeta(iringbuffer,sizeof(iringbuffer),0,EnumMetaFlag_Ref,   0, NULL, NULL, iringbuffer_destructor, NULL, NULL, NULL),\
+__ideclaremeta(ipolygon3d, sizeof(ipolygon3d), 0,EnumMetaFlag_Ref, 1000, NULL, NULL, ipolygon3d_destructor, NULL, NULL, NULL),\
+__ideclaremeta(ipolygon2d, sizeof(ipolygon2d), 0,EnumMetaFlag_Ref, 1000, NULL, NULL, ipolygon2d_destructor, NULL, NULL, NULL),\
+__ideclaremeta(imeta,      sizeof(imeta),      0,EnumMetaFlag_Complex,0, NULL, NULL, NULL, NULL, NULL, NULL)
 
 
 /* all meta-indexs */
 typedef enum EnumMetaTypeIndex {
     __iallmeta,
     EnumMetaTypeIndex_imax,
-}EnumMetaTypeIndex;
+} EnumMetaTypeIndex;
 
 /* support IMaxMetaCountForUser user define meta-type */
 #define IMaxMetaCountForUser 512

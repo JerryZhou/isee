@@ -3,13 +3,7 @@
 
 /* for user types */
 #undef __iudeclaremeta
-#undef __iudeclaremetacapacity
-#undef __iudeclaremetapart
-#undef __iudeclaremetafull
 
-#define __iudeclaremetafull(type, capacity, constructor, destructor, hash, compare) irealimplementregisterfull(type, capacity, constructor, destructor, hash, compare)
-#define __iudeclaremetapart(type, capacity, constructor, destructor) __iudeclaremetafull(type, capacity, constructor, destructor, NULL, NULL)
-#define __iudeclaremetacapacity(type, capacity) __iudeclaremetapart(type, capacity, NULL, NULL)
-#define __iudeclaremeta(type) __iudeclaremetacapacity(type, 0)
+#define __iudeclaremeta(type, xsize, xalign, xflag, xcapacity,  xmptr, xconstructor, xdestructor, xhash, xcompare, xcopy) irealimplementregisterfull(type, xsize, xalign, xflag, xcapacity,  xmptr, xconstructor, xdestructor, xhash, xcompare, xcopy) 
 
 #define __iudeclare imetaconfig config

@@ -20,12 +20,11 @@ void ivar_destructor(const imeta* meta, iptr o) {
     } else {
         /* the meta ref */
         irefdelete(var->v.ref);
-        var->meta = NULL;
     }
 }
 
 /* ivar meta-funcs: hashcode */
-uint64_t ivar_hash(const imeta* meta, iptr o) {
+uint64_t ivar_hash(const imeta* meta, const iptr o) {
     ivar *var = icast(ivar, o);
     return ivarhashcode(var);
 }
@@ -33,7 +32,7 @@ uint64_t ivar_hash(const imeta* meta, iptr o) {
 /* ivar meta-funcs: compare 
  * todos: may be problems in compare with 64 bit
  */
-int ivar_compare(const imeta* varmeta, iptr lfs, iptr rfs) {
+int ivar_compare(const imeta* varmeta, const iptr lfs, const iptr rfs) {
     ivar *l = icast(ivar, lfs);
     ivar *r = icast(ivar, rfs);
     const struct imeta* lmeta = iobjgetmeta(l);
@@ -69,6 +68,30 @@ int ivar_compare(const imeta* varmeta, iptr lfs, iptr rfs) {
     }
     return (int)((char*)lfs - (char*)rfs);
 }
+
+/* ivar meta-funcs: assign */
+void ivar_assign(const struct imeta* meta, iptr dst, const iptr src) {
+    ivar *nvar = icast(ivar, dst);
+    ivar *var = icast(ivar, src);
+    
+    icheck(nvar);
+    ivar_destructor(meta, dst); // release resources
+    icheck(var);
+    
+    if (ivarissimple(var)) {
+        nvar->meta = var->meta;
+        nvar->v = var->v;
+    } else if (var->meta == imetaof(ipod)) {
+        nvar->v = var->v;
+        nvar->v.pod.ptr = icalloc(1, var->v.pod.size);
+        memcpy(nvar->v.pod.ptr, var->v.pod.ptr, var->v.pod.size);
+    } else {
+        irefretain(var->v.ref);
+        nvar->meta = var->meta;
+        nvar->v = var->v;
+    }
+}
+
  
 /* ivar type */
 int ivartype(const ivar *var) {
@@ -109,19 +132,8 @@ ibool ivaris(const ivar *var, const struct imeta *meta) {
     
 /* ivar copy */
 ivar *ivardup(const ivar *var) {
-    ivar *nvar = nvar = irefnew(ivar);
-    if (ivarissimple(var)) {
-        nvar->meta = var->meta;
-        nvar->v = var->v;
-    } else if (var->meta == imetaof(ipod)) {
-        nvar->v = var->v;
-        nvar->v.pod.ptr = icalloc(1, var->v.pod.size);
-        memcpy(nvar->v.pod.ptr, var->v.pod.ptr, var->v.pod.size);
-    } else {
-        irefretain(var->v.ref);
-        nvar->meta = var->meta;
-        nvar->v = var->v;
-    }
+    ivar *nvar = irefnew(ivar);
+    ivar_assign(nvar->meta, nvar, var);
     return nvar;
 }
   

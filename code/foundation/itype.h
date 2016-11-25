@@ -3,14 +3,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <stddef.h>
+#include <stdarg.h>
 #include <memory.h>
 #include <math.h>
 #include <time.h>
-#include <stdint.h>
-#include <stddef.h>
-#include <sys/types.h>
-#include <stdarg.h>
 #include <assert.h>
+#include <sys/types.h>
 
 /* Set up for C function definitions, even when using C++ */
 
@@ -44,6 +44,15 @@ typedef _int64 int64_t;
 typedef _uint64 uint64_t;
 typedef _int32 int32_t;
 typedef _uint32 uint32_t;
+    
+typedef _int64 i64;
+typedef _uint64 u64;
+typedef _int32 i32;
+typedef _uint32 u32;
+typedef char i8;
+typedef unsigned char u8;
+typedef short i16;
+typedef unsigned short u16;
 
 #ifndef offsetof
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
