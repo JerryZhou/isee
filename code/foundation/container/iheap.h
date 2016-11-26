@@ -33,6 +33,9 @@ void iheappop(iheap *heap);
 
 /* heap-operators: remove the heap-lement at index, and keep the heap order */
 void iheapdelete(iheap *heap, int index);
+    
+/* find the index in heap */
+int iheapindexof(iheap *heap, const void *value);
 
 /* heap-sort: [2, 3, 0, 1] ==> [0, 1, 2, 3] */
 void iarraysortheap(iarray *arr, int start, int end);

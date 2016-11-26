@@ -129,3 +129,9 @@ void iheapdelete(iheap *heap, int index) {
         _iarray_heap_shift(heap, index, iarraylen(heap)-1, 0);
     }
 }
+
+/* todos: find the index in heap */
+int iheapindexof(iheap *heap, const void *value) {
+    return kindex_invalid;
+}
+
