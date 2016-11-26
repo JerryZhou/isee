@@ -324,13 +324,14 @@ static iarray_searchpair _iarraybinaryindexing(iarray *arr, int start, int end, 
     int heigh = end-1;
     int mid;
     int cmp;
-    while (low < heigh) {
+    while (low <= heigh) {
         mid = (heigh - low)/2 + low;
         cmp = meta->funcs->compare(meta, iarrayat(arr, mid), value);
         
         pair.index = mid;   /* the insert index */
         if (cmp == 0) {
             pair.found = iiok;
+            break;
         } else if (cmp < 0) {
             low = mid + 1;
         } else {
@@ -345,22 +346,28 @@ int iarraybinarysearch(iarray *arr, int start, int end, const void* value) {
     iarray_searchpair pair = _iarraybinaryindexing(arr, start, end, value);
     return pair.found ? pair.index : kindex_invalid;
 }
- 
-/* binary search insert into array [start, end] */
-int iarraybinaryinsert(iarray *arr, int start, int end, const void* value) {
+
+/* binary indexing the value: insert-place */
+int iarraybinaryindexing(iarray *arr, int start, int end, const void *value) {
     iarray_searchpair pair = _iarraybinaryindexing(arr, start, end, value);
     const imeta *meta = arr->entry->elemeta;
     
     if (pair.found == iino) {
-        iarrayinsert(arr, pair.index, value, 1);
+        return pair.index;
     } else {
         while (pair.index < end &&
                meta->funcs->compare(meta, iarrayat(arr, pair.index), value) <= 0) {
             ++pair.index;
         }
-        iarrayinsert(arr, pair.index, value, 1);
+        return pair.index;
     }
-    return pair.index;
+}
+ 
+/* binary search insert into array [start, end] */
+int iarraybinaryinsert(iarray *arr, int start, int end, const void* value) {
+    int index = iarraybinaryindexing(arr, start, end, value);
+    iarrayinsert(arr, index, value, 1);
+    return index;
 }
 
 /* for each */
