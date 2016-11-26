@@ -23,6 +23,7 @@ extern "C" {
     
 /* this pointer */
 typedef void* iptr;
+typedef const void* iconstptr;
 
 /* default name with 32 bits */
 typedef char iname[32];

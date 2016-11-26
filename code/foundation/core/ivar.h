@@ -61,13 +61,13 @@ ivar *ivarmakeref(iref *ref);
 void ivar_destructor(const struct imeta*, iptr o);
 
 /* ivar meta-funcs: hashcode */
-uint64_t ivar_hash(const struct imeta*, const iptr o);
+uint64_t ivar_hash(const struct imeta*, iconstptr o);
 
 /* ivar meta-funcs: compare */
-int ivar_compare(const struct imeta*, const iptr lfs, const iptr rfs);
+int ivar_compare(const struct imeta*, iconstptr lfs, iconstptr rfs);
 
 /* ivar meta-funcs: assign */
-void ivar_assign(const struct imeta*, iptr dst, const iptr src);
+void ivar_assign(const struct imeta*, iptr dst, iconstptr src);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

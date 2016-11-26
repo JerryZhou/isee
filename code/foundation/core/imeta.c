@@ -23,6 +23,7 @@
 #include "foundation/util/istring.h"
 #include "foundation/math/ipolygon.h"
 #include "foundation/math/imd5.h"
+#include "foundation/core/irawtype.h"
 
 
 /******************************************/

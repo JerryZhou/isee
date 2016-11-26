@@ -25,7 +25,7 @@ void ivar_destructor(const imeta* meta, iptr o) {
 }
 
 /* ivar meta-funcs: hashcode */
-uint64_t ivar_hash(const imeta* meta, const iptr o) {
+uint64_t ivar_hash(const imeta* meta, iconstptr o) {
     ivar *var = icast(ivar, o);
     return ivarhashcode(var);
 }
@@ -33,7 +33,7 @@ uint64_t ivar_hash(const imeta* meta, const iptr o) {
 /* ivar meta-funcs: compare 
  * todos: may be problems in compare with 64 bit
  */
-int ivar_compare(const imeta* varmeta, const iptr lfs, const iptr rfs) {
+int ivar_compare(const imeta* varmeta, iconstptr lfs, iconstptr rfs) {
     ivar *l = icast(ivar, lfs);
     ivar *r = icast(ivar, rfs);
     const struct imeta* lmeta = iobjgetmeta(l);
@@ -71,7 +71,7 @@ int ivar_compare(const imeta* varmeta, const iptr lfs, const iptr rfs) {
 }
 
 /* ivar meta-funcs: assign */
-void ivar_assign(const struct imeta* meta, iptr dst, const iptr src) {
+void ivar_assign(const struct imeta* meta, iptr dst, iconstptr src) {
     ivar *nvar = icast(ivar, dst);
     ivar *var = icast(ivar, src);
     
@@ -139,7 +139,7 @@ ivar *ivardup(const ivar *var) {
         var->meta->funcs->constructor(var->meta, (iptr)(&var->v));
     }
     /* ivar_assign */
-    ivar_assign(nvar->meta, nvar, (const iptr)var);
+    ivar_assign(nvar->meta, nvar, (iconstptr)var);
     return nvar;
 }
   

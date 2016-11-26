@@ -78,7 +78,7 @@ iref *irefassistretain(iref *ref);
 #define irefthis(type, ref) icast(type, (ref)->_rthis)
     
 /* ref-assign: dst ==> iref**; src ==> iref** */
-void iref_assign(const struct imeta*, iptr dst, const iptr src);
+void iref_assign(const struct imeta*, iptr dst, iconstptr src);
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

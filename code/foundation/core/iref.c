@@ -82,7 +82,7 @@ iref *irefassistretain(iref *ref) {
 }
     
 /* ref-assign: dst ==> iref**; src ==> iref** */
-void iref_assign(const struct imeta* meta, iptr dst, const iptr src) {
+void iref_assign(const struct imeta* meta, iptr dst, iconstptr src) {
     iref **reff = icast(iref*, dst);
     iref **reff_src = icast(iref*, src);
     icheck(dst);

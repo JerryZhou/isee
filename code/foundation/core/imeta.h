@@ -30,12 +30,12 @@ typedef void (*ientryobjconstructor)(const struct imeta *meta, iptr ptr);
 typedef void (*ientryobjdestructor)(const struct imeta *meta, iptr ptr);
     
 /* make all has the hash values: i default point to struct imetafuncs */
-typedef uint64_t (*ientryobjhash)(const struct imeta *meta, const iptr ptr);
+typedef uint64_t (*ientryobjhash)(const struct imeta *meta, iconstptr ptr);
 /* make all can be compare with each other: i default point to struct imetafuncs  */
-typedef int (*ientryobjcompare)(const struct imeta *meta, const iptr lfs, const iptr rfs);
+typedef int (*ientryobjcompare)(const struct imeta *meta, iconstptr lfs, iconstptr rfs);
     
 /* entry for free : i default point to struct iobjcache */
-typedef void (*ientryobjassign)(const struct imeta *meta, iptr dst, const iptr src); /* copy the value */
+typedef void (*ientryobjassign)(const struct imeta *meta, iptr dst, iconstptr src); /* copy the value */
     
 /* all internal meta-config informations */
 typedef struct imetaconfig {

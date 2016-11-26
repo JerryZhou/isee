@@ -34,20 +34,20 @@ extern "C" {
 #define __ideclaremeta(type, xsize, xalign, xflag, xcapacity,  xmptr, xconstructor, xdestructor, xhash, xcompare, xassign) imetaindex(type)
 
 #define __iallmeta    \
-__ideclaremeta(inull,    sizeof(inull),    sizeof(inull),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(int,      sizeof(int),      sizeof(int),     EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(int32_t,  sizeof(int32_t),  sizeof(int32_t), EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(uint32_t, sizeof(uint32_t), sizeof(uint32_t),EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(int64_t,  sizeof(int64_t),  sizeof(int64_t), EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(uint64_t, sizeof(uint64_t), sizeof(uint64_t),EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(ireal,    sizeof(ireal),    sizeof(ireal),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(float,    sizeof(float),    sizeof(float),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(double,   sizeof(double),   sizeof(double),  EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(ibyte,    sizeof(ibyte),    sizeof(ibyte),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(ibool,    sizeof(ibool),    sizeof(ibool),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(iptr,     sizeof(iptr),     sizeof(iptr),    EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(ipod,     sizeof(ipod),     0,               EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
-__ideclaremeta(irune,    sizeof(irune),    sizeof(irune),   EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(inull,    sizeof(inull),    sizeof(inull),   EnumMetaFlag_POD,0, NULL, NULL, NULL, inull_hash, inull_compare, inull_assign),\
+__ideclaremeta(int,      sizeof(int),      sizeof(int),     EnumMetaFlag_POD,0, NULL, NULL, NULL, int_hash, int_compare, int_assign),\
+__ideclaremeta(int32_t,  sizeof(int32_t),  sizeof(int32_t), EnumMetaFlag_POD,0, NULL, NULL, NULL, int32_t_hash, int32_t_compare, int32_t_assign),\
+__ideclaremeta(uint32_t, sizeof(uint32_t), sizeof(uint32_t),EnumMetaFlag_POD,0, NULL, NULL, NULL, uint32_t_hash, uint32_t_compare, uint32_t_assign),\
+__ideclaremeta(int64_t,  sizeof(int64_t),  sizeof(int64_t), EnumMetaFlag_POD,0, NULL, NULL, NULL, int64_t_hash, int64_t_compare, int64_t_assign),\
+__ideclaremeta(uint64_t, sizeof(uint64_t), sizeof(uint64_t),EnumMetaFlag_POD,0, NULL, NULL, NULL, uint64_t_hash, uint64_t_compare, uint64_t_assign),\
+__ideclaremeta(ireal,    sizeof(ireal),    sizeof(ireal),   EnumMetaFlag_POD,0, NULL, NULL, NULL, ireal_hash, ireal_compare, ireal_assign),\
+__ideclaremeta(float,    sizeof(float),    sizeof(float),   EnumMetaFlag_POD,0, NULL, NULL, NULL, float_hash, float_compare, float_assign),\
+__ideclaremeta(double,   sizeof(double),   sizeof(double),  EnumMetaFlag_POD,0, NULL, NULL, NULL, double_hash, double_compare, double_assign),\
+__ideclaremeta(ibyte,    sizeof(ibyte),    sizeof(ibyte),   EnumMetaFlag_POD,0, NULL, NULL, NULL, ibyte_hash, ibyte_compare, ibyte_assign),\
+__ideclaremeta(ibool,    sizeof(ibool),    sizeof(ibool),   EnumMetaFlag_POD,0, NULL, NULL, NULL, ibool_hash, ibool_compare, ibool_assign),\
+__ideclaremeta(iptr,     sizeof(iptr),     sizeof(iptr),    EnumMetaFlag_POD,0, NULL, NULL, NULL, iptr_hash, iptr_compare, iptr_assign),\
+__ideclaremeta(irune,    sizeof(irune),    sizeof(irune),   EnumMetaFlag_POD,0, NULL, NULL, NULL, irune_hash, irune_compare, irune_assign),\
+__ideclaremeta(ipod,     sizeof(ipod),     0,               EnumMetaFlag_POD,0, NULL, NULL, ipod_destructor, ipod_hash, ipod_compare, ipod_assign),\
 __ideclaremeta(imd5,     sizeof(imd5),     0,               EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
 __ideclaremeta(iobj,     sizeof(iobj),     0,               EnumMetaFlag_POD,0, NULL, NULL, NULL, NULL, NULL, NULL),\
 __ideclaremeta(iobjcache,sizeof(iobjcache),0,               EnumMetaFlag_Ref,0, NULL, NULL, NULL, NULL, NULL, NULL),\
