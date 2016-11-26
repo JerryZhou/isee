@@ -314,11 +314,9 @@ typedef struct iarray_searchpair {
 } iarray_searchpair;
 
 static iarray_searchpair _iarraybinaryindexing(iarray *arr, int start, int end, const void *value) {
-    iarray_searchpair pair = {.found = iino, .index=kindex_invalid};
+    iarray_searchpair pair = {.found = iino, .index=0};
     
-    icheckret(arr->len, pair);
     icheckretassert(start >=0 && end <= arr->len, pair);
-    icheckretassert(end > start, pair);
     const imeta *meta = arr->entry->elemeta;
     int low = start;
     int heigh = end-1;
