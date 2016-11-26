@@ -134,35 +134,17 @@ idictentry* _idictentryof(iarray *arr, const ivar *key) {
     return NULL;
 }
 
-/* make a dicit with default-capacity */
-idict *idictmake(size_t capacity) {
-    return idictmakewith(capacity, 0);
-}
-/* make a dicit with default-capacity */
-idict *idictmakewith(size_t capacity, int flag) {
-    idict *d = irefnew(idict);
-    d->keys = _idictentryarraymake_forkey(capacity); /*ivar array */
-    d->values = iarraymakeiref(capacity);           /*iarray array */
-    d->values->len = capacity; /* raw- empty- ref array with capacity */
-    d->flag = flag;
-    
-    d->priv = (idict_private*)icalloc(1, sizeof(idict_private));
-    return d;
-}
-
-/* the number of entry */
-size_t idictsize(const idict *d) {
-    return iheapsize(d->keys);
-}
-
+/* private size protocol */
 size_t _idictcapacity(const idict *d) {
     return iarraycapacity(d->values);
 }
 
+/* private size protocol */
 size_t _idictnewcapacity(const idict *d) {
     return imin(_idictcapacity(d) * 2, INT32_MAX-1);
 }
 
+/* private size protocol */
 size_t _idictnewshrinkcapacity(const idict *d) {
     return imax(_idictcapacity(d) / 2, 1);
 }
@@ -177,12 +159,6 @@ int _idictkeyindex(const idict *d, const ivar *key) {
 iarray *_idictentryarrayof(const idict *d, const ivar *key) {
     int index = _idictkeyindex(d, key);
     return icast(iarray, iarrayof(d->values, irefptr, index));
-}
-
-/* find the value for key, return iiok or iino */
-int idicthas(const idict *d, const ivar *key) {
-    iarray* indexentrys = _idictentryarrayof(d, key);
-    return _idictentryindexof(indexentrys, key) != kindex_invalid;
 }
 
 /* rehashing-indexing a entry */
@@ -256,6 +232,34 @@ static void _idict_auto_rehashing(idict *d) {
     } else if (nvalues > 10 * nkeys && ncollides < nkeys ) {
         _idictshrinkcapacity_rehashing(d);
     }
+}
+
+/* make a dicit with default-capacity */
+idict *idictmake(size_t capacity) {
+    return idictmakewith(capacity, 0);
+}
+
+/* make a dicit with default-capacity */
+idict *idictmakewith(size_t capacity, int flag) {
+    idict *d = irefnew(idict);
+    d->keys = _idictentryarraymake_forkey(capacity); /*ivar array */
+    d->values = iarraymakeiref(capacity);           /*iarray array */
+    d->values->len = capacity; /* raw- empty- ref array with capacity */
+    d->flag = flag;
+    
+    d->priv = (idict_private*)icalloc(1, sizeof(idict_private));
+    return d;
+}
+
+/* the number of entry */
+size_t idictsize(const idict *d) {
+    return iarraylen(d->keys);
+}
+
+/* find the value for key, return iiok or iino */
+int idicthas(const idict *d, const ivar *key) {
+    iarray* indexentrys = _idictentryarrayof(d, key);
+    return _idictentryindexof(indexentrys, key) != kindex_invalid;
 }
 
 /* find the value for key, return iiok or iino [retain-key] [retain-value] */
