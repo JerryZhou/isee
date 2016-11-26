@@ -278,8 +278,13 @@ void idict_destructor(const struct imeta *meta, iptr o) {
     idict *d = icast(idict, o);
     irefdelete(d->keys);
     irefdelete(d->values);
+    
+    ifree(d->priv);
+    d->priv = NULL;
 }
     
 /* the dict hash */
-void idict_hash(const struct imeta *meta, iconstptr o);
+uint64_t idict_hash(const struct imeta *meta, iconstptr o) {
+    return 0;
+}
  

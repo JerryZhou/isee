@@ -87,7 +87,7 @@ const iarray* idicttkeys(const idict *d);
 void idict_destructor(const struct imeta *meta, iptr o);
     
 /* the dict hash */
-void idict_hash(const struct imeta *meta, iconstptr o);
+uint64_t idict_hash(const struct imeta *meta, iconstptr o);
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
