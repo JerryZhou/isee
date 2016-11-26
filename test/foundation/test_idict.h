@@ -92,13 +92,13 @@ SP_CASE(idict, idicttkeys) {
     ivar *value1 = ivarmakereal(37.8);
     
     SP_TRUE(idictsize(d) == 0);
-    SP_TRUE(idictadd(d, key, value) == iiok);
+    SP_TRUE(idictadd(d, key, value) != NULL);
     SP_TRUE(idictsize(d) == 1);
     
     SP_TRUE(idicthas(d, key) == iiok);
     SP_TRUE(idictvalue(d, key) == value);
     
-    SP_TRUE(idictadd(d, key, value1) == iino);
+    SP_TRUE(idictadd(d, key, value1) != NULL);
     SP_TRUE(idictsize(d) == 1);
     SP_TRUE(idicthas(d, key) == iiok);
     SP_TRUE(idictvalue(d, key) == value1);
@@ -113,6 +113,42 @@ SP_CASE(idict, idicttkeys) {
     
     irefdelete(d);
     irefdelete(key);
+    irefdelete(value);
+    irefdelete(value1);
+}
+
+SP_CASE(idict, complexbehavior) {
+    idict *d = idictmake(5);
+    ivar *key = ivarmakeint(8);
+    ivar *value = ivarmakereal(3.78);
+    ivar *value1 = ivarmakereal(37.8);
+    
+    idictentry* entry = idictadd(d, key, value);
+    SP_TRUE(entry->indexkey == 0);
+    SP_TRUE(entry->indexvalue == 0);
+    
+    ivar *key1 = ivarmakeint(1);
+    idictentry* entry1 = idictadd(d, key1, value);
+    SP_TRUE(entry->indexkey == 1);
+    SP_TRUE(entry->indexvalue == 0);
+    SP_TRUE(entry1->indexkey == 0);
+    SP_TRUE(entry1->indexvalue == 0);
+    
+    ivar *key2 = ivarmakeint(3);
+    idictentry* entry2 = idictadd(d, key2, value);
+    SP_TRUE(entry->indexkey == 2); /*8*/
+    SP_TRUE(entry2->indexkey == 1); /*3*/
+    SP_TRUE(entry1->indexkey == 0); /*1*/
+    
+    SP_TRUE(entry->indexvalue == 1); /*8%5---3*/
+    SP_TRUE(entry2->indexvalue == 0); /*3%5---3*/
+    
+    SP_TRUE(entry1->indexvalue == 0);  /*1%5---1*/
+    
+    irefdelete(d);
+    irefdelete(key);
+    irefdelete(key1);
+    irefdelete(key2);
     irefdelete(value);
     irefdelete(value1);
 }
