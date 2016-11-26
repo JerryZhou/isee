@@ -21,6 +21,12 @@ typedef struct idictentry {
     ivar *key;
     ivar *value;
 } idictentry;
+    
+/*
+ * todos: auto-growsize
+ * todos: refract the key-index-change-event
+ * todos: add-hash-statics-for
+ * todos: add-sorted-feature */
 
 /* make a entry with key */
 idictentry* idictentrymake(ivar *key);
