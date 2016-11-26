@@ -246,10 +246,11 @@ uint64_t ipod_hash(const struct imeta *meta, iconstptr o) {
 int ipod_compare(const struct imeta *meta, iconstptr lfs, iconstptr rfs) {
     ipod *l = icast(ipod, lfs);
     ipod *r = icast(ipod, rfs);
-    if (l->size != r->size) {
-        return l->size - r->size;
+    int n = memcmp(l->ptr, r->ptr, imin(l->size, r->size)); 
+    if (n) {
+        return n;
     }
-    return memcmp(l->ptr, r->ptr, imin(l->size, r->size));
+    return l->size - r->size;
 }
 /* ipod: meta-assign */
 void ipod_assign(const struct imeta *meta, iptr dst, iconstptr src) {
