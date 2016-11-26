@@ -135,11 +135,16 @@ idictentry* _idictentryof(iarray *arr, const ivar *key) {
 }
 
 /* make a dicit with default-capacity */
-idict *idictmake(int capacity) {
+idict *idictmake(size_t capacity) {
+    return idictmakewith(capacity, 0);
+}
+/* make a dicit with default-capacity */
+idict *idictmakewith(size_t capacity, int flag) {
     idict *d = irefnew(idict);
     d->keys = _idictentryarraymake_forkey(capacity); /*ivar array */
     d->values = iarraymakeiref(capacity);           /*iarray array */
     d->values->len = capacity; /* raw- empty- ref array with capacity */
+    d->flag = flag;
     
     d->priv = (idict_private*)icalloc(1, sizeof(idict_private));
     return d;
@@ -155,20 +160,11 @@ size_t _idictcapacity(const idict *d) {
 }
 
 size_t _idictnewcapacity(const idict *d) {
-    return _idictcapacity(d) * 2;
+    return imin(_idictcapacity(d) * 2, INT32_MAX-1);
 }
 
-void _idictgrowcapacity(idict *d) {
-    /* make new one with new-capaicty */
-    iarray *nvalues = iarraymakeiref(_idictnewcapacity(d));
-    /* copy old data from the old arrays */
-    iarrayappend(nvalues, iarraybuffer(d->values), _idictcapacity(d));
-    /* raw-set the size to new-capacity */
-    nvalues->len = nvalues->capacity;
-    /* attach the nvalues */
-    iassign(d->values, nvalues);
-    /* release the reference */
-    irefdelete(nvalues);
+size_t _idictnewshrinkcapacity(const idict *d) {
+    return imax(_idictcapacity(d) / 2, 1);
 }
 
 /* raw-index in dict-value-array */
@@ -189,10 +185,88 @@ int idicthas(const idict *d, const ivar *key) {
     return _idictentryindexof(indexentrys, key) != kindex_invalid;
 }
 
+/* rehashing-indexing a entry */
+static void _idictrehashingentry(idict *d, idictentry* entry) {
+    iarray* indexentrys = _idictentryarrayof(d, entry->key);
+    
+    /* deal with entry-array */
+    if (indexentrys == NULL) {
+        /* make indexentry array */
+        indexentrys = _idictentryarraymake_forvalue(8);
+        iarrayset(d->values, _idictkeyindex(d, entry->key), &indexentrys);
+        /* release the reference */
+        irelease(indexentrys);
+    }
+    
+    /*add to values */
+    _idictentryadd(indexentrys, entry);
+    /* collides with the keys */
+    if (iarraylen(indexentrys) > 1) {
+        d->priv->collides++;
+    }
+}
+
+/* grow the capacity */
+static void _idictgrowcapacity_rehashing(idict *d) {
+    /*clear the collides */
+    d->priv->collides = 0;
+    /* make new one with new-capaicty */
+    iarray *nvalues = iarraymakeiref(_idictnewcapacity(d));
+    /* raw-set the size to new-capacity */
+    nvalues->len = nvalues->capacity;
+    /* attach the nvalues */
+    iassign(d->values, nvalues);
+    /* release the reference */
+    irefdelete(nvalues);
+    
+    /* rehashing all the entrys */
+    irangearray(d->keys, idictentry*,
+                _idictrehashingentry(d, __value);
+                );
+}
+
+/* shrink the capacity */
+static void _idictshrinkcapacity_rehashing(idict *d) {
+    /*clear the collides */
+    d->priv->collides = 0;
+    /* make new one with new-capaicty */
+    iarray *nvalues = iarraymakeiref(_idictnewshrinkcapacity(d));
+    /* raw-set the size to new-capacity */
+    nvalues->len = nvalues->capacity;
+    /* attach the nvalues */
+    iassign(d->values, nvalues);
+    /* release the reference */
+    irefdelete(nvalues);
+    
+    /* rehashing all the entrys */
+    irangearray(d->keys, idictentry*,
+                _idictrehashingentry(d, __value);
+                );
+}
+
+/* will auto-rehashing the dict by collides */
+static void _idict_auto_rehashing(idict *d) {
+    size_t nkeys = iarraylen(d->keys);
+    size_t nvalues = iarraylen(d->values);
+    size_t ncollides = d->priv->collides;
+    if (nkeys > nvalues && nkeys - nvalues > ncollides) {
+        _idictgrowcapacity_rehashing(d);
+    } else if (nkeys < nvalues && ncollides/2 > nkeys) {
+        _idictgrowcapacity_rehashing(d);
+    } else if (nvalues > 10 * nkeys && ncollides < nkeys ) {
+        _idictshrinkcapacity_rehashing(d);
+    }
+}
+
 /* find the value for key, return iiok or iino [retain-key] [retain-value] */
 idictentry* idictadd(idict *d, const ivar *key, ivar *value) {
     iarray* indexentrys = _idictentryarrayof(d, key);
     idictentry *entry = NULL;
+    
+    /* auto-rehashing */
+    if (iflag_is(d->flag, EnumDictFlag_AutoRehashing)) {
+        _idict_auto_rehashing(d);
+    }
     
     /* deal with entry-array */
     if (indexentrys == NULL) {
@@ -217,6 +291,11 @@ idictentry* idictadd(idict *d, const ivar *key, ivar *value) {
         _idictentryadd(d->keys, entry);
         /* free the tmp entry but not clear, we will return it as holded by array */
         irelease(entry);
+        
+        /* collides with the keys */
+        if (iarraylen(indexentrys) > 1) {
+            d->priv->collides++;
+        }
     } else {
         /* replace the entry with key */
         idictentysetvalue(entry, value);
@@ -228,16 +307,27 @@ idictentry* idictadd(idict *d, const ivar *key, ivar *value) {
 /* remove the value with key */
 int idictremove(idict *d, const ivar *key) {
     iarray* indexentrys = _idictentryarrayof(d, key);
+    idictentry *entry = NULL;
     if (indexentrys && iarraylen(indexentrys)) {
-        idictentry *entry = _idictentryof(indexentrys, key);
+        entry = _idictentryof(indexentrys, key);
         if (entry) {
             /* remove value */
             iarrayremove(indexentrys, entry->indexvalue);
             /* remove key */
             iarrayremove(d->keys, entry->indexkey);
+            
+            /* minus the collides */
+            if (iarraylen(indexentrys) > 0) {
+                d->priv->collides--;
+            }
         }
     }
-    return iino;
+    
+    /* auto-rehashing */
+    if (iflag_is(d->flag, EnumDictFlag_AutoRehashing)) {
+        _idict_auto_rehashing(d);
+    }
+    return entry != NULL;
 }
 
 /* fech the value with key, if exits [no-retain-ret] */

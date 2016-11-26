@@ -57,6 +57,11 @@ void idictentry_assign(const struct imeta *meta, iptr dst, iconstptr src);
 /* the same as compare on key */
 int idictentry_compare(const struct imeta *meta, iconstptr lfs, iconstptr rfs);
 
+/* idict control-flag */
+typedef enum EnumDictFlag {
+    EnumDictFlag_AutoRehashing = 1, /* auto rehashing the dict */
+} EnumDictFlag;
+    
 /* the ivar hash-map */
 typedef struct idict {
     irefdeclare;
@@ -64,11 +69,16 @@ typedef struct idict {
     iarray* keys;      /* iarray<idictentry> */
     iarray* values;   /* iarray<iarray<idictentry> > */
     
+    int flag;
+    
     struct idict_private *priv;
 } idict;
 
 /* make a dicit with default-capacity */
-idict *idictmake(int capacity);
+idict *idictmake(size_t capacity);
+    
+/* make a dicit with default-capacity */
+idict *idictmakewith(size_t capacity, int flag);
     
 /* the number of entry */
 size_t idictsize(const idict *d);
