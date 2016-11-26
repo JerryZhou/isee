@@ -152,6 +152,12 @@ size_t iarrayexpandcapacity(iarray *arr, size_t capacity);
 
 /* sort array with cmp in entry */
 void iarraysort(iarray *arr);
+    
+/* binary search in array [start, end) */
+int iarraybinarysearch(iarray *arr, int start, int end, const void* value);
+    
+/* binary search insert into array [start, end) */
+int iarraybinaryinsert(iarray *arr, int start, int end, const void* value);
 
 /* for each */
 void iarrayforeach(const iarray *arr, iarray_entry_visitor visitor);
