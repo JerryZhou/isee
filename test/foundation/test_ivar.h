@@ -18,7 +18,7 @@ SP_CASE(ivar, ivartype) {
     SP_EQUAL(ivartype(var), imetaindex(inull));
     irefdelete(nvar);
 }
-
+/*
 SP_CASE(ivar, ivarmeta) {
     ivar *var = ivarmakeint(0);
     SP_EQUAL(ivarmeta(var), imetaof(int));
@@ -128,6 +128,7 @@ SP_CASE(ivar, ivarhashcode) {
         irefdelete(nvar);
     }
 }
+*/
 
 SP_CASE(ivar, end) {
     imemoryglobalclear();

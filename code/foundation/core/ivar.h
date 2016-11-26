@@ -24,9 +24,10 @@ typedef struct ivar {
         int64_t i64;
         uint64_t u64;
         ireal real;
-        iref *ref;
         void *ptr;
         ipod pod;
+        
+        iref *ref;
     } v ; 
     const struct imeta *meta; /* type-meta */
 } ivar;
@@ -44,6 +45,9 @@ ibool ivaris(const ivar *var, const struct imeta *meta);
     
 /* ivar copy */
 ivar *ivardup(const ivar *var);
+
+/* make a value */
+ivar* ivarmake(const struct imeta* meta, iconstptr value);
   
 /* ivar hash code */
 uint64_t ivarhashcode(const ivar *var);
@@ -53,9 +57,9 @@ ivar *ivarmakeint(int i);
 ivar *ivarmakei64(int64_t i64);
 ivar *ivarmakeu64(uint64_t u64);
 ivar *ivarmakereal(ireal real);
-ivar *ivarmakeptr(iptr *ptr);
+ivar *ivarmakeptr(iptr ptr);
 ivar *ivarmakepod(ipod pod);
-ivar *ivarmakeref(iref *ref);
+ivar *ivarmakeref(irefptr ref);
     
 /* ivar destructor */
 void ivar_destructor(const struct imeta*, iptr o);
