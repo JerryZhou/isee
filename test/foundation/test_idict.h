@@ -117,7 +117,6 @@ SP_CASE(idict, idicttkeys) {
     irefdelete(value1);
 }
 
-
 SP_CASE(idict, end) {
     imemoryglobalclear();
     
