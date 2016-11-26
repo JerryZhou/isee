@@ -112,8 +112,14 @@ static const iarrayentry _arr_entry_int = {
     _iarray_entry_cmp_int,
 };
 
+/* link meta */
+#define _iarr_meta_type_link(entry, type) \
+    do { if (!(entry)->elemeta) { ((iarrayentry*)(entry))->elemeta = imetaof(type); \
+    } } while(0)
+
 /* array-int */
 iarray* iarraymakeint(size_t capacity) {
+    _iarr_meta_type_link(&_arr_entry_int, int);
     return iarraymake(capacity, &_arr_entry_int);
 }
 
@@ -138,6 +144,7 @@ static const iarrayentry _arr_entry_ireal = {
 
 /* array-ireal */
 iarray* iarraymakeireal(size_t capacity) {
+    _iarr_meta_type_link(&_arr_entry_ireal, ireal);
     return iarraymake(capacity, &_arr_entry_ireal);
 }
 
@@ -162,6 +169,7 @@ static const iarrayentry _arr_entry_int64 = {
 
 /* array-int64 */
 iarray* iarraymakeint64(size_t capacity) {
+    _iarr_meta_type_link(&_arr_entry_int64, int64_t);
     return iarraymake(capacity, &_arr_entry_int64);
 }
 
@@ -186,6 +194,7 @@ static const iarrayentry _arr_entry_uint64 = {
 
 /* array-uint64 */
 iarray* iarraymakeuint64(size_t capacity) {
+    _iarr_meta_type_link(&_arr_entry_uint64, uint64_t);
     return iarraymake(capacity, &_arr_entry_uint64);
 }
 
@@ -210,6 +219,7 @@ static const iarrayentry _arr_entry_char = {
 
 /* array-char */
 iarray* iarraymakechar(size_t capacity) {
+    _iarr_meta_type_link(&_arr_entry_char, ibyte);
     return iarraymake(capacity, &_arr_entry_char);
 }
 
