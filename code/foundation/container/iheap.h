@@ -37,7 +37,8 @@ void iheapdelete(iheap *heap, int index);
 /* find the index in heap */
 int iheapindexof(iheap *heap, const void *value);
 
-/* heap-sort: [2, 3, 0, 1] ==> [0, 1, 2, 3] */
+/* heap-sort: [2, 3, 0, 1] ==> [0, 1, 2, 3] 
+ * heap-sort in range [start, end] */
 void iarraysortheap(iarray *arr, int start, int end);
     
 /* Ends C function definitions when using C++ */
