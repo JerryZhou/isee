@@ -80,9 +80,37 @@ iref *irefassistretain(iref *ref) {
     iretain(ref);
     return ref;
 }
+   
+/* the iref-constructor */
+void irefptr_destructor(const struct imeta* meta, iptr o) {
+    irefptr *ptr = icast(irefptr, o);
+    irefdelete(ptr[0]);
+}
+    
+/* the iref-hash */
+uint64_t irefptr_hash(const struct imeta* meta, iconstptr o) {
+    iref *ref = icast(irefptr , o)[0];
+    const imeta* refmeta = iobjgetmeta(ref);
+    icheckret(refmeta && ref, 0);
+    if (refmeta->funcs && refmeta->funcs->hash) {
+        return refmeta->funcs->hash(refmeta, ref);
+    }
+    return (uint64_t)ref;
+}
+
+/* the iref-compare */
+int irefptr_compare(const struct imeta* meta, iconstptr lfs, iconstptr rfs) {
+    iref *l = icast(irefptr, lfs)[0];
+    iref *r = icast(irefptr, rfs)[0];
+    const imeta* refmeta = iobjgetmeta(l);
+    if (refmeta && refmeta->funcs && refmeta->funcs->compare) {
+        return refmeta->funcs->compare(refmeta, l, r);
+    }
+    return l - r;
+}
     
 /* ref-assign: dst ==> iref**; src ==> iref** */
-void iref_assign(const struct imeta* meta, iptr dst, iconstptr src) {
+void irefptr_assign(const struct imeta* meta, iptr dst, iconstptr src) {
     iref **reff = icast(iref*, dst);
     iref **reff_src = icast(iref*, src);
     icheck(dst);

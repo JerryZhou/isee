@@ -76,9 +76,21 @@ iref *irefassistretain(iref *ref);
     
 /* get the private pointer */
 #define irefthis(type, ref) icast(type, (ref)->_rthis)
+
+/* the ref type */
+typedef iref* irefptr;
+  
+/* the iref-constructor */
+void irefptr_destructor(const struct imeta*, iptr o);
+    
+/* the iref-hash */
+uint64_t irefptr_hash(const struct imeta*, iconstptr o);
+
+/* the iref-compare */
+int irefptr_compare(const struct imeta*, iconstptr lfs, iconstptr rfs);
     
 /* ref-assign: dst ==> iref**; src ==> iref** */
-void iref_assign(const struct imeta*, iptr dst, iconstptr src);
+void irefptr_assign(const struct imeta*, iptr dst, iconstptr src);
     
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

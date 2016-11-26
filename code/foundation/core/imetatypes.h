@@ -53,6 +53,7 @@ __ideclaremeta(iobj,     sizeof(iobj),     0,               EnumMetaFlag_POD,0, 
 __ideclaremeta(iobjcache,sizeof(iobjcache),0,               EnumMetaFlag_Ref,0, NULL, NULL, NULL, NULL, NULL, NULL),\
 __ideclaremeta(iref,     sizeof(iref),     0,               EnumMetaFlag_Ref,0, NULL, NULL, NULL, NULL, NULL, NULL),\
 __ideclaremeta(iwref,    sizeof(iwref),    0,               EnumMetaFlag_Ref,0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(irefptr,  sizeof(irefptr),     0,         EnumMetaFlag_Ref,0, NULL, NULL, irefptr_destructor, irefptr_hash, irefptr_compare, irefptr_assign),\
 __ideclaremeta(ivar,     sizeof(ivar),     0,               EnumMetaFlag_Ref,0, NULL, NULL, ivar_destructor, ivar_hash, ivar_compare, ivar_assign),\
 __ideclaremeta(irefcache,sizeof(irefcache),0,               EnumMetaFlag_Ref,0, NULL, NULL, irefcache_destructor, NULL, NULL, NULL),\
 __ideclaremeta(irefjoint,sizeof(irefjoint),0,               EnumMetaFlag_Ref,0, NULL, NULL, irefjoint_destructor, NULL, NULL, NULL),\
