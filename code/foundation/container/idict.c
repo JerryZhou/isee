@@ -2,10 +2,11 @@
 #include "foundation/util/iarraytypes.h"
 #include "foundation/memory/imemory.h"
 
-
 /* make a entry with key */
 idictentry* idictentrymake(ivar *key) {
-    idictentry *entry = iobjmalloc(idictentry);
+    idictentry *entry = irefnew(idictentry);
+    entry->indexkey = kindex_invalid;
+    entry->indexvalue = kindex_invalid;
     iassign(entry->key, key);
     return entry;
 }
@@ -58,114 +59,82 @@ typedef struct idict_private {
     size_t collides;
 } idict_private;
 
-/*************************************************************/
-/* iarray - idictentry                                             */
-/*************************************************************/
-
-/* array-idictentry assign */
-static void _iarray_entry_assign_idictentry(struct iarray *arr,
-                                      int i, const void *value, int nums) {
-    idictentry *arrs = (idictentry *)arr->buffer;
-    idictentry *dvalues = (idictentry *)value;
-    int j = 0;
-    
-    /* for nums */
-    while (j < nums) {
-        /* realloc not set zero to pending memory */
-        if (i >= arr->len) {
-            arrs[i].key = NULL;
-            arrs[i].value = NULL;
-        }
-        
-        idictentry_assign(imetaof(idictentry), arrs + i, dvalues + j);
-        
-        ++j;
-        ++i;
-    }
+/* index tracing for key-array */
+void _irefarray_index_change_forkey(iptr x, iarray *arr, iref *ref, int index) {
+    idictentry* entry = icast(idictentry, ref);
+    entry->indexkey = index;
 }
 
-/* swap the idictentry */
-static void _iarray_entry_swap_idictentry(struct iarray *arr,
-                                    int i, int j) {
-    idictentry tmp = {.key = NULL, .value=NULL};
-    idictentry *arrs = (idictentry *)arr->buffer;
-    
-    if (j == kindex_invalid) {
-        /* arr_int[i] = 0;
-         * may call assign */
-        idictentry_assign(imetaof(idictentry), arrs+i, &tmp);
-    } else if (i == kindex_invalid) {
-        /* arr_int[j] = 0;
-         * may call assign */
-        idictentry_assign(imetaof(idictentry), arrs+j, &tmp);
-    } else {
-        tmp = arrs[i];
-        arrs[i] = arrs[j];
-        arrs[j] = tmp;
-    }
-}
-
-/* compare idictentry */
-static int _iarray_entry_cmp_idictentry(struct iarray *arr,
-                                  int i, int j) {
-    idictentry *arrs = (idictentry *)arr->buffer;
-    /* the meta compare-funcs */
-    const imeta *meta = imetaof(idictentry);
-    return idictentry_compare(meta, arrs +i, arrs + j);
-}
-
-/* idictentry array-entry */
-static iarrayentry _idictentry_arrayentry = {
-    .flag = 0,
-    .size = sizeof(idictentry),
-    .cmp = _iarray_entry_cmp_idictentry,
-    .swap = _iarray_entry_swap_idictentry,
-    .assign = _iarray_entry_assign_idictentry
+/* index tracing for key-array */
+static irefarrayentry _idictenty_array_forkey = {
+    .indexchange = _irefarray_index_change_forkey
 };
 
-/* make a capacity of idictentry array */
-iarray *_idictentyarraymake(size_t capacity) {
-    return iarraymake(capacity, &_idictentry_arrayentry);
+/* make a capacity of idictentry array for keys */
+iarray *_idictentryarraymake_forkey(size_t capacity) {
+    return iarraymakeirefwithentry(capacity, &_idictenty_array_forkey);
+}
+
+/* index tracing for key-array */
+void _irefarray_index_change_forvalue(iptr x, iarray *arr, iref *ref, int index) {
+    idictentry* entry = icast(idictentry, ref);
+    entry->indexvalue = index;
+}
+
+/* index tracing for key-array */
+static irefarrayentry _idictenty_array_forvalue = {
+    .indexchange =_irefarray_index_change_forvalue
+};
+
+/* make a capacity of idictentry array for values */
+iarray *_idictentryarraymake_forvalue(size_t capacity) {
+    return iarraymakeirefwithentry(capacity, &_idictenty_array_forvalue);
 }
 
 /* find in idictentry-array for key */
 int _idictentryindexof(iarray *arr, const ivar *key) {
     icheckret(arr, kindex_invalid);
     icheckret(key, kindex_invalid);
-    irangearray(arr, idictentry,
-                if (ivarcompare(__value.key, key) == 0) {
-                    return __key;
-                }
-                );
-    return kindex_invalid;
+    /* temp val */
+    idictentry *entry = irefnew(idictentry);
+    iassign(entry->key, (ivar*)key);
+    /* search and remove */
+    int index = iarraybinarysearch(arr, 0, iarraylen(arr), &entry);
+    /* free temp */
+    irefdelete(entry);
+    return index;
 }
 
 /* remove the right-key in idictentry-array */
-int _dictentryremove(iarray *arr, const ivar *key) {
-    irangearray(arr, idictentry,
-                if (ivarcompare(__value.key, key) == 0) {
-                    iarrayremove(arr, __key);
-                    return __key;
-                }
-                );
-    return kindex_invalid;
+int _idictentryremove(iarray *arr, const ivar *key) {
+    /* search and remove */
+    int index = _idictentryindexof(arr, key);
+    if (index != kindex_invalid) {
+        iarrayremove(arr, index);
+    }
+    return index;
+}
+
+/* add the entry to idictentry-array */
+void _idictentryadd(iarray *arr, idictentry *entry) {
+    iarraybinaryinsert(arr, 0, iarraylen(arr), &entry);
 }
 
 /* get the idictentry of value in arr */
 idictentry* _idictentryof(iarray *arr, const ivar *key) {
-    irangearray(arr, idictentry,
-                if (ivarcompare(__value.key, key) == 0) {
-                    return &iarrayof(arr, idictentry, __key);
-                }
-                );
+    /* search and remove */
+    int index = _idictentryindexof(arr, key);
+    if (index != kindex_invalid) {
+        return iarrayof(arr, idictentry*, index);
+    }
     return NULL;
 }
 
 /* make a dicit with default-capacity */
 idict *idictmake(int capacity) {
     idict *d = irefnew(idict);
-    d->keys = _idictentyarraymake(capacity); /*ivar array */
-    d->values = iarraymakeiref(capacity); /*iarray array */
+    d->keys = _idictentryarraymake_forkey(capacity); /*ivar array */
+    d->values = iarraymakeiref(capacity);           /*iarray array */
     d->values->len = capacity; /* raw- empty- ref array with capacity */
     
     d->priv = (idict_private*)icalloc(1, sizeof(idict_private));
@@ -224,7 +193,7 @@ int idictadd(idict *d, const ivar *key, ivar *value) {
     /* deal with entry-array */
     if (indexentrys == NULL) {
         /* make indexentry array */
-        indexentrys = _idictentyarraymake(8);
+        indexentrys = _idictentryarraymake_forvalue(8);
         iarrayset(d->values, _idictkeyindex(d, key), &indexentrys);
         /* release the reference */
         irelease(indexentrys);
@@ -236,15 +205,17 @@ int idictadd(idict *d, const ivar *key, ivar *value) {
     /* deal with entry */
     if (!entry) {
         entry = idictentrymake((ivar*)key);
+        /*set value for key */
         idictentysetvalue(entry, value);
         /*add to values */
-        iarrayadd(indexentrys, entry);
+        _idictentryadd(indexentrys, entry);
         /*add keys */
-        iarrayadd(d->keys, entry);
+        _idictentryadd(d->keys, entry);
         /* free the tmp entry */
-        iobjfree(entry);
+        irefdelete(entry);
         return iiok;
     } else {
+        /* replace the entry with key */
         idictentysetvalue(entry, value);
         return iino;
     }
@@ -254,15 +225,13 @@ int idictadd(idict *d, const ivar *key, ivar *value) {
 int idictremove(idict *d, const ivar *key) {
     iarray* indexentrys = _idictentryarrayof(d, key);
     if (indexentrys && iarraylen(indexentrys)) {
-        irangearray(indexentrys, idictentry,
-                    if (ivarcompare(__value.key, key) == 0) {
-                        /* remove value */
-                        iarrayremove(indexentrys, __key);
-                        /* remove key */
-                        _dictentryremove(d->keys, __value.key);
-                        return iiok;
-                    }
-                    );
+        idictentry *entry = _idictentryof(indexentrys, key);
+        if (entry) {
+            /* remove value */
+            iarrayremove(indexentrys, entry->indexvalue);
+            /* remove key */
+            iarrayremove(d->keys, entry->indexkey);
+        }
     }
     return iino;
 }
@@ -271,11 +240,10 @@ int idictremove(idict *d, const ivar *key) {
 ivar* idictvalue(const idict *d, const ivar *key) {
     iarray* indexentrys = _idictentryarrayof(d, key);
     if (indexentrys && iarraylen(indexentrys)) {
-        irangearray(indexentrys, idictentry,
-                    if (ivarcompare(__value.key, key) == 0) {
-                        return __value.value;
-                    }
-                    );
+        idictentry *entry = _idictentryof(indexentrys, key);
+        if (entry) {
+            return icast(ivar, entry->value);
+        }
     }
     return NULL;
 }

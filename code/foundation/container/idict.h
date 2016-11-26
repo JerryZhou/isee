@@ -18,8 +18,13 @@ struct idict_private;
    
 /* the idict entry */
 typedef struct idictentry {
+    irefdeclare;
+    
     ivar *key;
     ivar *value;
+    
+    volatile int indexkey;
+    volatile int indexvalue;
 } idictentry;
     
 /*
