@@ -1,5 +1,6 @@
 #include "foundation/core/ivar.h"
 #include "foundation/util/istring.h"
+#include "foundation/core/irawtype.h"
 
 SP_SUIT(ivar);
 
@@ -18,7 +19,7 @@ SP_CASE(ivar, ivartype) {
     SP_EQUAL(ivartype(var), imetaindex(inull));
     irefdelete(nvar);
 }
-/*
+
 SP_CASE(ivar, ivarmeta) {
     ivar *var = ivarmakeint(0);
     SP_EQUAL(ivarmeta(var), imetaof(int));
@@ -59,27 +60,40 @@ SP_CASE(ivar, ivarissimple) {
     }
     {
         ivar *var = ivarmakeref(NULL);
-        SP_TRUE(ivarissimple(var));
+        SP_TRUE(!ivarissimple(var));
         irefdelete(var);
     }
     {
         iref *ref = irefnew(iref);
         ivar *var = ivarmakeref(ref);
         SP_TRUE(!ivarissimple(var));
-        irefdelete(var);
         irefdelete(ref);
+        
+        irefdelete(var);
     }
     {
+        const char *s = "abcdefg01234567890";
         ipod p;
-        p.ptr = p.stbuf;
+        ipod_init(&p, s, strlen(s), 0);
         
         ivar *var = ivarmakepod(p);
         SP_TRUE(!ivarissimple(var));
+        SP_TRUE(var->v.pod.size == p.size);
+        SP_TRUE(var->v.pod.align == p.align);
+        SP_TRUE(ipod_compare(imetaof(ipod), &var->v.pod, &p) == 0);
+        
+        const char* ss = (const char*)var->v.pod.ptr;
+        SP_TRUE(ss[0] == s[0]);
+        SP_TRUE(ss[1] == s[1]);
+        SP_TRUE(ss[var->v.pod.size-1] == s[var->v.pod.size-1]);
+        
         irefdelete(var);
+        
+        ipod_destructor(imetaof(ipod), &p);
     }
-    
 }
 
+/*
 SP_CASE(ivar, ivardup) {
     {
         iref *ref = irefnew(iref);
