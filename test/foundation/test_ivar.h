@@ -142,6 +142,31 @@ SP_CASE(ivar, ivarhashcode) {
     }
 }
 
+SP_CASE(ivar, ivarcompare) {
+    {
+        ivar *var = ivarmakeint(10);
+        ivar *nvar = ivarmakeint(5);
+        
+        SP_TRUE(ivarcompare(var, nvar) == 5);
+        
+        irefdelete(var);
+        irefdelete(nvar);
+    }
+    {
+        istring *s0 = istringmake("abc");
+        istring *s1 = istringmake("abb");
+        ivar *var = ivarmakeref(irefcast(s0));
+        ivar *nvar = ivarmakeref(irefcast(s1));
+        
+        SP_TRUE(ivarcompare(var, nvar) == 1);
+        
+        irefdelete(s0);
+        irefdelete(s1);
+        irefdelete(var);
+        irefdelete(nvar);
+    }
+}
+
 SP_CASE(ivar, end) {
     imemoryglobalclear();
     
