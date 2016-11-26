@@ -93,7 +93,6 @@ SP_CASE(ivar, ivarissimple) {
     }
 }
 
-/*
 SP_CASE(ivar, ivardup) {
     {
         iref *ref = irefnew(iref);
@@ -142,7 +141,6 @@ SP_CASE(ivar, ivarhashcode) {
         irefdelete(nvar);
     }
 }
-*/
 
 SP_CASE(ivar, end) {
     imemoryglobalclear();
