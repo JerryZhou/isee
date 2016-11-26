@@ -341,6 +341,71 @@ SP_CASE(iarray, iarrayforeach) {
     irelease(arr);
 }
 
+SP_CASE(iarray, iarraybinarysearch) {
+    iarray* arr = iarraymakeint(0);
+    int values[] = {0, 3, 1, 7, 5, 6, 2, 4, 9};
+    iarrayappend(arr, values, 9);
+    iarraysort(arr);
+    
+    int v = 4;
+    int index = iarraybinarysearch(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == 4);
+    v = 3;
+    index = iarraybinarysearch(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == 3);
+    v = 0;
+    index = iarraybinarysearch(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == 0);
+    v = -1;
+    index = iarraybinarysearch(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == kindex_invalid);
+    v = 9;
+    index = iarraybinarysearch(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == 8);
+    v = 8;
+    index = iarraybinarysearch(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == kindex_invalid);
+    v = 10;
+    index = iarraybinarysearch(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == kindex_invalid);
+    
+    irefdelete(arr);
+}
+
+SP_CASE(iarray, iarraybinaryinsert) {
+    iarray* arr = iarraymakeint(0);
+    int values[] = {0, 3, 1, 1, 7, 3};
+    iarrayappend(arr, values, 6);
+    iarraysort(arr);
+    SP_TRUE(iarrayof(arr, int, 0) == 0);
+    SP_TRUE(iarrayof(arr, int, 1) == 1);
+    SP_TRUE(iarrayof(arr, int, 2) == 1);
+    SP_TRUE(iarrayof(arr, int, 3) == 3);
+    SP_TRUE(iarrayof(arr, int, 4) == 3);
+    SP_TRUE(iarrayof(arr, int, 5) == 7);
+    
+    int v = 1;
+    int index = iarraybinaryindexing(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == 3);
+    v = 2;
+    index = iarraybinaryindexing(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == 3);
+    v = 3;
+    index = iarraybinaryindexing(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == 5);
+    v = 4;
+    index = iarraybinaryindexing(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == 5);
+    v = 8;
+    index = iarraybinaryindexing(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == 5);
+    v = -2;
+    index = iarraybinaryindexing(arr, 0, iarraylen(arr), &v);
+    SP_TRUE(index == 0);
+    
+    irefdelete(arr);
+}
+
 SP_CASE(iarray, end) {
     imemoryglobalclear();
     
