@@ -112,6 +112,15 @@ uint64_t ivarhashcode(const ivar *var) {
     return ivar_hash(var->meta, var);
 }
 
+/* ivar compare should be the same value-type */
+int ivarcompare(const ivar *var, const ivar *nvar) {
+    const imeta* valuemeta = nvar ? nvar->meta : (var ? var->meta : NULL);
+    if (valuemeta->funcs && valuemeta->funcs->compare) {
+        return valuemeta->funcs->compare(valuemeta, &var->v, &nvar->v);
+    }
+    return var - nvar;
+}
+
 /* ivar make functions: int  */
 ivar *ivarmakeint(int i) {
     return ivarmake(imetaof(int), &i);

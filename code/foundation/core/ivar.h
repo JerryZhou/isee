@@ -52,6 +52,9 @@ ivar* ivarmake(const struct imeta* meta, iconstptr value);
 /* ivar hash code */
 uint64_t ivarhashcode(const ivar *var);
 
+/* ivar compare should be the same value-type */
+int ivarcompare(const ivar *var, const ivar *nvar);
+
 /* ivar make functions  */
 ivar *ivarmakeint(int i);
 ivar *ivarmakei64(int64_t i64);
