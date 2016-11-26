@@ -5,7 +5,7 @@
 
 /* make a entry with key */
 idictentry* idictentrymake(ivar *key) {
-    idictentry *entry = irefnew(idictentry);
+    idictentry *entry = iobjmalloc(idictentry);
     iassign(entry->key, key);
     return entry;
 }
@@ -154,7 +154,7 @@ int _dictentryremove(iarray *arr, const ivar *key) {
 /* get the idictentry of value in arr */
 idictentry* _idictentryof(iarray *arr, const ivar *key) {
     irangearray(arr, idictentry,
-                if (ivarcompare(__value.key, key)) {
+                if (ivarcompare(__value.key, key) == 0) {
                     return &iarrayof(arr, idictentry, __key);
                 }
                 );
@@ -221,21 +221,33 @@ int idictadd(idict *d, const ivar *key, ivar *value) {
     iarray* indexentrys = _idictentryarrayof(d, key);
     idictentry *entry = NULL;
     
+    /* deal with entry-array */
     if (indexentrys == NULL) {
+        /* make indexentry array */
         indexentrys = _idictentyarraymake(8);
         iarrayset(d->values, _idictkeyindex(d, key), &indexentrys);
+        /* release the reference */
+        irelease(indexentrys);
     } else {
+        /* get the */
         entry = _idictentryof(indexentrys, key);
     }
+    
+    /* deal with entry */
     if (!entry) {
         entry = idictentrymake((ivar*)key);
+        idictentysetvalue(entry, value);
         /*add to values */
         iarrayadd(indexentrys, entry);
         /*add keys */
         iarrayadd(d->keys, entry);
+        /* free the tmp entry */
+        iobjfree(entry);
+        return iiok;
+    } else {
+        idictentysetvalue(entry, value);
+        return iino;
     }
-    idictentysetvalue(entry, value);
-    return iiok;
 }
 
 /* remove the value with key */
@@ -247,7 +259,7 @@ int idictremove(idict *d, const ivar *key) {
                         /* remove value */
                         iarrayremove(indexentrys, __key);
                         /* remove key */
-                        _dictentryremove(d->keys, __key);
+                        _dictentryremove(d->keys, __value.key);
                         return iiok;
                     }
                     );
@@ -269,7 +281,7 @@ ivar* idictvalue(const idict *d, const ivar *key) {
 }
 
 /* get all sorted keys */
-const iarray* idicttkeys(const idict *d) {
+const iarray* idictkeys(const idict *d) {
     return d->keys;
 }
 

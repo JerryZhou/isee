@@ -81,7 +81,7 @@ int idictremove(idict *d, const ivar *key);
 ivar* idictvalue(const idict *d, const ivar *key);
 
 /* get all sorted keys */
-const iarray* idicttkeys(const idict *d);
+const iarray* idictkeys(const idict *d);
     
 /* the dict destructor */
 void idict_destructor(const struct imeta *meta, iptr o);
