@@ -246,27 +246,28 @@ uint64_t ipod_hash(const struct imeta *meta, iconstptr o) {
 int ipod_compare(const struct imeta *meta, iconstptr lfs, iconstptr rfs) {
     ipod *l = icast(ipod, lfs);
     ipod *r = icast(ipod, rfs);
-    return memcmp(l->ptr, r->ptr, l->size);
+    if (l->size != r->size) {
+        return l->size - r->size;
+    }
+    return memcmp(l->ptr, r->ptr, imin(l->size, r->size));
 }
 /* ipod: meta-assign */
 void ipod_assign(const struct imeta *meta, iptr dst, iconstptr src) {
     ipod *l = icast(ipod, dst);
     ipod *r = icast(ipod, src);
     ipod_destructor(meta, dst);
-    if (r->size > sizeof(r->stbuf)) {
-        l->ptr = icalloc(1, r->size);
-    }
-    memcpy(l->ptr, r->ptr, r->size);
+    ipod_init(l, r->ptr, r->size, r->align);
 }
 
 /* ipod: init */
-void ipod_init(ipod *p, const void* byte, size_t len) {
-    p->size = len;
+void ipod_init(ipod *p, const void* byte, size_t size, size_t align) {
+    p->align = align;
+    p->size = size;
     p->ptr = p->stbuf;
-    if (len > sizeof(p->stbuf)) {
-        p->ptr = icalloc(1, len);
+    if (size > sizeof(p->stbuf)) {
+        p->ptr = icalloc(1, size);
     }
-    memcpy(p->ptr, byte, len);
+    memcpy(p->ptr, byte, size);
 }
 
 /* irune: meta-hash */
