@@ -36,6 +36,7 @@ imetafuncs* _inewdefaultmetafuncs(imeta *meta, const imetaconfig *config) {
     funcs->destructor = config->destructor;
     funcs->hash = config->hash;
     funcs->compare = config->compare;
+    funcs->assign = config->assign;
     return funcs;
 }
 
