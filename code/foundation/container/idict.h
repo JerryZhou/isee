@@ -28,10 +28,8 @@ typedef struct idictentry {
 } idictentry;
     
 /*
- * todos: auto-growsize
- * todos: refract the key-index-change-event
- * todos: add-hash-statics-for
- * todos: add-sorted-feature */
+ * todos: add-write-on-copy behavior
+ * todos: add-dual-nvalues for concurrent-rehashing */
 
 /* make a entry with key */
 idictentry* idictentrymake(ivar *key);
