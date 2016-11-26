@@ -229,7 +229,7 @@ void iptr_assign(const struct imeta *meta, iptr dst, iconstptr src) {
 /* pod destructor */
 void ipod_destructor(const struct imeta *meta, iptr o) {
     ipod *p = icast(ipod, o);
-    if (p->ptr != p->stbuf) {
+    if (p->ptr && p->ptr != p->stbuf) {
         ifree(p->ptr);
         p->ptr = p->stbuf;
     }
@@ -257,6 +257,16 @@ void ipod_assign(const struct imeta *meta, iptr dst, iconstptr src) {
         l->ptr = icalloc(1, r->size);
     }
     memcpy(l->ptr, r->ptr, r->size);
+}
+
+/* ipod: init */
+void ipod_init(ipod *p, const void* byte, size_t len) {
+    p->size = len;
+    p->ptr = p->stbuf;
+    if (len > sizeof(p->stbuf)) {
+        p->ptr = icalloc(1, len);
+    }
+    memcpy(p->ptr, byte, len);
 }
 
 /* irune: meta-hash */

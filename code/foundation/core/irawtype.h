@@ -104,6 +104,9 @@ uint64_t ipod_hash(const struct imeta *meta, iconstptr o);
 int ipod_compare(const struct imeta *meta, iconstptr lfs, iconstptr rfs);
 /* ipod: meta-assign */
 void ipod_assign(const struct imeta *meta, iptr dst, iconstptr src);
+
+/* ipod: init */
+void ipod_init(ipod *p, const void* byte, size_t len);
     
 /* irune: meta-hash */
 uint64_t irune_hash(const struct imeta *meta, iconstptr o);
