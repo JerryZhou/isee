@@ -62,7 +62,9 @@ typedef struct idict_private {
 /* index tracing for key-array */
 void _irefarray_index_change_forkey(iptr x, iarray *arr, iref *ref, int index) {
     idictentry* entry = icast(idictentry, ref);
-    entry->indexkey = index;
+    if (entry) {
+        entry->indexkey = index;
+    }
 }
 
 /* index tracing for key-array */
@@ -78,7 +80,9 @@ iarray *_idictentryarraymake_forkey(size_t capacity) {
 /* index tracing for key-array */
 void _irefarray_index_change_forvalue(iptr x, iarray *arr, iref *ref, int index) {
     idictentry* entry = icast(idictentry, ref);
-    entry->indexvalue = index;
+    if (entry) {
+        entry->indexvalue = index;
+    }
 }
 
 /* index tracing for key-array */
@@ -186,7 +190,7 @@ int idicthas(const idict *d, const ivar *key) {
 }
 
 /* find the value for key, return iiok or iino [retain-key] [retain-value] */
-int idictadd(idict *d, const ivar *key, ivar *value) {
+idictentry* idictadd(idict *d, const ivar *key, ivar *value) {
     iarray* indexentrys = _idictentryarrayof(d, key);
     idictentry *entry = NULL;
     
@@ -211,14 +215,14 @@ int idictadd(idict *d, const ivar *key, ivar *value) {
         _idictentryadd(indexentrys, entry);
         /*add keys */
         _idictentryadd(d->keys, entry);
-        /* free the tmp entry */
-        irefdelete(entry);
-        return iiok;
+        /* free the tmp entry but not clear, we will return it as holded by array */
+        irelease(entry);
     } else {
         /* replace the entry with key */
         idictentysetvalue(entry, value);
-        return iino;
     }
+    
+    return entry;
 }
 
 /* remove the value with key */

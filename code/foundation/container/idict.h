@@ -77,7 +77,7 @@ size_t idictsize(const idict *d);
 int idicthas(const idict *d, const ivar *key);
 
 /* find the value for key, return iiok or iino [retain-key] [retain-value] */
-int idictadd(idict *d, const ivar *key, ivar *value);
+idictentry* idictadd(idict *d, const ivar *key, ivar *value);
 
 /* remove the value with key */
 int idictremove(idict *d, const ivar *key);
