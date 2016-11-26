@@ -324,6 +324,9 @@ iarray* iarraymakeiref(size_t capacity) {
 
 /* array-iref with user config, index the change */
 iarray* iarraymakeirefwithentry(size_t capacity, const irefarrayentry *refentry) {
+    if (!_arr_entry_iref.elemeta) {
+        ((iarrayentry*)&_arr_entry_iref)->elemeta = imetaof(irefptr);
+    }
     iarray*  arr = iarraymake(capacity, &_arr_entry_iref);
     arr->userdata = (void*)refentry;
     return arr;
@@ -347,6 +350,7 @@ iarray* iarraymakeirefwithentryandcmp(size_t capacity, const irefarrayentry *ref
     entry->swap = _iarray_entry_swap_iref;
     entry->assign = _iarray_entry_assign_iref;
     entry->cmp = cmp;
+    entry->elemeta = imetaof(irefptr);
     
     arr = iarraymake(capacity, entry);
     arr->userdata = (void*)refentry;
