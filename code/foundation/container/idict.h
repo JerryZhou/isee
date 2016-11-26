@@ -50,8 +50,8 @@ int idictentry_compare(const struct imeta *meta, iconstptr lfs, iconstptr rfs);
 typedef struct idict {
     irefdeclare;
     
-    iheap* keys;      /* heap<ivar> */
-    iarray* values;   /* array<iarray> */
+    iarray* keys;      /* iarray<idictentry> */
+    iarray* values;   /* iarray<iarray<idictentry> > */
     
     struct idict_private *priv;
 } idict;

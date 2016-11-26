@@ -123,11 +123,48 @@ static iarrayentry _idictentry_arrayentry = {
     .assign = _iarray_entry_assign_idictentry
 };
 
+/* make a capacity of idictentry array */
+iarray *_idictentyarraymake(size_t capacity) {
+    return iarraymake(capacity, &_idictentry_arrayentry);
+}
+
+/* find in idictentry-array for key */
+int _idictentryindexof(iarray *arr, const ivar *key) {
+    icheckret(arr, kindex_invalid);
+    icheckret(key, kindex_invalid);
+    irangearray(arr, idictentry,
+                if (ivarcompare(__value.key, key) == 0) {
+                    return __key;
+                }
+                );
+    return kindex_invalid;
+}
+
+/* remove the right-key in idictentry-array */
+int _dictentryremove(iarray *arr, const ivar *key) {
+    irangearray(arr, idictentry,
+                if (ivarcompare(__value.key, key) == 0) {
+                    iarrayremove(arr, __key);
+                    return __key;
+                }
+                );
+    return kindex_invalid;
+}
+
+/* get the idictentry of value in arr */
+idictentry* _idictentryof(iarray *arr, const ivar *key) {
+    irangearray(arr, idictentry,
+                if (ivarcompare(__value.key, key)) {
+                    return &iarrayof(arr, idictentry, __key);
+                }
+                );
+    return NULL;
+}
 
 /* make a dicit with default-capacity */
 idict *idictmake(int capacity) {
     idict *d = irefnew(idict);
-    d->keys = iarraymakeiref(capacity); /*ivar array */
+    d->keys = _idictentyarraymake(capacity); /*ivar array */
     d->values = iarraymakeiref(capacity); /*iarray array */
     d->values->len = capacity; /* raw- empty- ref array with capacity */
     
@@ -161,38 +198,16 @@ void _idictgrowcapacity(idict *d) {
     irefdelete(nvalues);
 }
 
-int _idictentryindexof(iarray *arr, const ivar *key) {
-    icheckret(arr, kindex_invalid);
-    icheckret(key, kindex_invalid);
-    irangearray(arr, idictentry,
-                if (ivarcompare(__value.key, key) == 0) {
-                    return __key;
-                }
-                );
-    return kindex_invalid;
-}
-
-idictentry* _idictentryof(iarray *arr, const ivar *key) {
-    irangearray(arr, idictentry,
-                if (ivarcompare(__value.key, key)) {
-                    return &iarrayof(arr, idictentry, __key);
-                }
-                );
-    return NULL;
-}
-
+/* raw-index in dict-value-array */
 int _idictkeyindex(const idict *d, const ivar *key) {
     uint64_t hash = ivarhashcode(key);
     return hash % _idictcapacity(d);
 }
 
+/* raw-dictentry-array in dict */
 iarray *_idictentryarrayof(const idict *d, const ivar *key) {
     int index = _idictkeyindex(d, key);
     return icast(iarray, iarrayof(d->values, irefptr, index));
-}
-
-iarray *_idictentyarraymake() {
-    return iarraymake(8, &_idictentry_arrayentry);
 }
 
 /* find the value for key, return iiok or iino */
@@ -207,14 +222,17 @@ int idictadd(idict *d, const ivar *key, ivar *value) {
     idictentry *entry = NULL;
     
     if (indexentrys == NULL) {
-        indexentrys = _idictentyarraymake();
+        indexentrys = _idictentyarraymake(8);
         iarrayset(d->values, _idictkeyindex(d, key), &indexentrys);
     } else {
         entry = _idictentryof(indexentrys, key);
     }
     if (!entry) {
         entry = idictentrymake((ivar*)key);
+        /*add to values */
         iarrayadd(indexentrys, entry);
+        /*add keys */
+        iarrayadd(d->keys, entry);
     }
     idictentysetvalue(entry, value);
     return iiok;
@@ -226,7 +244,10 @@ int idictremove(idict *d, const ivar *key) {
     if (indexentrys && iarraylen(indexentrys)) {
         irangearray(indexentrys, idictentry,
                     if (ivarcompare(__value.key, key) == 0) {
+                        /* remove value */
                         iarrayremove(indexentrys, __key);
+                        /* remove key */
+                        _dictentryremove(d->keys, __key);
                         return iiok;
                     }
                     );
@@ -249,7 +270,7 @@ ivar* idictvalue(const idict *d, const ivar *key) {
 
 /* get all sorted keys */
 const iarray* idicttkeys(const idict *d) {
-    return NULL;
+    return d->keys;
 }
 
 /* the dict destructor */
