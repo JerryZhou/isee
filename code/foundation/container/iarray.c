@@ -326,15 +326,19 @@ static iarray_searchpair _iarraybinaryindexing(const iarray *arr, int start, int
         mid = (heigh - low)/2 + low;
         cmp = meta->funcs->compare(meta, iarrayat(arr, mid), value);
         
-        pair.index = mid;   /* the insert index */
         if (cmp == 0) {
             pair.found = iiok;
+            pair.index = mid;   /* the found index */
             break;
         } else if (cmp < 0) {
             low = mid + 1;
         } else {
             heigh = mid - 1;
         }
+    }
+    /* the insert index */
+    if (pair.found == iino) {
+        pair.index = low;
     }
     return pair;
 }
