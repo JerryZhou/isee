@@ -139,4 +139,7 @@ SP_CASE(iquat, iquatfromrotatemat3) {
 
 SP_CASE(iquat, end) {
     SP_TRUE(1);
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

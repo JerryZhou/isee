@@ -44,5 +44,9 @@ SP_CASE(ipos3, constcheck) {
 
 SP_CASE(ipos3, end) {
     SP_TRUE(1);
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 

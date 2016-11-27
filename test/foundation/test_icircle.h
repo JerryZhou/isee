@@ -107,3 +107,8 @@ SP_CASE(icircle, icirclecontainspoint) {
     SP_EQUAL(icirclecontainspoint(&c, &p), iino);
 }
 
+SP_CASE(icircle, end) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}

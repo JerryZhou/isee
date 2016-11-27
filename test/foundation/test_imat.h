@@ -324,4 +324,7 @@ SP_CASE(imat4, imat4lookat) {
 
 SP_CASE(imat4, end) {
     SP_TRUE(1);
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

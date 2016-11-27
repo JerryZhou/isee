@@ -108,3 +108,9 @@ SP_CASE(irect, irectintersect) {
     c.pos.y = 1;
     SP_EQUAL(irectintersect(&r, &c), iiok);
 }
+
+SP_CASE(irect, end) {
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
+}

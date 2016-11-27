@@ -56,6 +56,9 @@ int64_t _g_memory_in_use = 0;
 #include "foundation/test_isize.h"
 #include "foundation/test_ivec.h"
 
+// foundation/algorithm
+#include "foundation/test_iconsistent.h"
+
 iimplementapplication();
 
 int ISeeMain(const icmdarg *arg) {

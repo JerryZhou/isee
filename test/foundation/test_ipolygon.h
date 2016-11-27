@@ -14,6 +14,8 @@ SP_CASE(ipolygon2d, ipolygon2dmake) {
     SP_TRUE(ipolygon2dsize(poly) == 0);
     SP_TRUE(islicecapacity(poly->pos) == 10);
     irefdelete(poly);
+    
+    
 }
 
 SP_CASE(ipolygon2d, ipolygon2dadd) {
@@ -68,6 +70,10 @@ SP_CASE(ipolygon2d, ipolygon2dfinish) {
 
 SP_CASE(ipolygon2d, end) {
     SP_TRUE(1);
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_SUIT(ipolygon3d);
@@ -96,6 +102,10 @@ SP_CASE(ipolygon3d, ipolygon3dadd) {
     SP_TRUE(ipos3isequal(pos+2, &poly->max));
     
     irefdelete(poly);
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(ipolygon3d, ipolygon3dfinish) {
@@ -116,6 +126,10 @@ SP_CASE(ipolygon3d, ipolygon3dfinish) {
     SP_TRUE(ipos3isequal(pos+2, &poly->max));
     
     irefdelete(poly);
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(ipolygon3d, ipolygon3dpos3) {
@@ -138,6 +152,10 @@ SP_CASE(ipolygon3d, ipolygon3dpos3) {
     SP_TRUE(ipos3isequal(pos+1, ipolygon3dpos3(poly, 7)));
     
     irefdelete(poly);
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(ipolygon3d, ipolygon3dposxz) {
@@ -164,6 +182,10 @@ SP_CASE(ipolygon3d, ipolygon3dposxz) {
     SP_TRUE(ipos2isequal(posxz+5, &xp));
     
     irefdelete(poly);
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(ipolygon3d, ipolygon3dincollum) {
@@ -182,6 +204,10 @@ SP_CASE(ipolygon3d, ipolygon3dincollum) {
     SP_FALSE(ipolygon3dincollum(poly, xpos+2));
     
     irefdelete(poly);
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(ipolygon3d, plane) {
@@ -205,9 +231,17 @@ SP_CASE(ipolygon3d, plane) {
     SP_TRUE(ireal_equal(0, poly->plane.distance));
     
     irefdelete(poly);
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 
 SP_CASE(ipolygon3d, end) {
     SP_TRUE(1);
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 

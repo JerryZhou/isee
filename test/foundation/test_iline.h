@@ -295,6 +295,8 @@ SP_CASE(iline3d, iline3dclosestpoint) {
 }
 
 SP_CASE(iline3d, end) {
-    SP_TRUE(1);
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
 

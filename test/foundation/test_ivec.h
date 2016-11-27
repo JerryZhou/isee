@@ -162,4 +162,8 @@ SP_CASE(ivec3, base_funcs) {
 
 SP_CASE(ivec3, end) {
     SP_TRUE(1);
+    
+    imemoryglobalclear();
+    
+    SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }
