@@ -398,7 +398,7 @@ SP_CASE(iarray, iarraybinaryinsert) {
     SP_TRUE(index == 5);
     v = 8;
     index = iarraybinaryindexing(arr, 0, iarraylen(arr), &v);
-    SP_TRUE(index == 5);
+    SP_TRUE(index == 6);
     v = -2;
     index = iarraybinaryindexing(arr, 0, iarraylen(arr), &v);
     SP_TRUE(index == 0);
