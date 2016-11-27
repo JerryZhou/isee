@@ -24,6 +24,7 @@
 #include "foundation/math/ipolygon.h"
 #include "foundation/math/imd5.h"
 #include "foundation/core/irawtype.h"
+#include "foundation/algorithm/iconsistent.h"
 
 
 /******************************************/
