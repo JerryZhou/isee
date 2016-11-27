@@ -59,7 +59,14 @@ iarray* iconsistentsearch(const iconsistent *c, istring *key, size_t n);
 
 /* the hash-code-for key */
 uint64_t iconsistenthashof(const iconsistent *c, istring *key);
-
+    
+/* the circle-size */
+size_t iconsistentcount(const iconsistent *c);
+/* the circle-hashcode at */
+uint64_t iconsistentcodeat(const iconsistent *c, int index);
+/* the circle-value at */
+istring *iconsistentvalueat(const iconsistent *c, int index);
+    
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
