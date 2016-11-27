@@ -8,6 +8,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
+/* forward declares */
+struct iarray;
 
 /*
  * http://www.cnblogs.com/jzhlin/archive/2012/07/23/Quorum.html
@@ -23,7 +26,7 @@ typedef struct iquorum {
 
 typedef struct iquorumvalue {
     uint32_t version;
-    iarray *data;
+    struct iarray *data;
 } iquorumvalue;
 
 /* Ends C function definitions when using C++ */
