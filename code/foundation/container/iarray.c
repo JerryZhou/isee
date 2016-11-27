@@ -313,7 +313,7 @@ typedef struct iarray_searchpair {
     int index;
 } iarray_searchpair;
 
-static iarray_searchpair _iarraybinaryindexing(iarray *arr, int start, int end, const void *value) {
+static iarray_searchpair _iarraybinaryindexing(const iarray *arr, int start, int end, const void *value) {
     iarray_searchpair pair = {.found = iino, .index=0};
     
     icheckretassert(start >=0 && end <= arr->len, pair);
@@ -340,13 +340,13 @@ static iarray_searchpair _iarraybinaryindexing(iarray *arr, int start, int end, 
 }
 
 /* binary search in array */
-int iarraybinarysearch(iarray *arr, int start, int end, const void* value) {
+int iarraybinarysearch(const iarray *arr, int start, int end, const void* value) {
     iarray_searchpair pair = _iarraybinaryindexing(arr, start, end, value);
     return pair.found ? pair.index : kindex_invalid;
 }
 
 /* binary indexing the value: insert-place */
-int iarraybinaryindexing(iarray *arr, int start, int end, const void *value) {
+int iarraybinaryindexing(const iarray *arr, int start, int end, const void *value) {
     iarray_searchpair pair = _iarraybinaryindexing(arr, start, end, value);
     const imeta *meta = arr->entry->elemeta;
     

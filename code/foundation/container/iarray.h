@@ -154,10 +154,10 @@ size_t iarrayexpandcapacity(iarray *arr, size_t capacity);
 void iarraysort(iarray *arr);
     
 /* binary search in array [start, end) */
-int iarraybinarysearch(iarray *arr, int start, int end, const void* value);
+int iarraybinarysearch(const iarray *arr, int start, int end, const void* value);
     
 /* binary indexing the value: insert-place */
-int iarraybinaryindexing(iarray *arr, int start, int end, const void *value);
+int iarraybinaryindexing(const iarray *arr, int start, int end, const void *value);
     
 /* binary search insert into array [start, end) */
 int iarraybinaryinsert(iarray *arr, int start, int end, const void* value);
