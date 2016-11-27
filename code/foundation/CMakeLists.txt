@@ -46,6 +46,13 @@ file(GLOB SOURCE_FILES_MATH
 	${PROJECT_SOURCE_DIR}/code/foundation/math/*.c)
 source_group("math" FILES ${SOURCE_FILES_MATH})
 
+file(GLOB SOURCE_FILES_ALGORITHM
+    ${PROJECT_SOURCE_DIR}/code/foundation/algorithm/*.h 
+	${PROJECT_SOURCE_DIR}/code/foundation/algorithm/*.inl 
+	${PROJECT_SOURCE_DIR}/code/foundation/algorithm/*.c)
+source_group("algorithm" FILES ${SOURCE_FILES_ALGORITHM})
+
+
 add_library(foundation STATIC 
     ${SOURCE_FILES_}
     ${SOURCE_FILES_CORE}
@@ -54,6 +61,7 @@ add_library(foundation STATIC
     ${SOURCE_FILES_CONTAINER}
     ${SOURCE_FILES_UTIL}
     ${SOURCE_FILES_MATH}
+    ${SOURCE_FILES_ALGORITHM}
     )
 
 
