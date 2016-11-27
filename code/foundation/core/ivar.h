@@ -48,6 +48,9 @@ ivar *ivardup(const ivar *var);
 
 /* make a value */
 ivar* ivarmake(const struct imeta* meta, iconstptr value);
+    
+/* return the value address */
+void *ivarvalue(const ivar *var);
   
 /* ivar hash code */
 uint64_t ivarhashcode(const ivar *var);
@@ -63,6 +66,7 @@ ivar *ivarmakereal(ireal real);
 ivar *ivarmakeptr(iptr ptr);
 ivar *ivarmakepod(ipod pod);
 ivar *ivarmakeref(irefptr ref);
+ivar *ivarmakebool(ibool b);
     
 /* ivar destructor */
 void ivar_destructor(const struct imeta*, iptr o);
@@ -75,6 +79,9 @@ int ivar_compare(const struct imeta*, iconstptr lfs, iconstptr rfs);
 
 /* ivar meta-funcs: assign */
 void ivar_assign(const struct imeta*, iptr dst, iconstptr src);
+    
+/* the ivar-cast to type */
+#define ivarcast(var, type) (*(type*)(ivarvalue(var)))
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

@@ -106,7 +106,13 @@ ivar* ivarmake(const struct imeta* meta, iconstptr value) {
     }
     return var;
 }
-  
+
+/* return the value address */
+void *ivarvalue(const ivar *var) {
+    icheckret(var, NULL);
+    return (void*)(&var->v);
+}
+
 /* ivar hash code */
 uint64_t ivarhashcode(const ivar *var) {
     return ivar_hash(var->meta, var);
@@ -153,4 +159,8 @@ ivar *ivarmakepod(ipod pod) {
 ivar *ivarmakeref(irefptr ref) {
     return ivarmake(imetaof(irefptr), &ref);
 }
- 
+
+/* ivar make functions: ibool  */
+ivar *ivarmakebool(ibool b) {
+    return ivarmake(imetaof(ibool), &b);
+}
