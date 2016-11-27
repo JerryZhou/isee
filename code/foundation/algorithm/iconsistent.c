@@ -35,7 +35,7 @@ void iconsistentadd(iconsistent *c, istring *ele) {
     
     for (int i=0; i<c->numberofreplicas; ++i) {
         key = _iconsistent_key_n(c, ele, i);
-        idictadd_u64_istring(c->circle, iconsistenthashof(c, key), key);
+        idictadd_u64_istring(c->circle, iconsistenthashof(c, key), ele);
         irefdelete(key);
     }
     idictadd_istring_ibool(c->elems, ele, iiok);
@@ -110,7 +110,8 @@ istring* iconsistentindexingof(const iconsistent *c, istring *key) {
 /* closed index for key */
 int iconsistentindexing(const iconsistent *c, istring *key) {
     ivar *keyvar = ivarmakeu64(iconsistenthashof(c, key));
-    idictentry entry = {.key=keyvar};
+    idictentry ventry = {.key=keyvar};
+    idictentry *entry = &ventry;
     const iarray* sortedkeys = idictkeys(c->circle);
     int index = iarraybinaryindexing(sortedkeys, 0, iarraylen(sortedkeys), &entry);
     irefdelete(keyvar);
@@ -124,6 +125,7 @@ int iconsistentindexing(const iconsistent *c, istring *key) {
 iarray* iconsistentsearch(const iconsistent *c, istring *key, size_t n) {
     iarray* closest = iarraymakeiref(8);
     istring *skey;
+    size_t ne = idictsize(c->elems);
     size_t nc = idictsize(c->circle);
     int start;
     int i;
@@ -132,7 +134,7 @@ iarray* iconsistentsearch(const iconsistent *c, istring *key, size_t n) {
         if (nc == 0) {
             break;
         }
-        n = imin(n, nc);
+        n = imin(n, ne);
         /* the first one */
         start = iconsistentindexing(c, key);
         skey = _iconsistent_value(c, start);
@@ -146,7 +148,7 @@ iarray* iconsistentsearch(const iconsistent *c, istring *key, size_t n) {
             if (i >= nc) {
                 i = 0;
             }
-            skey = _iconsistent_value(c, start);
+            skey = _iconsistent_value(c, i);
             if (_iarray_range_search(closest, skey) == iino) {
                 iarrayadd(closest, &skey);
             }
