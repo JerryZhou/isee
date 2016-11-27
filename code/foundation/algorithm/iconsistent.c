@@ -10,6 +10,20 @@ void iconsistent_destructor(const struct imeta *meta, iptr o) {
     irefdelete(c->elems);
 }
 
+/* make a empty iconsistent */
+iconsistent *iconsistentmake(size_t capacity, size_t replicas) {
+    iconsistent *c = irefnew(iconsistent);
+    c->numberofreplicas = replicas;
+    c->circle = idictmake(capacity);
+    c->elems = idictmake(capacity);
+    return c;
+}
+    
+/* the element-size in circle */
+size_t iconsistentsize(const iconsistent *c) {
+    return idictsize(c->elems);
+}
+
 /* make a replicas-key */
 istring *_iconsistent_key_n(iconsistent *c, istring *ele, int index) {
     return istringformat("%S|%i", ele, index);

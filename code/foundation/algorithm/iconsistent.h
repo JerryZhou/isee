@@ -32,6 +32,12 @@ typedef struct iconsistent {
 
 /* the consistent destructor */
 void iconsistent_destructor(const struct imeta *meta, iptr o);
+    
+/* make a empty iconsistent */
+iconsistent *iconsistentmake(size_t capacity, size_t replicas);
+    
+/* the element-size in circle */
+size_t iconsistentsize(const iconsistent *c);
    
 /* add ele to c in span: replicasspan with numberofreplicas */
 void iconsistentadd(iconsistent *c, istring *ele);
