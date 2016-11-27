@@ -24,7 +24,6 @@ ipolygon3d *ipolygon3dmake(size_t capacity){
     poly->min.z = 0x1.fffffep+127f;
     
     irelease(array);
-    iretain(poly);
     return poly;
 }
 
