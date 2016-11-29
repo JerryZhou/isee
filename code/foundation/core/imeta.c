@@ -25,6 +25,7 @@
 #include "foundation/math/imd5.h"
 #include "foundation/core/irawtype.h"
 #include "foundation/algorithm/iconsistent.h"
+#include "foundation/algorithm/ilamport.h"
 
 
 /******************************************/

@@ -72,6 +72,7 @@ __ideclaremeta(iringbuffer,sizeof(iringbuffer),0,EnumMetaFlag_Ref,   0, NULL, NU
 __ideclaremeta(iconsistent,sizeof(iconsistent),0,EnumMetaFlag_Ref,   0, NULL, NULL, iconsistent_destructor, NULL, NULL, NULL),\
 __ideclaremeta(ipolygon3d, sizeof(ipolygon3d), 0,EnumMetaFlag_Ref, 1000, NULL, NULL, ipolygon3d_destructor, NULL, NULL, NULL),\
 __ideclaremeta(ipolygon2d, sizeof(ipolygon2d), 0,EnumMetaFlag_Ref, 1000, NULL, NULL, ipolygon2d_destructor, NULL, NULL, NULL),\
+__ideclaremeta(ilamport, sizeof(ilamport), 0,EnumMetaFlag_Ref, 1000, NULL, NULL, ilamport_destructor, NULL, NULL, NULL),\
 __ideclaremeta(imeta,      sizeof(imeta),      0,EnumMetaFlag_Complex,0, NULL, NULL, NULL, NULL, NULL, NULL)
 
 
