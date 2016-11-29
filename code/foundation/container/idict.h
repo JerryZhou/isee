@@ -58,6 +58,8 @@ int idictentry_compare(const struct imeta *meta, iconstptr lfs, iconstptr rfs);
 /* idict control-flag */
 typedef enum EnumDictFlag {
     EnumDictFlag_AutoRehashing = 1, /* auto rehashing the dict */
+    
+    EnumDictFlag_NotSortingKeys = 1<<1, /* the default idict-keys are keeping in order, the user can disable it */
 } EnumDictFlag;
     
 /* the ivar hash-map */
