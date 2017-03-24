@@ -42,7 +42,7 @@ void ilamportlock(ilamport *l, int i);
 void ilamportunlock(ilamport *l, int i);
 
 /* the meta destructor func */
-void ilamport_destructor(const struct imeta* , iconstptr o);
+void ilamport_destructor(const struct imeta* , iptr o);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

@@ -47,7 +47,7 @@ void ilamportunlock(ilamport *l, int i) {
 }
 
 /* the meta destructor func */
-void ilamport_destructor(const struct imeta* meta, iconstptr o) {
+void ilamport_destructor(const struct imeta* meta, iptr o) {
     ilamport *p = icast(ilamport, o);
     irefdelete(p->entering);
     irefdelete(p->number);
