@@ -68,6 +68,7 @@ __ideclaremeta(itree,    sizeof(itree),0,        EnumMetaFlag_Ref,   0, NULL, NU
 __ideclaremeta(idict,   sizeof(idict),0,         EnumMetaFlag_Ref,   0, NULL, NULL, idict_destructor, idict_hash, NULL, NULL),\
 __ideclaremeta(idictentry,   sizeof(idictentry),0,EnumMetaFlag_Ref,   0, NULL, NULL, idictentry_destructor, idictentry_hash, idictentry_compare, idictentry_assign),\
 __ideclaremeta(ineighbor,sizeof(ineighbor),    0,EnumMetaFlag_Ref,   0, NULL, NULL, ineighbor_destructor, NULL, NULL, NULL),\
+__ideclaremeta(iregex,sizeof(iregex),          0,EnumMetaFlag_Ref,   0, NULL, NULL, iregex_destructor, NULL, NULL, NULL),\
 __ideclaremeta(iringbuffer,sizeof(iringbuffer),0,EnumMetaFlag_Ref,   0, NULL, NULL, iringbuffer_destructor, NULL, NULL, NULL),\
 __ideclaremeta(iconsistent,sizeof(iconsistent),0,EnumMetaFlag_Ref,   0, NULL, NULL, iconsistent_destructor, NULL, NULL, NULL),\
 __ideclaremeta(ipolygon3d, sizeof(ipolygon3d), 0,EnumMetaFlag_Ref, 1000, NULL, NULL, ipolygon3d_destructor, NULL, NULL, NULL),\
