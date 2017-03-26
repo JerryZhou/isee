@@ -10,6 +10,8 @@
 extern "C" {
 #endif
     
+   
+/* the little endian in irune */
 /* https://zh.wikipedia.org/wiki/UTF-8 */
 typedef struct iutf8decodeout {
     ibyte len;      /* 1, 2, 3, 4*/
