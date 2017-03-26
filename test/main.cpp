@@ -33,7 +33,7 @@ int64_t _g_memory_in_use = 0;
 #include "foundation/test_ireflist.h"
 #include "foundation/test_ineighbor.h"
 #include "foundation/test_irefcache.h"
-#include "foundation/test_idict.h" // TODO:
+#include "foundation/test_idict.h"
 #include "foundation/test_itree.h" // TODO:
 
 // foundation/util
@@ -42,6 +42,7 @@ int64_t _g_memory_in_use = 0;
 #include "foundation/test_iradix.h"
 #include "foundation/test_istring.h"
 #include "foundation/test_icmdarg.h"
+#include "foundation/test_iutf8.h"
 
 // foundation/math
 #include "foundation/test_icircle.h"
@@ -61,8 +62,23 @@ int64_t _g_memory_in_use = 0;
 
 iimplementapplication();
 
+#define __ideclare_void_func0(name) void __f_##name(void (*f)()) { f(); }
+#define __icall_void_func0(f) __f_fvoid(f)
+
+
+#define __ideclare_void_func1(name, arg0type) void __f1_##name(void (*f)(arg0type), arg0type arg0) { f(arg0); }
+
+__ideclare_void_func0(fvoid);
+__ideclare_void_func1(fint, int);
+
+static void clourse_void() {
+    printf("%d-%s", __LINE__, __FUNCTION__);
+}
+
 int ISeeMain(const icmdarg *arg) {
     iunused(arg);
+    
+    clourse_void();
     
     _g_memory_in_use = imemoryglobaluse();
     
