@@ -18,8 +18,8 @@ typedef struct iutf8decodeout {
 } iutf8decodeout;
      
 typedef struct iutf8encodeout {
-    ibyte len;
-    ibyte utf8[4];
+    ibyte len;      /* 1, 2, 3, 4*/
+    ibyte utf8[4];  /* the utf8 encoded */
 } iutf8encodeout;
   
 /* decoder */
