@@ -43,6 +43,7 @@ int64_t _g_memory_in_use = 0;
 #include "foundation/test_istring.h"
 #include "foundation/test_icmdarg.h"
 #include "foundation/test_iutf8.h"
+#include "foundation/test_iendian.h"
 
 // foundation/math
 #include "foundation/test_icircle.h"
