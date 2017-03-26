@@ -223,6 +223,29 @@ iarray* iarraymakechar(size_t capacity) {
     return iarraymake(capacity, &_arr_entry_char);
 }
 
+/* compare ibyte */
+static int _iarray_entry_cmp_ibyte(struct iarray *arr,
+                                   int i, int j) {
+    ibyte *arrs = (ibyte *)arr->buffer;
+    return arrs[i] - arrs[j];
+}
+
+/* array-ibyte config */
+static const iarrayentry _arr_entry_ibyte = {
+    EnumArrayFlagAutoShirk |
+    EnumArrayFlagSimple |
+    EnumArrayFlagKeepOrder |
+    EnumArrayFlagMemsetZero,
+    sizeof(ibyte),
+    _iarray_entry_swap_copy,
+    _iarray_entry_assign_copy,
+    _iarray_entry_cmp_ibyte,
+};
+
+/* array-ibyte */
+iarray* iarraymakeibyte(size_t capacity) {
+    return iarraymake(capacity, &_arr_entry_ibyte);
+}
 
 /*************************************************************/
 /* iarray - iref                                             */
