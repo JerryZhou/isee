@@ -235,6 +235,8 @@ int iarrayinsert(iarray *arr, int index, const void *value, int nums) {
 
 /* operators: set value at index */
 int iarrayset(iarray *arr, int index, const void *value) {
+    /* the value can not be NULL */
+    icheckretassert(value, iino);
     /* length-rang-check */
     icheckret(index >=0 && index<arr->len, iino);
     /* const array */
