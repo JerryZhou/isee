@@ -3,8 +3,12 @@
 
 /* https://en.wikipedia.org/wiki/Base64 */
 
-static void _ibase64init(ibase64encoding* encoding, const ibyte* bytes) {
-    encoding->source = istringmake((const char*)bytes);
+static void _ibase64init(ibase64encoding* encoding, const istring* bytes) {
+    /* the-law rule in string */
+    istringlaw((istring*)bytes);
+    
+    /* the retain it in source */
+    encoding->source = bytes;
     for (int i=0; i<icountof(encoding->encodeMap); ++i) {
         encoding->encodeMap[i] = 0xFF;
     }
@@ -14,18 +18,21 @@ static void _ibase64init(ibase64encoding* encoding, const ibyte* bytes) {
 }
 
 /* RFC 1421 */
+ideclarestring(_std_code, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
 const ibase64encoding *ibase64Std() {
     static ibase64encoding _Std = {0};
-    if (_Std.source) {
-        _ibase64init(&_Std, (ibyte*)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
+    if (!_Std.source) {
+        _ibase64init(&_Std, _std_code);
     }
     return &_Std;
 }
 
+/* the url encoding: the '/' and '+' is used in special meanings */
+ideclarestring(_url_code, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_");
 const ibase64encoding *ibase64URL() {
     static ibase64encoding _URL = {0};
-    if (_URL.source) {
-        _ibase64init(&_URL, (ibyte*)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_");
+    if (!_URL.source) {
+        _ibase64init(&_URL, _url_code);
     }
     return &_URL;
 }

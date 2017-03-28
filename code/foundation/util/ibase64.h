@@ -12,7 +12,7 @@ extern "C" {
 
 /* the base64 encoding-map */
 typedef struct ibase64encoding {
-    istring *source;
+    const istring *source;
     ibyte encodeMap[256];
 } ibase64encoding;
     
