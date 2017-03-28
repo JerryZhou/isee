@@ -110,14 +110,14 @@ void ibase64decodedetails(const ibase64encoding *encoding, const islice*isrc, ib
     islice* idst = isliceunique(arr);
     islice* dst = islicedby((islice*)idst, 0, islicelen(idst));
     islice* src = islicedby((islice*)isrc, 0, islicelen(isrc));
-    _ROut(0, false, 0); rout->dst = idst;
+    _ROut(0, iino, 0); rout->dst = idst;
     
     for (; islicelen(src) && !rout->end; ) {
         ibyte dbuf[4];
         size_t dlen = 4;
         for (size_t j=0; j<icountof(dbuf); ++j) {
             if (islicelen(src) == 0) {
-                _ROut(rout->n, false, -1);
+                _ROut(rout->n, iino, olen - islicelen(src)-j);
                 goto ret;
             }
             ibyte in = isliceof(src, ibyte, 0);
@@ -126,13 +126,17 @@ void ibase64decodedetails(const ibase64encoding *encoding, const islice*isrc, ib
                 switch (j) {
                     case 0:
                     case 1:
-                        _ROut(rout->n, false, olen - islicelen(src)-1); /*  */
+                        _ROut(rout->n, iino, olen - islicelen(src)-1); /*  */
                         goto ret;
                         break;
                     case 2:
                         /*except == */
                         if (islicelen(src) == 0) {
-                            _ROut(rout->n, false, olen - islicelen(src) -1); /*  */
+                            _ROut(rout->n, iino, olen); /*  */
+                            goto ret;
+                        }
+                        if (isliceof(src, ibyte, 0) != '=') {
+                            _ROut(rout->n, iino, olen - islicelen(src)); /* ?? may the last '=' is ileggel */
                             goto ret;
                         }
                         src = isliceuniqueby(src, "1:");
@@ -147,7 +151,7 @@ void ibase64decodedetails(const ibase64encoding *encoding, const islice*isrc, ib
             }
             dbuf[j] = encoding->encodeMap[in];
             if (dbuf[j] == 0xFF) {
-                _ROut(rout->n, false, olen - islicelen(src) -1); /*  */
+                _ROut(rout->n, iino, olen - islicelen(src) -1); /*  */
                 goto ret;
             }
         }
@@ -169,7 +173,10 @@ void ibase64decodedetails(const ibase64encoding *encoding, const islice*isrc, ib
 ret:
     irefdelete(dst);
     irefdelete(src);
-    rout->dst = idst;
+    if (rout->n != islicelen(idst)) {
+        __isargs(-1, rout->n, -1);
+        rout->dst = isliceuniqueby(idst, __isargs_);
+    }
 }
 
 /* decode the base64 */
