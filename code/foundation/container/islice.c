@@ -67,8 +67,11 @@ islice *islicemakearg(iarray *arr, const char* args) {
  * islicemakeargby(arr, ":")
  * islicemakeargby(arr, ":1")
  * islicemakeargby(arr, ":1:5")
+ * islicemakeargby(arr, "1::5")
  * islicemakeargby(arr, "3:1:5")
  * islicemakeargby(arr, "3:")
+ * islicemakeargby(arr, ":2")
+ * islicemakeargby(arr, "::2")
  */
 islice *islicemakeargby(islice *slice, const char* args) {
     int params[3] = {0, (int)islicelen(slice), (int)islicecapacity(slice)};
@@ -112,6 +115,33 @@ void isliceparamsparse(int *params, const char* args, const char delim) {
     
     if (arg != buffer) {
         free(arg);
+    }
+}
+
+/* format the args */
+void isliceargsformat(char* buf, int begin, int end, int capacity) {
+    /* 2 * 2 * 2 = C3-0 + C3-1 + C3-2 + C3-3 = 1 + 3 + 3 + 1 = 8 */
+#define __islice_arg_buf_len 64
+    if (begin >= 0 && end >= 0 && capacity >= 0) {
+        (void)(snprintf(buf, __islice_arg_buf_len, "%d:%d:%d", begin, end, capacity));
+    } else if (begin >= 0 && end >= 0) {
+        (void)(snprintf(buf, __islice_arg_buf_len, "%d:%d", begin, end));
+    } else if (begin >= 0) {
+        if (capacity >= 0) {
+            (void)(snprintf(buf, __islice_arg_buf_len, "%d::%d", begin, capacity));
+        } else {
+            (void)(snprintf(buf, __islice_arg_buf_len, "%d:", begin));
+        }
+    } else if (end >= 0) {
+        if (capacity >= 0) {
+            (void)(snprintf(buf, __islice_arg_buf_len, ":%d:%d", end, capacity));
+        } else {
+            (void)(snprintf(buf, __islice_arg_buf_len, ":%d", end));
+        }
+    } else if (capacity >= 0){
+        (void)(snprintf(buf, 64, "::%d", capacity));
+    } else {
+        (void)(snprintf(buf, 64, "%s", ":"));
     }
 }
 

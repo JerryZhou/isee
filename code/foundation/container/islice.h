@@ -74,6 +74,10 @@ islice *islicemakeargby(islice *slice, const char* args);
 /* parse the args */
 void isliceparamsparse(int *params, const char* args, const char delim);
 
+/* format the args */
+void isliceargsformat(char* buf, int begin, int end, int capacity);
+#define __isargs(_begin, _end, _capacity) char __isargs_[64] = {0}; isliceargsformat(__isargs_, (int)_begin, (int)_end, (int)_capacity)
+
 /* length */
 size_t islicelen(const islice *slice);
 
