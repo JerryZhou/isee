@@ -101,6 +101,12 @@ const void* isliceat(const islice *slice, int index);
 
 /* foreach */
 void isliceforeach(const islice *slice, islice_entry_visitor visitor);
+    
+/* delivering the array-ownership to slice */
+islice *isliceunique(iarray* arr);
+   
+/* delivering the slice-ownership to new-slice */
+islice *isliceuniqueby(islice* s, const char* args);
 
 /* macro: indexing */
 #define isliceof(slice, type, i) (((type *)isliceat(slice, i))[0])

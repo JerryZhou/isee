@@ -237,3 +237,19 @@ void isliceforeach(const islice *slice, islice_entry_visitor visitor) {
         visitor(slice, idx, isliceat(slice, idx));
     }
 }
+ 
+/* delivering the array ownership to slice */
+islice *isliceunique(iarray* arr) {
+    islice* s =  islicemakearg(arr, ":");
+    irefdelete(arr);
+    return s;
+}
+
+/* delivering the slice-ownership to new-slice */
+islice *isliceuniqueby(islice* sold, const char* args) {
+    islice* s = islicemakeargby(sold, args);
+    irefdelete(sold);
+    return s;
+}
+
+
