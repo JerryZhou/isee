@@ -348,6 +348,28 @@ int idictremove(idict *d, const ivar *key) {
     return entry != NULL;
 }
 
+/* remove all the values in dict */
+int idictremoveall(idict *d) {
+    /* skip the empty array */
+    icheckret(d && iarraylen(d->keys), iiok);
+    
+    /* remove all keys */
+    iarrayremoveall(d->keys);
+    
+    /* remove all values */
+    iarray* indexentrys = NULL;
+    irangearray(d->values, iarray*,
+                iarrayset(d->values, __key, &indexentrys);
+                );
+    
+    /* auto-rehashing */
+    if (iflag_is(d->flag, EnumDictFlag_AutoRehashing)) {
+        _idict_auto_rehashing(d);
+    }
+    
+    return iiok;
+}
+
 /* fech the value with key, if exits [no-retain-ret] */
 ivar* idictvalue(const idict *d, const ivar *key) {
     iarray* indexentrys = _idictentryarrayof(d, key);

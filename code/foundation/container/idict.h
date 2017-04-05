@@ -91,6 +91,9 @@ idictentry* idictadd(idict *d, const ivar *key, ivar *value);
 
 /* remove the value with key */
 int idictremove(idict *d, const ivar *key);
+    
+/* remove all the values in dict */
+int idictremoveall(idict *d);
 
 /* fech the value with key, if exits [no-retain-ret] */
 ivar* idictvalue(const idict *d, const ivar *key);
