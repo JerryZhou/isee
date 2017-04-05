@@ -328,24 +328,36 @@ int idictremove(idict *d, const ivar *key) {
     idictentry *entry = NULL;
     if (indexentrys && iarraylen(indexentrys)) {
         entry = _idictentryof(d, indexentrys, key);
-        if (entry) {
-            /* remove value */
-            iarrayremove(indexentrys, entry->indexvalue);
-            /* remove key */
-            iarrayremove(d->keys, entry->indexkey);
-            
-            /* minus the collides */
-            if (iarraylen(indexentrys) > 0) {
-                d->priv->collides--;
-            }
-        }
+        return idictremoveentry(d, entry, indexentrys);
+    }
+    
+    return iino;
+}
+
+/* remove the entry in dict */
+int idictremoveentry(idict *d, idictentry *entry, iarray* indexentrys) {
+    icheckret(d && entry, iino);
+    
+    if (indexentrys == NULL) {
+        indexentrys = _idictentryarrayof(d, entry->key);
+    }
+    
+    /* remove value */
+    iarrayremove(indexentrys, entry->indexvalue);
+    /* remove key */
+    iarrayremove(d->keys, entry->indexkey);
+    
+    /* minus the collides */
+    if (iarraylen(indexentrys) > 0) {
+        d->priv->collides--;
     }
     
     /* auto-rehashing */
     if (iflag_is(d->flag, EnumDictFlag_AutoRehashing)) {
         _idict_auto_rehashing(d);
     }
-    return entry != NULL;
+    
+    return iiok;
 }
 
 /* remove all the values in dict */
@@ -372,12 +384,18 @@ int idictremoveall(idict *d) {
 
 /* fech the value with key, if exits [no-retain-ret] */
 ivar* idictvalue(const idict *d, const ivar *key) {
+    idictentry *entry = idictentryof(d, key);
+    if (entry) {
+        return icast(ivar, entry->value);
+    }
+    return NULL;
+}
+
+/* fech the entry with key, if exits [no-retain-ret] */
+idictentry* idictentryof(const idict *d, const ivar *key) {
     iarray* indexentrys = _idictentryarrayof(d, key);
     if (indexentrys && iarraylen(indexentrys)) {
-        idictentry *entry = _idictentryof(d, indexentrys, key);
-        if (entry) {
-            return icast(ivar, entry->value);
-        }
+        return _idictentryof(d, indexentrys, key);
     }
     return NULL;
 }

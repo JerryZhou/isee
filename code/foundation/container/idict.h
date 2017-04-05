@@ -23,6 +23,8 @@ typedef struct idictentry {
     ivar *key;
     ivar *value;
     
+    void *u;    /* user data in entry */
+    
     volatile int indexkey;
     volatile int indexvalue;
 } idictentry;
@@ -92,11 +94,17 @@ idictentry* idictadd(idict *d, const ivar *key, ivar *value);
 /* remove the value with key */
 int idictremove(idict *d, const ivar *key);
     
+/* remove the entry in dict */
+int idictremoveentry(idict *d, idictentry *entry, iarray* indexentrys);
+    
 /* remove all the values in dict */
 int idictremoveall(idict *d);
 
 /* fech the value with key, if exits [no-retain-ret] */
 ivar* idictvalue(const idict *d, const ivar *key);
+    
+/* fech the entry with key, if exits [no-retain-ret] */
+idictentry* idictentryof(const idict *d, const ivar *key);
 
 /* get all sorted keys */
 const iarray* idictkeys(const idict *d);
