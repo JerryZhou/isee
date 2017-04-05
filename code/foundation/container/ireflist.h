@@ -22,7 +22,7 @@ typedef struct irefjoint {
     /* the joined list */
     iwref *list;
     
-    /* double linked list: next and pre */
+    /* double linked list: next and pre, unsafe-retain */
     struct irefjoint *next;
     struct irefjoint *pre;
 }irefjoint;
