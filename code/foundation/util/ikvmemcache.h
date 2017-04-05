@@ -3,6 +3,7 @@
 	
 #include "foundation/itype.h"
 #include "foundation/core/iref.h"
+
 	
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
@@ -15,38 +16,38 @@ extern "C" {
     struct ivar;
     
     /* the control flag in kv-cache */
-    typedef enum EnumKvCacheFlag {
-        EnumKvCacheFlag_NotTrimTheRetained = 1,      /* do not trime the retained object */
+    typedef enum EnumKvMemCacheFlag {
+        EnumKvMemCacheFlag_NotTrimTheRetained = 1,      /* do not trime the retained object */
         
-    } EnumKvCacheFlag;
+    } EnumKvMemCacheFlag;
     
     /* the const lru-memory-cache */
-    typedef struct ikvcache {
+    typedef struct ikvmemcache {
         irefdeclare;
         
-        int flag;
+        int flag;                       /* @see EnumKvCacheFlag */
         
         struct idict *dict;             /* the key-value */
         struct ireflist *lru;           /* the lru node list */
-    } ikvcache;
+    } ikvmemcache;
     
-    /**/
-    ikvcache* ikvcachemake(size_t capacity);
+    /* make a cache */
+    ikvmemcache* ikvmemcachemake(size_t capacity);
     
     /* destructor */
-    void ikvcache_destructor(const struct imeta*, iptr o);
+    void ikvmemcache_destructor(const struct imeta*, iptr o);
     
-    /**/
-    void ikvcacheclear(ikvcache* cache);
+    /* clear all the node in the cache*/
+    void ikvmemcacheclear(ikvmemcache* cache);
     
-    /**/
-    size_t ikvcachetrim(ikvcache* cache, size_t trim);
+    /* trim the cache to right size, return the trimed object counts */
+    size_t ikvmemcachetrim(ikvmemcache* cache, size_t trim);
     
-    /**/
-    struct ivar * ikvcacheget(const ikvcache* cache, const struct ivar* key);
+    /* get the value of cache, not need to release for ivar */
+    struct ivar * ikvmemcacheget(const ikvmemcache* cache, const struct ivar* key);
     
-    /**/
-    void ikvcacheput(struct ikvcache* cache, const struct ivar *key, struct ivar *value);
+    /* put the ivar in key */
+    void ikvmemcacheput(struct ikvmemcache* cache, const struct ivar *key, struct ivar *value);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
