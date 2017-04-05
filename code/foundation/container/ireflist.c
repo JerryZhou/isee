@@ -7,8 +7,11 @@
     do {                           \
         if (root == NULL) {        \
             root = node;           \
+            root->next = NULL;     \
+            root->pre = node;      \
         }else {                    \
             node->next = root;     \
+            node->pre = root->pre; \
             root->pre = node;      \
             root = node;           \
         }                          \
@@ -16,15 +19,21 @@
 
 #define list_remove(root, node)         \
     do {                                \
-        if (root == node) {             \
-            root = node->next;          \
-        }                               \
         if (node->next) {               \
             node->next->pre = node->pre;\
         }                               \
         if (node->pre) {                \
             node->pre->next = node->next;\
         }                                \
+        if (root->pre == node)  {       \
+            root->pre = node->pre;      \
+        }                               \
+        if (root == node) {             \
+            if (root->pre) {            \
+                root->pre->next = NULL; \
+            }                           \
+            root = node->next;          \
+        }                               \
         node->pre = NULL;                \
         node->next = NULL;               \
     }while(0)
@@ -111,6 +120,13 @@ int64_t ireflisttick(const ireflist *list) {
 irefjoint* ireflistfirst(const ireflist *list) {
     icheckret(list, NULL);
     return list->root;
+}
+
+/* get the list last node */
+irefjoint* ireflistlast(const ireflist *list) {
+    icheckret(list, NULL);
+    icheckret(list->root, NULL);
+    return list->root->pre;
 }
 
 /* find the node in list with first match */

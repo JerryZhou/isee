@@ -71,6 +71,9 @@ int64_t ireflisttick(const ireflist *list);
 /* get the list first node */
 irefjoint* ireflistfirst(const ireflist *list);
 
+/* get the list last node */
+irefjoint* ireflistlast(const ireflist *list);
+
 /* find the node in list with first match */
 irefjoint* ireflistfind(const ireflist *list,
                         const iref *value);
