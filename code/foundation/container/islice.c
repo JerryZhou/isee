@@ -139,9 +139,9 @@ void isliceargsformat(char* buf, int begin, int end, int capacity) {
             (void)(snprintf(buf, __islice_arg_buf_len, ":%d", end));
         }
     } else if (capacity >= 0){
-        (void)(snprintf(buf, 64, "::%d", capacity));
+        (void)(snprintf(buf, __islice_arg_buf_len, "::%d", capacity));
     } else {
-        (void)(snprintf(buf, 64, "%s", ":"));
+        (void)(snprintf(buf, __islice_arg_buf_len, "%s", ":"));
     }
 }
 
