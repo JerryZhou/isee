@@ -128,7 +128,7 @@ SP_CASE(ikvmemcache, ikvmemcacheget) {
         SP_TRUE(__x_cacheget(cache, 1) == 100);
         SP_TRUE(__x_cacheget(cache, 2) == 200);
     }
-     
+    
     {
         ivar *key = ivarmakeint(3);
         ivar *value = ikvmemcacheget(cache, key);

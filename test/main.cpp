@@ -44,6 +44,8 @@ int64_t _g_memory_in_use = 0;
 #include "foundation/test_icmdarg.h"
 #include "foundation/test_iutf8.h"
 #include "foundation/test_iendian.h"
+#include "foundation/test_ibase64.h"
+#include "foundation/test_ikvmemcache.h"
 
 // foundation/math
 #include "foundation/test_icircle.h"
