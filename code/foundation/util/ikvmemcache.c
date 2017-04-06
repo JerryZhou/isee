@@ -32,10 +32,11 @@ size_t ikvmemcachesize(const ikvmemcache *cache) {
 }
 
 /* should update the weight */
-static void _ikvmemcacheweight_change(ikvmemcache* cache, const ivar *key, ivar *oldvalue, ivar *newvalue) {
-    icheck(cache && oldvalue != newvalue);
-    icheck(cache->fnweight);
-    icheck(iflag_is(cache->flag, EnumKvMemCacheFlag_Weighted));
+static int _ikvmemcacheweight_change(ikvmemcache* cache, const ivar *key, ivar *oldvalue, ivar *newvalue) {
+    icheckret(cache && oldvalue != newvalue, iino);
+    icheckret(cache->fnweight, iino);
+    icheckret(iflag_is(cache->flag, EnumKvMemCacheFlag_Weighted), iino);
+    size_t oldweight = cache->weight;
     
     if (oldvalue) {
         cache->weight -= cache->fnweight(cache, key, oldvalue);
@@ -44,6 +45,8 @@ static void _ikvmemcacheweight_change(ikvmemcache* cache, const ivar *key, ivar 
     if (newvalue) {
         cache->weight += cache->fnweight(cache, key, newvalue);
     }
+    
+    return cache->weight > oldweight;
 }
 
 /* basic remove-entry */
@@ -64,7 +67,7 @@ typedef int (*_ikv_range_end) (ikvmemcache* cache, size_t size);
 typedef void (*_ikv_range_eval) (ikvmemcache*cache, idictentry *entry);
 
 static size_t _ikvmemcache_trim_to(ikvmemcache* cache, size_t size, _ikv_range_end end, _ikv_range_eval eval) {
-    icheckret(end(cache, size), 0);
+    icheckret(end && end(cache, size), 0);
     
     /*double-linked-list in circle */
     irefjoint* node = ireflistlast(cache->lru);
@@ -83,9 +86,11 @@ static size_t _ikvmemcache_trim_to(ikvmemcache* cache, size_t size, _ikv_range_e
     while (end(cache, size) && rangelimit > 0) {
         if (node) {
             pre = node->pre;
-            if (!iflag_is(cache->flag, EnumKvMemCacheFlag_NotTrimTheRetained) || // no need to track the retain
-                (entry = icast(idictentry, node->value) &&                       // track the retain-count is less equal than 1
-                 (entry == NULL || entry->value == NULL || entry->value->_ref == 1))) {
+            entry = icast(idictentry, node->value);
+            if (!iflag_is(cache->flag, EnumKvMemCacheFlag_NotTrimTheRetained) || /* no need to track the retain */
+                 (entry == NULL ||
+                  entry->value == NULL ||
+                  entry->value->_ref == 1)) { /* track the retain-count is less equal than 1 */
                     /* the eval */
                     if (eval) {
                         eval(cache, entry);
@@ -120,7 +125,7 @@ static int _ikv_end_count(ikvmemcache *cache, size_t size) {
 }
 
 /* trim the cache to right size, return the trimed object counts */
-size_t ikvmemcachetrim(ikvmemcache* cache, size_t trim) {
+size_t ikvmemcachetrimcount(ikvmemcache* cache, size_t trim) {
     return _ikvmemcache_trim_to(cache, trim, _ikv_end_count, NULL);
 }
 
@@ -130,7 +135,7 @@ static int _ikv_end_weight(ikvmemcache *cache, size_t size) {
 }
 
 /* the weight-val */
-static size_t ikvmemcachetrimweight(ikvmemcache* cache, size_t weight) {
+size_t ikvmemcachetrimweight(ikvmemcache* cache, size_t weight) {
     return _ikvmemcache_trim_to(cache, weight, _ikv_end_weight, NULL);
 }
 
@@ -146,10 +151,10 @@ static void _ikvmemcacheupdateentry(ikvmemcache* cache, idictentry *entry) {
 /* should update the weight */
 static void _ikvmemcacheweighteval(ikvmemcache* cache, const ivar *key, ivar *oldvalue, ivar *newvalue) {
     /* the truly weight cacl */
-    _ikvmemcacheweight_change(cache, key, oldvalue, newvalue);
+    int changelager = _ikvmemcacheweight_change(cache, key, oldvalue, newvalue);
     
     /* the weight eval-trim */
-    if (cache->weight >= cache->capacityweight) {
+    if (changelager && iflag_is(cache->flag, EnumKvMemCacheFlag_AutoTrimToWeightCapacity)) {
         ikvmemcachetrimweight(cache, cache->capacityweight);
     }
 }
@@ -168,26 +173,40 @@ struct ivar * ikvmemcacheget(const ikvmemcache* cache, const struct ivar* key) {
 int ikvmemcacheput(struct ikvmemcache* cache, const struct ivar *key, struct ivar *value) {
     idictentry* entry = idictentryof(cache->dict, key);
     int exits = iino;
+    int changelager = iino;
     if (!entry) {
         entry = idictadd(cache->dict, key, value);
         entry->u = ireflistadd(cache->lru, irefcast(entry));
         
         /* update the weight */
-        _ikvmemcacheweighteval(cache, key, NULL, value);
+        changelager = _ikvmemcacheweight_change(cache, key, NULL, value);
     } else {
         exits = iiok;
-        /* update the weight */
-        _ikvmemcacheweighteval(cache, key, entry->value, value);
+        /* resign the old-value */
+        ivar *oldvalue = NULL;
+        iassign(oldvalue, entry->value);
+        
         /* set the value*/
         idictentysetvalue(entry, value);
         
         /* update the joint in lru */
         _ikvmemcacheupdateentry((ikvmemcache*)cache, entry);
+        
+        /* update the weight */
+        changelager = _ikvmemcacheweight_change(cache, key, oldvalue, value);
+        
+        /* release the old-value */
+        irefdelete(oldvalue);
     }
     
     /* if add object and the flag is auto-triming */
-    if (!exits && iflag_is(cache->flag, EnumKvMemCacheFlag_AutoTrimToCapacity)) {
-        ikvmemcachetrim(cache, cache->capacity);
+    if (!exits && iflag_is(cache->flag, EnumKvMemCacheFlag_AutoTrimToCountCapacity)) {
+        ikvmemcachetrimcount(cache, cache->capacitycount);
+    }
+    
+    /* the weight eval-trim */
+    if (changelager && iflag_is(cache->flag, EnumKvMemCacheFlag_AutoTrimToWeightCapacity)) {
+        ikvmemcachetrimweight(cache, cache->capacityweight);
     }
     
     return exits;
@@ -201,5 +220,18 @@ int ikvmemcacheremove(ikvmemcache* cache, const struct ivar *key) {
     }
     
     return entry != NULL;
+}
+
+/* all keys in LRU-order returned in @param keys, return the keys-count */
+size_t ikvmemcachekeys(const ikvmemcache* cache, struct iarray *keys) {
+    irefjoint* joint = ireflistfirst(cache->lru);
+    while (joint) {
+        idictentry *entry = icast(idictentry, joint->value);
+        if (entry && entry->key) {
+            iarrayadd(keys, &entry->key);
+        }
+        joint = joint->next;
+    }
+    return iarraylen(keys);
 }
 
