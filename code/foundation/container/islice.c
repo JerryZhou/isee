@@ -269,16 +269,16 @@ void isliceforeach(const islice *slice, islice_entry_visitor visitor) {
 }
  
 /* delivering the array ownership to slice */
-islice *isliceunique(iarray* arr) {
-    islice* s =  islicemakearg(arr, ":");
-    irefdelete(arr);
+islice *isliceunique(iarray** arrref) {
+    islice* s =  islicemakearg(*arrref, ":");
+    irefdelete(arrref[0]);
     return s;
 }
 
 /* delivering the slice-ownership to new-slice */
-islice *isliceuniqueby(islice* sold, const char* args) {
-    islice* s = islicemakeargby(sold, args);
-    irefdelete(sold);
+islice *isliceuniqueby(islice** soldref, const char* args) {
+    islice* s = islicemakeargby(*soldref, args);
+    irefdelete(soldref[0]);
     return s;
 }
 

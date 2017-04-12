@@ -49,7 +49,7 @@ islice* ibase64encode(const ibase64encoding *encoding, const islice* isrc) {
     ibyte pad = '=';
     
     /* prepare the encode dst and read src*/
-    islice* idst = isliceunique(bytes);
+    islice* idst = isliceunique(&bytes);
     islice* dst = islicemakeargby(idst, ":");
     islice* src = islicemakeargby((islice*)isrc, ":");
     
@@ -86,8 +86,8 @@ islice* ibase64encode(const ibase64encoding *encoding, const islice* isrc) {
         }
         
         /* next src and dst */
-        src = isliceuniqueby(src, "3:");
-        dst = isliceuniqueby(dst, "4:");
+        src = isliceuniqueby(&src, "3:");
+        dst = isliceuniqueby(&dst, "4:");
     }
     
     irefdelete(src);
@@ -107,7 +107,7 @@ void ibase64decodedetails(const ibase64encoding *encoding, const islice*isrc, ib
     arr->len = decodeLen;
     
     /* the source */
-    islice* idst = isliceunique(arr);
+    islice* idst = isliceunique(&arr);
     islice* dst = islicedby((islice*)idst, 0, islicelen(idst));
     islice* src = islicedby((islice*)isrc, 0, islicelen(isrc));
     _ROut(0, iino, 0); rout->dst = idst;
@@ -121,7 +121,7 @@ void ibase64decodedetails(const ibase64encoding *encoding, const islice*isrc, ib
                 goto ret;
             }
             ibyte in = isliceof(src, ibyte, 0);
-            src = isliceuniqueby(src, "1:");
+            src = isliceuniqueby(&src, "1:");
             if (in == '=') {
                 switch (j) {
                     case 0:
@@ -139,7 +139,7 @@ void ibase64decodedetails(const ibase64encoding *encoding, const islice*isrc, ib
                             _ROut(rout->n, iino, olen - islicelen(src)); /* ?? may the last '=' is ileggel */
                             goto ret;
                         }
-                        src = isliceuniqueby(src, "1:");
+                        src = isliceuniqueby(&src, "1:");
                     break;
                 }
                 if (islicelen(src) > 0) {
@@ -166,7 +166,7 @@ void ibase64decodedetails(const ibase64encoding *encoding, const islice*isrc, ib
                 rdst[0] = dbuf[0] <<2 | dbuf[1] >> 4;
                 break;
         }
-        dst = isliceuniqueby(dst, "3:");
+        dst = isliceuniqueby(&dst, "3:");
         rout->n += dlen-1;
     }
     
@@ -175,7 +175,7 @@ ret:
     irefdelete(src);
     if (rout->n != islicelen(idst)) {
         __isargs(-1, rout->n, -1);
-        rout->dst = isliceuniqueby(idst, __isargs_);
+        rout->dst = isliceuniqueby(&idst, __isargs_);
     }
 }
 
