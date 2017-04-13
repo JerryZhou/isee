@@ -65,7 +65,7 @@ void ipolygon3dadd(ipolygon3d *poly, const ipos3 *v, int nums) {
     }
     
     /* add vec3 */
-    poly->pos = isliceappendvalues(poly->pos, v, nums);
+    poly->pos = isliceappendvalues(&poly->pos, v, nums);
     
     /* set polygon plane */
     if (slicelen<3 && islicelen(poly->pos) >= 3) {
@@ -230,7 +230,7 @@ void ipolygon2dadd(ipolygon2d *poly, const ipos2 *v, int nums) {
     }
     
     /* add vec2 */
-    poly->pos = isliceappendvalues(poly->pos, v, nums);
+    poly->pos = isliceappendvalues(&poly->pos, v, nums);
     
     /* the center */
     ipolygon2dfinish(poly);

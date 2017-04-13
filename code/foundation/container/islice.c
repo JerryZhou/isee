@@ -162,7 +162,8 @@ size_t islicecapacity(const islice *slice) {
 
 /* append
  * usage: slice = isliceappendvalues(slice, values, count); */
-islice* isliceappendvalues(islice* slice, const void *values, int count) {
+islice* isliceappendvalues(islice** sliceref, const void *values, int count) {
+    islice *slice = sliceref[0];
     int appendcount = count;
     int needcapacity = (slice->end+appendcount-1);
     int index = slice->end;
@@ -192,6 +193,7 @@ islice* isliceappendvalues(islice* slice, const void *values, int count) {
         }
         /* update the slice end cursor */
         slice->end += appendcount;
+        sliceref[0] = NULL;
     } else {
         newcapacity = islicecapacity(slice);
         newcapacity = imax(newcapacity, 4);
@@ -214,8 +216,10 @@ islice* isliceappendvalues(islice* slice, const void *values, int count) {
         /*make new slice*/
         newslice = islicemake(newarray, 0, needcapacity, newcapacity);
         
-        /* set slice to return*/
         /* free the old slice*/
+        irefdelete(sliceref[0]);
+        slice = NULL;
+        /* set slice to return*/
         iassign(slice, newslice);
         
         /* free the new array ref*/
@@ -227,18 +231,19 @@ islice* isliceappendvalues(islice* slice, const void *values, int count) {
 }
 
 /* append */
-islice* isliceappend(islice *slice, const islice *append) {
+islice* isliceappend(islice **sliceref, const islice *append) {
     /* should be the same slice entry */
+    islice *slice = sliceref[0];
     icheckret(slice, NULL);
     icheckret(append, slice);
     icheckret(slice->array->entry == slice->array->entry, slice);
-    return isliceappendvalues(slice,
+    return isliceappendvalues(sliceref,
                               __arr_i(append->array, append->begin),
                               islicelen(append));
 }
 
 /* add element */
-islice* isliceadd(islice *slice, const void *value) {
+islice* isliceadd(islice **slice, const void *value) {
     return isliceappendvalues(slice, value, 1);
 }
 

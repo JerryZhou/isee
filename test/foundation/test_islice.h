@@ -140,7 +140,7 @@ SP_CASE(islice, islicemakeby) {
     
     /**/
     int aps[] = {100, 200};
-    isliceadd(yslice, aps);
+    yslice = isliceadd(&yslice, aps);
     
     SP_EQUAL(islicelen(yslice), 1);
     SP_EQUAL(islicecapacity(yslice), 3);
@@ -302,20 +302,20 @@ SP_CASE(islice, isliceappendvalues) {
     
     __Sn_be_1(slice, 0, 2);
     
-    islice *slicenew = isliceappendvalues(slice, values, icountof(values));
-    SP_TRUE(islicelen(slice) == 4);
-    SP_TRUE(islicecapacity(slice) == 6);
-    SP_TRUE(slice == slicenew);
+    islice *slicenew = isliceappendvalues(&slice, values, icountof(values));
+    SP_TRUE(islicelen(slicenew) == 4);
+    SP_TRUE(islicecapacity(slicenew) == 6);
+    SP_TRUE(slice == NULL);
     
-    __Sn_be_4(slice, 0, 2, 0, 1, 2);
+    __Sn_be_4(slicenew, 0, 2, 0, 1, 2);
     
-    islice *slicenew1 = isliceappendvalues(slicenew, values, icountof(values));
+    islice *slicenew1 = isliceappendvalues(&slicenew, values, icountof(values));
     SP_TRUE(islicelen(slicenew1) == 7);
     SP_TRUE(islicecapacity(slicenew1) == 12);
-    SP_TRUE(slice != slicenew1);
+    SP_TRUE(NULL != slicenew1);
     
     __Sn_be_7(slicenew1, 0, 2, 0, 1, 2, 0, 1, 2);
-   
+    
     irelease(slice);
     irelease(slicenew);
     irelease(slicenew1);
@@ -341,17 +341,17 @@ SP_CASE(islice, isliceset) {
     
     __Sn_be_1(slice, 0, 2);
     
-    islice *slicenew = isliceappendvalues(slice, values, icountof(values));
-    SP_TRUE(islicelen(slice) == 4);
-    SP_TRUE(islicecapacity(slice) == 6);
-    SP_TRUE(slice == slicenew);
+    islice *slicenew = isliceappendvalues(&slice, values, icountof(values));
+    SP_TRUE(islicelen(slicenew) == 4);
+    SP_TRUE(islicecapacity(slicenew) == 6);
+    SP_TRUE(slice == NULL);
     
-    __Sn_be_4(slice, 0, 2, 0, 1, 2);
+    __Sn_be_4(slicenew, 0, 2, 0, 1, 2);
     
-    islice *slicenew1 = isliceappendvalues(slicenew, values, icountof(values));
+    islice *slicenew1 = isliceappendvalues(&slicenew, values, icountof(values));
     SP_TRUE(islicelen(slicenew1) == 7);
     SP_TRUE(islicecapacity(slicenew1) == 12);
-    SP_TRUE(slice != slicenew1);
+    SP_TRUE(NULL == slicenew);
     
     __Sn_be_7(slicenew1, 0, 2, 0, 1, 2, 0, 1, 2);
     

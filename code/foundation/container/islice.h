@@ -86,16 +86,16 @@ size_t islicecapacity(const islice *slice);
 
 /* append
  * usage: slice = isliceappendvalues(slice, values, count); */
-islice* isliceappendvalues(islice* slice, const void *values, int count);
+islice* isliceappendvalues(islice** slice, const void *values, int count);
 
 /* append
  * usage: slice = isliceappend(slice, append); */
-islice* isliceappend(islice *slice, const islice *append);
+islice* isliceappend(islice** slice, const islice *append);
 
 /*
  * add value
  * usage : slice = isliceadd(slice, i); */
-islice* isliceadd(islice *slice, const void *value);
+islice* isliceadd(islice** slice, const void *value);
 
 /* set value at index */
 int isliceset(islice *slice, int index, const void *value);
