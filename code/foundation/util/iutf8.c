@@ -170,6 +170,15 @@ void iutf8decodelast(const islice* bytes, iutf8decodeout* rout) {
 
 /* encoder */
 void iutf8encode(const irune rune, iutf8encodeout* rout) {
+    /* http://stackoverflow.com/questions/4607413/c-library-to-convert-unicode-code-points-to-utf8/4609989#4609989 
+     * if (c<0x80) *b++=c;
+     * else if (c<0x800) *b++=192+c/64, *b++=128+c%64;
+     * else if (c-0xd800u<0x800) goto error;
+     * else if (c<0x10000) *b++=224+c/4096, *b++=128+c/64%64, *b++=128+c%64;
+     * else if (c<0x110000) *b++=240+c/262144, *b++=128+c/4096%64, *b++=128+c/64%64, *b++=128+c%64;
+     * else goto error;
+     * */
+
     if (rune < iRune1Max) {
         rout->utf8[0] = (ibyte)(rune);
         rout->len = 1;
