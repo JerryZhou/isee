@@ -59,7 +59,10 @@ typedef enum EnumArrayFlag {
     EnumArrayFlagNeedFreeUserData = 1<<7,
     
     /* the array is the const-array */
-    EnumArrayConst = 1<<8,
+    EnumArrayFlagConst = 1<<8,
+    
+    /* the array buffer is no need to free: TODOS */
+    EnumArrayFlagStaticBufferNoFree = 1<<9,
 }EnumArrayFlag;
 
 /* the array sencond-meta information */
@@ -79,17 +82,21 @@ typedef struct iarrayentry{
 typedef struct iarray {
     irefdeclare;
     
-    size_t capacity;
-    size_t len;
-    char *buffer;
-    int flag;
-    iarray_entry_cmp cmp;
-    
     /* the array-meta */
     const iarrayentry* entry;
     
     /* user data appending to array*/
     void *userdata;
+    
+    /* the flag of array */
+    int flag;
+    /* the instance compare operators */
+    iarray_entry_cmp cmp;
+    
+    /* the char-buffer descriptions */
+    size_t capacity;
+    size_t len;
+    char *buffer;
 }iarray;
 
 /* array destructor */
@@ -97,6 +104,7 @@ void iarray_destructor(const struct imeta*, iptr o);
     
 /* make array with type entry */
 iarray *iarraymake(size_t capacity, const iarrayentry *entry);
+iarray *iarraymakestatic(size_t len, char *buf, const iarrayentry *entry);
 
 /* length */
 size_t iarraylen(const iarray *arr);

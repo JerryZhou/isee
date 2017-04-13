@@ -11,7 +11,7 @@ typedef islice istring;
 
 /* declare the string in stack, no need to free */
 #define ideclarestring(name, value) \
-iarray name##_array = {1, NULL, NULL, 0, NULL, strlen(value), strlen(value), (char*)value};\
+iarray name##_array = {1, NULL, NULL, 0, NULL, NULL, NULL, 0, NULL, strlen(value), strlen(value), (char*)value};\
 islice name##_slice = {1, NULL, NULL, 0, NULL, &name##_array, 0, strlen(value)};\
 islice * name = & name##_slice
 

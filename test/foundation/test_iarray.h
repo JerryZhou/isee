@@ -406,6 +406,28 @@ SP_CASE(iarray, iarraybinaryinsert) {
     irefdelete(arr);
 }
 
+SP_CASE(iarray, staticarray) {
+    char ss[] = {'a', 'b', 'c'};
+    iarray * a = iarraymakestatic(3, ss, iarrayentryget(EnumArrayEntryType_Char));
+    
+    SP_TRUE(iarrayof(a, char, 0) == 'a');
+    SP_TRUE(iarrayof(a, char, 1) == 'b');
+    SP_TRUE(iarrayof(a, char, 2) == 'c');
+    SP_TRUE(a->buffer == ss);
+    
+    iarrayappend(a, ss, 3);
+    
+    SP_TRUE(iarrayof(a, char, 0) == 'a');
+    SP_TRUE(iarrayof(a, char, 1) == 'b');
+    SP_TRUE(iarrayof(a, char, 2) == 'c');
+    SP_TRUE(iarrayof(a, char, 3) == 'a');
+    SP_TRUE(iarrayof(a, char, 4) == 'b');
+    SP_TRUE(iarrayof(a, char, 5) == 'c');
+    SP_TRUE(a->buffer != ss);
+    
+    irefdelete(a);
+}
+
 SP_CASE(iarray, end) {
     imemoryglobalclear();
     

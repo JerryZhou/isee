@@ -18,8 +18,12 @@ void iarray_destructor(const struct imeta *meta, iptr o) {
     
     /* release all element */
     iarraytruncate(array, 0);
+    
     /* release the raw buffer */
-    ifree(array->buffer);
+    if (!iarrayisflag(array, EnumArrayFlagStaticBufferNoFree)) {
+        ifree(array->buffer);
+    }
+    
     /* for dynamic array */
     if (array->entry && iflag_is(array->entry->flag, EnumArrayFlagNeedFreeEntry)) {
         iobjfree(entry);
@@ -38,17 +42,33 @@ void iarray_destructor(const struct imeta *meta, iptr o) {
      */
 }
 
-/* make array */
-iarray *iarraymake(size_t capacity, const iarrayentry *entry) {
+/* make array - all - */
+static iarray *_iarraymake_in(size_t capacity, size_t len, char *buf, int flag, const iarrayentry *entry) {
     iarray *array = irefnew(iarray);
-    array->capacity = capacity;
-    array->len = 0;
-    array->buffer = capacity > 0 ? (char*)icalloc(capacity, entry->size) : NULL;
+    
+    /* instance - properties */
     array->entry = entry;
     array->flag = entry->flag;
     array->cmp = entry->cmp;
     
+    /* the array buffer */
+    array->capacity = capacity;
+    array->len = len;
+    array->buffer = buf;
+    array->flag |= flag;
+    
     return array;
+}
+
+/* make array - heap */
+iarray *iarraymake(size_t capacity, const iarrayentry *entry) {
+    return _iarraymake_in(capacity, 0,
+                          capacity > 0 ? (char*)icalloc(capacity, entry->size) : NULL,
+                          0, entry);
+}
+/* make array - static */
+iarray *iarraymakestatic(size_t len, char *buf, const iarrayentry *entry) {
+    return _iarraymake_in(len, len, buf, EnumArrayFlagStaticBufferNoFree, entry);
 }
 
 /* length */
@@ -117,7 +137,7 @@ int iarrayremove(iarray *arr, int index) {
     /* sliced array can not be removed */
     icheckret(!iarrayisflag(arr, EnumArrayFlagSliced), iino);
     /* const array */
-    icheckret(!iarrayisflag(arr, EnumArrayConst), iino);
+    icheckret(!iarrayisflag(arr, EnumArrayFlagConst), iino);
     
     if (!(arr->entry->flag & EnumArrayFlagSimple)) {
         arr->entry->swap(arr, index, kindex_invalid);
@@ -139,10 +159,21 @@ int iarrayremove(iarray *arr, int index) {
 /* NB!! should besure the redundant element have been destruct before call this */
 static size_t _iarray_just_capacity(iarray *arr, size_t newcapacity) {
     char* newbuffer;
-    newbuffer = irealloc(arr->buffer, newcapacity * arr->entry->size);
+    ibool inrealloc = iiyes;
+    if (!iarrayisflag(arr, EnumArrayFlagStaticBufferNoFree)) {
+        newbuffer = irealloc(arr->buffer, newcapacity * arr->entry->size);
+    } else {
+        /* should be a new buffer */
+        newbuffer = icalloc(newcapacity, arr->entry->size);
+        memmove(newbuffer, arr->buffer, arr->len * arr->entry->size);
+        /* unset the flag */
+        iarrayunsetflag(arr, EnumArrayFlagStaticBufferNoFree);
+        inrealloc = iino;
+    }
+    
     icheckret(newbuffer, arr->capacity);
-    /* 清理新加的内存 */
-    if (arr->flag & EnumArrayFlagMemsetZero && newcapacity > arr->capacity) {
+    /* clear the appended-memory, only happend in irealloc */
+    if (inrealloc && iarrayisflag(arr, EnumArrayFlagMemsetZero) && newcapacity > arr->capacity) {
         memset(newbuffer + arr->capacity * arr->entry->size,
                0,
                (newcapacity-arr->capacity) * arr->entry->size);
@@ -197,7 +228,7 @@ int iarrayinsert(iarray *arr, int index, const void *value, int nums) {
     int i;
     
     /* const array */
-    icheckret(!iarrayisflag(arr, EnumArrayConst), iino);
+    icheckret(!iarrayisflag(arr, EnumArrayFlagConst), iino);
     /* check if we need do insert */
     icheckret(nums > 0, iiok);
     /* check if the index belong to [0, arr->len] */
@@ -240,7 +271,7 @@ int iarrayset(iarray *arr, int index, const void *value) {
     /* length-rang-check */
     icheckret(index >=0 && index<arr->len, iino);
     /* const array */
-    icheckret(!iarrayisflag(arr, EnumArrayConst), iino);
+    icheckret(!iarrayisflag(arr, EnumArrayFlagConst), iino);
     
     arr->entry->assign(arr, index, value, 1);
     return iiok;
@@ -260,7 +291,7 @@ void iarraytruncate(iarray *arr, size_t len) {
     /* sliced array can not be truncate */
     icheck(!iarrayisflag(arr, EnumArrayFlagSliced));
     /* const array */
-    icheck(!iarrayisflag(arr, EnumArrayConst));
+    icheck(!iarrayisflag(arr, EnumArrayFlagConst));
     
     if (arr->entry->flag & EnumArrayFlagSimple) {
         /* direct set the length*/
@@ -281,7 +312,7 @@ void iarraytruncate(iarray *arr, size_t len) {
 size_t iarrayshrinkcapacity(iarray *arr, size_t capacity) {
     icheckret(arr->capacity > capacity, arr->capacity);
     /* const array */
-    icheckret(!iarrayisflag(arr, EnumArrayConst), arr->capacity);
+    icheckret(!iarrayisflag(arr, EnumArrayFlagConst), arr->capacity);
     
     /* sliced array can not be shrink */
     icheckret(!iarrayisflag(arr, EnumArrayFlagSliced), arr->capacity);
@@ -294,7 +325,7 @@ size_t iarrayshrinkcapacity(iarray *arr, size_t capacity) {
 size_t iarrayexpandcapacity(iarray *arr, size_t capacity) {
     icheckret(arr->capacity < capacity, arr->capacity);
     /* const array */
-    icheckret(!iarrayisflag(arr, EnumArrayConst), arr->capacity);
+    icheckret(!iarrayisflag(arr, EnumArrayFlagConst), arr->capacity);
     
     return _iarray_just_capacity(arr, capacity);
 }
@@ -303,7 +334,7 @@ size_t iarrayexpandcapacity(iarray *arr, size_t capacity) {
 void iarraysort(iarray *arr) {
     icheck(arr->len);
     /* const array */
-    icheck(!iarrayisflag(arr, EnumArrayConst));
+    icheck(!iarrayisflag(arr, EnumArrayFlagConst));
     
     /* algorithm: heap-sort */
     iarraysortheap(arr, 0, arr->len-1);
