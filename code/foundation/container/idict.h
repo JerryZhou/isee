@@ -25,8 +25,8 @@ struct idict_private;
 typedef struct idictentry {
     irefdeclare;
     
-    ivar *key;
-    ivar *value;
+    ivar key;
+    ivar value;
     
     void *u;    /* user data in entry */
     

@@ -5,63 +5,63 @@
 SP_SUIT(ivar);
 
 SP_CASE(ivar, ivaris) {
-    ivar *var = irefnew(ivar);
+    ivar *var = iobjmalloc(ivar);
     SP_TRUE(ivaris(var, NULL));
     SP_TRUE(ivaris(var, imetaof(inull)));
-    irefdelete(var);
+    iobjfree(var);
 }
 
 SP_CASE(ivar, ivartype) {
     ivar *var = ivarmakeint(0);
     SP_EQUAL(ivartype(var), imetaindex(int));
-    irefdelete(var);
-    ivar *nvar = irefnew(ivar);
+    iobjfree(var);
+    ivar *nvar = iobjmalloc(ivar);
     SP_EQUAL(ivartype(var), imetaindex(inull));
-    irefdelete(nvar);
+    iobjfree(nvar);
 }
 
 SP_CASE(ivar, ivarmeta) {
     ivar *var = ivarmakeint(0);
     SP_EQUAL(ivarmeta(var), imetaof(int));
-    irefdelete(var);
+    iobjfree(var);
 }
 
 SP_CASE(ivar, ivarissimple) {
     {
-        ivar *var = irefnew(ivar);
+        ivar *var = iobjmalloc(ivar);
         SP_TRUE(ivarissimple(var));
-        irefdelete(var);
+        iobjfree(var);
     }
     {
         ivar *var = ivarmakeint(0);
         SP_TRUE(ivarissimple(var));
-        irefdelete(var);
+        iobjfree(var);
     }
     {
         ivar *var = ivarmakei64(0);
         SP_TRUE(ivarissimple(var));
-        irefdelete(var);
+        iobjfree(var);
     }
     {
         ivar *var = ivarmakeu64(0);
         SP_TRUE(ivarissimple(var));
-        irefdelete(var);
+        iobjfree(var);
     }
     {
         ivar *var = ivarmakeptr(0);
         SP_TRUE(ivarissimple(var));
-        irefdelete(var);
+        iobjfree(var);
     }
     
     {
         ivar *var = ivarmakereal(0);
         SP_TRUE(ivarissimple(var));
-        irefdelete(var);
+        iobjfree(var);
     }
     {
         ivar *var = ivarmakeref(NULL);
         SP_TRUE(!ivarissimple(var));
-        irefdelete(var);
+        iobjfree(var);
     }
     {
         iref *ref = irefnew(iref);
@@ -69,7 +69,7 @@ SP_CASE(ivar, ivarissimple) {
         SP_TRUE(!ivarissimple(var));
         irefdelete(ref);
         
-        irefdelete(var);
+        iobjfree(var);
     }
     {
         const char *s = "abcdefg01234567890";
@@ -87,7 +87,7 @@ SP_CASE(ivar, ivarissimple) {
         SP_TRUE(ss[1] == s[1]);
         SP_TRUE(ss[var->v.pod.size-1] == s[var->v.pod.size-1]);
         
-        irefdelete(var);
+        iobjfree(var);
         
         ipod_destructor(imetaof(ipod), &p);
     }
@@ -102,9 +102,9 @@ SP_CASE(ivar, ivardup) {
         ivar *nvar = ivardup(var);
         SP_EQUAL(nvar->v.ref, var->v.ref);
         SP_EQUAL(nvar->v.ref, ref);
-        irefdelete(nvar);
+        iobjfree(nvar);
         
-        irefdelete(var);
+        iobjfree(var);
         irefdelete(ref);
     }
 
@@ -115,8 +115,8 @@ SP_CASE(ivar, ivardup) {
         ivar *nvar = ivardup(var);
         SP_EQUAL(nvar->v.i, 88);
         
-        irefdelete(var);
-        irefdelete(nvar);
+        iobjfree(var);
+        iobjfree(nvar);
     }
 }
 
@@ -135,10 +135,10 @@ SP_CASE(ivar, ivarhashcode) {
         ivar *svar = ivarmakeref(irefcast(s));
         SP_EQUAL(ivarhashcode(svar), scode);
         
-        irefdelete(svar);
+        iobjfree(svar);
         irefdelete(s);
-        irefdelete(var);
-        irefdelete(nvar);
+        iobjfree(var);
+        iobjfree(nvar);
     }
 }
 
@@ -149,8 +149,8 @@ SP_CASE(ivar, ivarcompare) {
         
         SP_TRUE(ivarcompare(var, nvar) == 5);
         
-        irefdelete(var);
-        irefdelete(nvar);
+        iobjfree(var);
+        iobjfree(nvar);
     }
     {
         istring *s0 = istringmake("abc");
@@ -162,8 +162,8 @@ SP_CASE(ivar, ivarcompare) {
         
         irefdelete(s0);
         irefdelete(s1);
-        irefdelete(var);
-        irefdelete(nvar);
+        iobjfree(var);
+        iobjfree(nvar);
     }
 }
 

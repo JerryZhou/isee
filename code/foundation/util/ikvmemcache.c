@@ -56,7 +56,7 @@ void _ikvmemcache_remove_entry(ikvmemcache* cache, idictentry *entry) {
     ireflistremovejoint(cache->lru, joint);
     
     /* update the weight */
-    _ikvmemcacheweight_change(cache, entry->key, entry->value, NULL);
+    _ikvmemcacheweight_change(cache, &entry->key, &entry->value, NULL);
     
     /* remove from the dict */
     idictremoveentry(cache->dict, entry, NULL);
@@ -65,6 +65,16 @@ void _ikvmemcache_remove_entry(ikvmemcache* cache, idictentry *entry) {
 /* typedef the range-trim */
 typedef int (*_ikv_range_end) (ikvmemcache* cache, size_t size);
 typedef void (*_ikv_range_eval) (ikvmemcache*cache, idictentry *entry);
+
+/* the only one ref */
+static int _ikvmemcache_refone(idictentry *entry) {
+    icheckret(entry, iiyes);
+    if (!ivarissimple(&entry->value)) {
+        irefptr ref = ivarcast(&entry->value, irefptr);
+        return ref->_ref == 1;
+    }
+    return iino;
+}
 
 static size_t _ikvmemcache_trim_to(ikvmemcache* cache, size_t size, _ikv_range_end end, _ikv_range_eval eval) {
     icheckret(end && end(cache, size), 0);
@@ -88,9 +98,7 @@ static size_t _ikvmemcache_trim_to(ikvmemcache* cache, size_t size, _ikv_range_e
             pre = node->pre;
             entry = icast(idictentry, node->value);
             if (!iflag_is(cache->flag, EnumKvMemCacheFlag_NotTrimTheRetained) || /* no need to track the retain */
-                 (entry == NULL ||
-                  entry->value == NULL ||
-                  entry->value->_ref == 1)) { /* track the retain-count is less equal than 1 */
+                 (_ikvmemcache_refone(entry))) { /* track the retain-count is less equal than 1 */
                     /* the eval */
                     if (eval) {
                         eval(cache, entry);
@@ -164,7 +172,7 @@ struct ivar * ikvmemcacheget(const ikvmemcache* cache, const struct ivar* key) {
     idictentry* entry = idictentryof(cache->dict, key);
     if (entry) {
         _ikvmemcacheupdateentry((ikvmemcache*)cache, entry);
-        return entry->value;
+        return &entry->value;
     }
     return NULL;
 }
@@ -183,8 +191,7 @@ int ikvmemcacheput(struct ikvmemcache* cache, const struct ivar *key, struct iva
     } else {
         exits = iiok;
         /* resign the old-value */
-        ivar *oldvalue = NULL;
-        iassign(oldvalue, entry->value);
+        ivar *oldvalue = ivardup(&entry->value);
         
         /* set the value*/
         idictentysetvalue(entry, value);
@@ -196,7 +203,7 @@ int ikvmemcacheput(struct ikvmemcache* cache, const struct ivar *key, struct iva
         changelager = _ikvmemcacheweight_change(cache, key, oldvalue, value);
         
         /* release the old-value */
-        irefdelete(oldvalue);
+        iobjfree(oldvalue);
     }
     
     /* if add object and the flag is auto-triming */
@@ -227,7 +234,7 @@ size_t ikvmemcachekeys(const ikvmemcache* cache, struct iarray *keys) {
     irefjoint* joint = ireflistfirst(cache->lru);
     while (joint) {
         idictentry *entry = icast(idictentry, joint->value);
-        if (entry && entry->key) {
+        if (entry) {
             iarrayadd(keys, &entry->key);
         }
         joint = joint->next;

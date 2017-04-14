@@ -70,7 +70,7 @@ void iconsistentset(iconsistent *c, iarray* elems) {
     
     /* remove ele in members but not in elems */
     irangearray(keys, idictentry*,
-                skey = ivarcast(__value->key, istring*);
+                skey = ivarcast(&__value->key, istring*);
                 if (!_iarray_range_search(elems, skey)) {
                     iconsistentremove(c, skey);
                 }
@@ -88,14 +88,14 @@ void iconsistentset(iconsistent *c, iarray* elems) {
 static uint64_t _iconsistent_key(const iconsistent *c, int index) {
     const iarray* sortedkeys = idictkeys(c->circle);
     idictentry *entry = iarrayof(sortedkeys, idictentry*, index);
-    return ivarcast(entry->key, uint64_t);
+    return ivarcast(&entry->key, uint64_t);
 }
 
 /* the index of elem-key ==> skey */
 static istring* _iconsistent_value(const iconsistent *c, int index) {
     const iarray* sortedkeys = idictkeys(c->circle);
     idictentry *entry = iarrayof(sortedkeys, idictentry*, index);
-    return ivarcast(entry->value, istring*);
+    return ivarcast(&entry->value, istring*);
 }
 
 /* closed ele for key */
@@ -110,11 +110,11 @@ istring* iconsistentindexingof(const iconsistent *c, istring *key) {
 /* closed index for key */
 int iconsistentindexing(const iconsistent *c, istring *key) {
     ivar *keyvar = ivarmakeu64(iconsistenthashof(c, key));
-    idictentry ventry = {.key=keyvar};
+    idictentry ventry = {.key=*keyvar};
     idictentry *entry = &ventry;
     const iarray* sortedkeys = idictkeys(c->circle);
     int index = iarraybinaryindexing(sortedkeys, 0, iarraylen(sortedkeys), &entry);
-    irefdelete(keyvar);
+    iobjfree(keyvar);
     if (index >= iarraylen(sortedkeys)) {
         index = 0;
     }

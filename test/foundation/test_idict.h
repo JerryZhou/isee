@@ -2,6 +2,12 @@
 
 SP_SUIT(idict);
 
+static void _showit() {
+    imemoryglobalclear();
+    
+    imetamemorystate();
+}
+
 SP_CASE(idict, idictmake) {
     idict *d = idictmake(5);
     
@@ -20,8 +26,10 @@ SP_CASE(idict, idictadd) {
     SP_TRUE(idictsize(d) == 1);
     
     irefdelete(d);
-    irefdelete(key);
-    irefdelete(value);
+    iobjfree(key);
+    iobjfree(value);
+    
+    _showit();
 }
 
 SP_CASE(idict, idictremove) {
@@ -37,8 +45,8 @@ SP_CASE(idict, idictremove) {
     SP_TRUE(idictsize(d) == 0);
     
     irefdelete(d);
-    irefdelete(key);
-    irefdelete(value);
+    iobjfree(key);
+    iobjfree(value);
 }
 
 SP_CASE(idict, idicthas) {
@@ -58,8 +66,8 @@ SP_CASE(idict, idicthas) {
     SP_TRUE(idicthas(d, key) == iino);
     
     irefdelete(d);
-    irefdelete(key);
-    irefdelete(value);
+    iobjfree(key);
+    iobjfree(value);
 }
 
 SP_CASE(idict, idictvalue) {
@@ -72,7 +80,7 @@ SP_CASE(idict, idictvalue) {
     SP_TRUE(idictsize(d) == 1);
     
     SP_TRUE(idicthas(d, key) == iiok);
-    SP_TRUE(idictvalue(d, key) == value);
+    SP_TRUE(idictvalue(d, key)->v.real == value->v.real);
     
     idictremove(d, key);
     SP_TRUE(idictsize(d) == 0);
@@ -81,8 +89,8 @@ SP_CASE(idict, idictvalue) {
     SP_TRUE(idictvalue(d, key) == NULL);
     
     irefdelete(d);
-    irefdelete(key);
-    irefdelete(value);
+    iobjfree(key);
+    iobjfree(value);
 }
 
 SP_CASE(idict, idicttkeys) {
@@ -96,12 +104,12 @@ SP_CASE(idict, idicttkeys) {
     SP_TRUE(idictsize(d) == 1);
     
     SP_TRUE(idicthas(d, key) == iiok);
-    SP_TRUE(idictvalue(d, key) == value);
+    SP_TRUE(idictvalue(d, key)->v.real == value->v.real);
     
     SP_TRUE(idictadd(d, key, value1) != NULL);
     SP_TRUE(idictsize(d) == 1);
     SP_TRUE(idicthas(d, key) == iiok);
-    SP_TRUE(idictvalue(d, key) == value1);
+    SP_TRUE(idictvalue(d, key)->v.real == value1->v.real);
     
     SP_TRUE(iarraylen(idictkeys(d)) == 1);
     
@@ -112,9 +120,9 @@ SP_CASE(idict, idicttkeys) {
     SP_TRUE(idictvalue(d, key) == NULL);
     
     irefdelete(d);
-    irefdelete(key);
-    irefdelete(value);
-    irefdelete(value1);
+    iobjfree(key);
+    iobjfree(value);
+    iobjfree(value1);
 }
 
 SP_CASE(idict, complexbehavior) {
@@ -146,15 +154,50 @@ SP_CASE(idict, complexbehavior) {
     SP_TRUE(entry1->indexvalue == 0);  /*1%5---1*/
     
     irefdelete(d);
-    irefdelete(key);
-    irefdelete(key1);
-    irefdelete(key2);
-    irefdelete(value);
-    irefdelete(value1);
+    iobjfree(key);
+    iobjfree(key1);
+    iobjfree(key2);
+    iobjfree(value);
+    iobjfree(value1);
+}
+
+#include <map>
+#include "foundation/math/irand.h"
+
+static void _i_x_dict_ii(idict *d, int key, int value) {
+    ivar keyvar = {.v = {key}, .meta = imetaof(int)};
+    ivar valuevar = {.v = {value}, .meta = imetaof(int)};
+    idictadd(d, &keyvar, &valuevar);
+}
+
+SP_CASE(idict, benchmark) {
+    irand r;
+    irandinit(&r, igetcurmicro());
+    
+    std::map<int, int> stdmap;
+    uint64_t micro = igetcurmicro();
+    for (int i=0; i<10000; ++i) {
+        int key = (int)irandN(&r, std::numeric_limits<int>::max());
+        int value = (int)irandN(&r, std::numeric_limits<int>::max());
+        stdmap[key] = value;
+    }
+    ilog("stdmap ===> [%lld]\n", igetcurmicro() - micro);
+    
+    idict *d = idictmakewith(8, EnumDictFlag_AutoRehashing|EnumDictFlag_NotSortingKeys);
+    micro = igetcurmicro();
+    for (int i=0; i<10000; ++i) {
+        int key = (int)irandN(&r, std::numeric_limits<int>::max());
+        int value = (int)irandN(&r, std::numeric_limits<int>::max());
+        _i_x_dict_ii(d, key, value);
+    }
+    ilog("idict ===> [%lld]\n", igetcurmicro() - micro);
+    irefdelete(d);
 }
 
 SP_CASE(idict, end) {
     imemoryglobalclear();
+    
+    imetamemorystate();
     
     SP_EQUAL(imemoryglobaluse(), _g_memory_in_use);
 }

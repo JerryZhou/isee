@@ -14,8 +14,6 @@ struct imeta;
    
 /* the ivar wrap all couldbeable */
 typedef struct ivar {
-    irefdeclare;
-    
     /* the &v is the real value of meta-funcs,
      * supposed we are in little-endian 
      * https://en.wikipedia.org/wiki/Endianness */

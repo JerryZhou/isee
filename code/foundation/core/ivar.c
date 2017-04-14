@@ -40,9 +40,14 @@ int ivar_compare(const imeta* varmeta, iconstptr lfs, iconstptr rfs) {
 
 /* ivar meta-funcs: assign */
 void ivar_assign(const struct imeta* meta, iptr dst, iconstptr src) {
+    icheck(dst);
     ivar *nvar = icast(ivar, dst);
     ivar *var = icast(ivar, src);
-    const imeta* valuemeta = nvar ? nvar->meta : (var ? var->meta : NULL);
+    if (!nvar->meta && var) {
+        nvar->meta = var->meta;
+    }
+    
+    const imeta* valuemeta = nvar->meta;
     
     icheck(valuemeta);
     if (valuemeta->funcs && valuemeta->funcs->assign) {
@@ -94,7 +99,7 @@ ivar *ivardup(const ivar *var) {
 
 /* make a value */
 ivar* ivarmake(const struct imeta* meta, iconstptr value) {
-    ivar *var = irefnew(ivar);
+    ivar *var = iobjmalloc(ivar);
     var->meta = meta;
     /* constructor */
     if (meta->funcs && meta->funcs->constructor) {

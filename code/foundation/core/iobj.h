@@ -35,6 +35,15 @@ int iobjistype(iconstptr p, const char* name);
 /* quickly type-compare */
 #define iistype(p, type) (iobjgetmeta(p) == imetaof(type))
     
+/* the obj assign */
+void iobjassign(const struct imeta *, iptr dst, iconstptr src);
+    
+/* the hash code */
+uint64_t iobjhash(const struct imeta *, iconstptr obj);
+    
+/* the compare */
+int iobjcompare(const struct imeta *, iconstptr lfs, iconstptr rfs);
+    
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }

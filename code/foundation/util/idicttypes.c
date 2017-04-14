@@ -5,8 +5,8 @@ idictentry* idictadd_u64_istring(idict *d, uint64_t key, istring *value) {
     ivar *keyval = ivarmakeu64(key);
     ivar *valueval = ivarmakeref(irefcast(value));
     idictentry* entry = idictadd(d, keyval, valueval);
-    irefdelete(keyval);
-    irefdelete(valueval);
+    iobjfree(keyval);
+    iobjfree(valueval);
     return entry;
 }
 
@@ -15,8 +15,8 @@ idictentry* idictadd_istring_ibool(idict *d, istring *key, ibool value) {
     ivar *keyval = ivarmakeref(irefcast(key));
     ivar *valueval = ivarmakebool(value);
     idictentry* entry = idictadd(d, keyval, valueval);
-    irefdelete(keyval);
-    irefdelete(valueval);
+    iobjfree(keyval);
+    iobjfree(valueval);
     return entry;
 }
 
@@ -24,7 +24,7 @@ idictentry* idictadd_istring_ibool(idict *d, istring *key, ibool value) {
 int idictremove_u64(idict *d, uint64_t key) {
     ivar *keyval = ivarmakeu64(key);
     int rdbool = idictremove(d, keyval);
-    irefdelete(keyval);
+    iobjfree(keyval);
     return rdbool;
 }
 
@@ -32,7 +32,7 @@ int idictremove_u64(idict *d, uint64_t key) {
 int idictremove_istring(idict *d, istring *key){
     ivar *keyval = ivarmakeref(irefcast(key));
     int rdbool = idictremove(d, keyval);
-    irefdelete(keyval);
+    iobjfree(keyval);
     return rdbool;
 }
 
@@ -40,7 +40,7 @@ int idictremove_istring(idict *d, istring *key){
 int idicthas_u64(idict *d, uint64_t key) {
     ivar *keyval = ivarmakeu64(key);
     int rdbool = idicthas(d, keyval);
-    irefdelete(keyval);
+    iobjfree(keyval);
     return rdbool;
 }
     
@@ -48,7 +48,7 @@ int idicthas_u64(idict *d, uint64_t key) {
 int idicthas_istring(idict *d, istring *key) {
     ivar *keyval = ivarmakeref(irefcast(key));
     int rdbool = idicthas(d, keyval);
-    irefdelete(keyval);
+    iobjfree(keyval);
     return rdbool;
 }
 

@@ -65,6 +65,9 @@ iarray* iarraymakechar(size_t capacity);
 /* array-ibyte */
 iarray* iarraymakeibyte(size_t capacity);
     
+/* array-ivar */
+iarray* iarraymakeivar(size_t capacity);
+    
 /* the inner array entry type */
 typedef enum EnumArrayEntryType {
     EnumArrayEntryType_Char,

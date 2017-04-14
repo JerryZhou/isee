@@ -1,6 +1,8 @@
 #include "foundation/util/iarraytypes.h"
 #include "foundation/memory/imemory.h"
 
+#include "foundation/core/ivar.h"
+
 #include "foundation/math/ivec.h"
 #include "foundation/math/ipos.h"
 #include "foundation/math/isize.h"
@@ -9,6 +11,145 @@
 #include "foundation/math/iline.h"
 #include "foundation/math/iplane.h"
 #include "foundation/math/imat.h"
+
+
+/*************************************************************/
+/* iref                                                      */
+/*************************************************************/
+
+/* array-iref assign */
+static void _iarray_entry_assign_iref(struct iarray *arr,
+                                      int i, const void *value, int nums) {
+    iref* *arrs = (iref* *)arr->buffer;
+    iref* *refvalue = (iref* *)value;
+    iref* ref = NULL;
+    int j = 0;
+    irefarrayentry *entry = (irefarrayentry*)arr->userdata;
+    
+    /* for nums */
+    while (j < nums) {
+        /* realloc not set zero to pending memory */
+        if (i >= arr->len) {
+            arrs[i] = NULL;
+        }
+        if (refvalue) {
+            ref = refvalue[j];
+        }
+        
+        /* watch the index change */
+        if (arrs[i] && entry && entry->indexchange) {
+            entry->indexchange(entry, arr, arrs[i], kindex_invalid);
+        }
+        
+        iassign(arrs[i], ref);
+        
+        /* watch the index change */
+        if (ref && entry && entry->indexchange) {
+            entry->indexchange(entry, arr, ref, i);
+        }
+        ++j;
+        ++i;
+    }
+}
+
+/* swap the iref */
+static void _iarray_entry_swap_iref(struct iarray *arr,
+                                    int i, int j) {
+    iref* tmp;
+    iref* *arrs = (iref* *)arr->buffer;
+    irefarrayentry *entry = (irefarrayentry*)arr->userdata;
+    
+    if (j == kindex_invalid) {
+        /* arr_int[i] = 0;
+         * may call assign */
+        _iarray_entry_assign_iref(arr, i, 0, 1);
+    } else if (i == kindex_invalid) {
+        /* arr_int[j] = 0;
+         * may call assign */
+        _iarray_entry_assign_iref(arr, j, 0, 1);
+    } else {
+        tmp = arrs[i];
+        arrs[i] = arrs[j];
+        arrs[j] = tmp;
+        
+        /* watch the index change */
+        if (entry && entry->indexchange) {
+            entry->indexchange(entry, arr, arrs[i], i);
+            entry->indexchange(entry, arr, arrs[j], j);
+        }
+    }
+}
+
+/* compare iref */
+static int _iarray_entry_cmp_iref(struct iarray *arr,
+                                  int i, int j) {
+    iref* *arrs = (iref* *)arr->buffer;
+    /* the meta compare-funcs */
+    const imeta *lfsmeta = iobjgetmeta(arrs[i]);
+    const imeta *rfsmeta = iobjgetmeta(arrs[j]);
+    const imeta *meta = lfsmeta?lfsmeta:rfsmeta;
+    if (meta->funcs && meta->funcs->compare) {
+        return meta->funcs->compare(meta, arrs[i], arrs[j]);
+    }
+    /* raw the meta compare with pointer */
+    return arrs[i] - arrs[j];
+}
+
+
+/*************************************************************/
+/* iobj                                                     */
+/*************************************************************/
+
+/* array-assign */
+static void _iarray_entry_assign_iobj(struct iarray *arr,
+                                      int i, const void *value, int nums) {
+    for (int n = 0; n < nums; ++n) {
+        iobjassign(arr->entry->elemeta, arr->buffer + (n + i) * arr->entry->size,
+                   (char*)value + n * arr->entry->size);
+    }
+}
+
+
+/* array-swap */
+static void _iarray_entry_swap_iobj(struct iarray *arr,
+                                    int i, int j) {
+    /* only read: empty element */
+    static char buffer[256];
+    char *tmp;
+    if (arr->entry->size > 256) {
+        tmp = icalloc(1, arr->entry->size);
+    } else {
+        tmp = buffer;
+    }
+    
+    if (j == kindex_invalid) {
+        /* arr_int[i] = 0;
+         may call assign */
+        _iarray_entry_assign_iobj(arr, i, tmp, 1);
+    } else if (i == kindex_invalid) {
+        /* arr_int[j] = 0;
+         may call assign */
+        _iarray_entry_assign_iobj(arr, j, tmp, 1);
+    } else {
+        iobjassign(arr->entry->elemeta, arr->buffer + arr->entry->size * i,
+                   arr->buffer + arr->entry->size * j);
+    }
+    
+    /* free the tmp */
+    if (tmp != buffer) {
+        ifree(tmp);
+    }
+}
+
+/* compare ivar */
+static int _iarray_entry_cmp_iobj(struct iarray *arr,
+                                  int i, int j) {
+    return iobjcompare(arr->entry->elemeta, arr->buffer + arr->entry->size * i, arr->buffer + arr->entry->size * j);
+}
+
+/*************************************************************/
+/* copyable                                                   */
+/*************************************************************/
 
 
 /* array-assign */
@@ -244,90 +385,32 @@ static const iarrayentry _arr_entry_ibyte = {
 
 /* array-ibyte */
 iarray* iarraymakeibyte(size_t capacity) {
+    _iarr_meta_type_link(&_arr_entry_ibyte, ibyte);
     return iarraymake(capacity, &_arr_entry_ibyte);
+}
+
+
+/* array-ibyte config */
+static const iarrayentry _arr_entry_ivar = {
+    EnumArrayFlagAutoShirk |
+    EnumArrayFlagSimple |
+    EnumArrayFlagKeepOrder |
+    EnumArrayFlagMemsetZero,
+    sizeof(ivar),
+    _iarray_entry_swap_iobj,
+    _iarray_entry_assign_iobj,
+    _iarray_entry_cmp_iobj,
+};
+
+/* array-ivar */
+iarray* iarraymakeivar(size_t capacity) {
+    _iarr_meta_type_link(&_arr_entry_ivar, ivar);
+    return iarraymake(capacity, &_arr_entry_ivar);
 }
 
 /*************************************************************/
 /* iarray - iref                                             */
 /*************************************************************/
-
-/* array-iref assign */
-static void _iarray_entry_assign_iref(struct iarray *arr,
-                                      int i, const void *value, int nums) {
-    iref* *arrs = (iref* *)arr->buffer;
-    iref* *refvalue = (iref* *)value;
-    iref* ref = NULL;
-    int j = 0;
-    irefarrayentry *entry = (irefarrayentry*)arr->userdata;
-    
-    /* for nums */
-    while (j < nums) {
-        /* realloc not set zero to pending memory */
-        if (i >= arr->len) {
-            arrs[i] = NULL;
-        }
-        if (refvalue) {
-            ref = refvalue[j];
-        }
-        
-        /* watch the index change */
-        if (arrs[i] && entry && entry->indexchange) {
-            entry->indexchange(entry, arr, arrs[i], kindex_invalid);
-        }
-        
-        iassign(arrs[i], ref);
-        
-        /* watch the index change */
-        if (ref && entry && entry->indexchange) {
-            entry->indexchange(entry, arr, ref, i);
-        }
-        ++j;
-        ++i;
-    }
-}
-
-/* swap the iref */
-static void _iarray_entry_swap_iref(struct iarray *arr,
-                                    int i, int j) {
-    iref* tmp;
-    iref* *arrs = (iref* *)arr->buffer;
-    irefarrayentry *entry = (irefarrayentry*)arr->userdata;
-    
-    if (j == kindex_invalid) {
-        /* arr_int[i] = 0;
-         * may call assign */
-        _iarray_entry_assign_iref(arr, i, 0, 1);
-    } else if (i == kindex_invalid) {
-        /* arr_int[j] = 0;
-         * may call assign */
-        _iarray_entry_assign_iref(arr, j, 0, 1);
-    } else {
-        tmp = arrs[i];
-        arrs[i] = arrs[j];
-        arrs[j] = tmp;
-        
-        /* watch the index change */
-        if (entry && entry->indexchange) {
-            entry->indexchange(entry, arr, arrs[i], i);
-            entry->indexchange(entry, arr, arrs[j], j);
-        }
-    }
-}
-
-/* compare iref */
-static int _iarray_entry_cmp_iref(struct iarray *arr,
-                                  int i, int j) {
-    iref* *arrs = (iref* *)arr->buffer;
-    /* the meta compare-funcs */
-    const imeta *lfsmeta = iobjgetmeta(arrs[i]);
-    const imeta *rfsmeta = iobjgetmeta(arrs[j]);
-    const imeta *meta = lfsmeta?lfsmeta:rfsmeta;
-    if (meta->funcs && meta->funcs->compare) {
-        return meta->funcs->compare(meta, arrs[i], arrs[j]);
-    }
-    /* raw the meta compare with pointer */
-    return arrs[i] - arrs[j];
-}
 
 /* array-iref config */
 static const iarrayentry _arr_entry_iref = {

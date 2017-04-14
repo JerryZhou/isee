@@ -7,51 +7,51 @@ idictentry* idictentrymake(ivar *key) {
     idictentry *entry = irefnew(idictentry);
     entry->indexkey = kindex_invalid;
     entry->indexvalue = kindex_invalid;
-    iassign(entry->key, key);
+    iobjassign(imetaof(ivar), &(entry->key), key);
     return entry;
 }
 
 /* get a key from entry */
 ivar *idictentrykey(const idictentry *e) {
-    return e->key;
+    return (ivar*)&e->key;
 }
 
 /* get a value from entry */
 ivar *idictentryvalue(const idictentry *e) {
-    return e->value;
+    return (ivar*)&e->value;
 }
 
 /* set a value for entry */
 void idictentysetvalue(idictentry *e, ivar *value) {
-    iassign(e->value, value);
+    iobjassign(imetaof(ivar), &e->value, value);
 }
 
 /* release all the resources with entry */
 void idictentry_destructor(const struct imeta *meta, iptr o) {
     idictentry *entry = icast(idictentry, o);
-    irefdelete(entry->key);
-    irefdelete(entry->value);
+    iobjassign(imetaof(ivar), &entry->key, NULL);
+    iobjassign(imetaof(ivar), &entry->value, NULL);
 }
 
 /* the same as hash on key */
 uint64_t idictentry_hash(const struct imeta *meta, iconstptr o) {
     idictentry *entry = icast(idictentry, o);
-    return ivarhashcode(entry->key);
+    return ivarhashcode(&entry->key);
 }
 
 /* the meta assign */
 void idictentry_assign(const struct imeta *meta, iptr dst, iconstptr src) {
     idictentry *dentry = icast(idictentry, dst);
     idictentry *sentry = icast(idictentry, src);
-    iassign(dentry->key, sentry->key);
-    iassign(dentry->value, sentry->value);
+    iobjassign(imetaof(ivar), &dentry->key, &sentry->key);
+    iobjassign(imetaof(ivar), &dentry->value, &sentry->value);
 }
 
 /* the same as compare on key */
 int idictentry_compare(const struct imeta *meta, iconstptr lfs, iconstptr rfs) {
     idictentry *lentry = icast(idictentry, lfs);
     idictentry *rentry = icast(idictentry, rfs);
-    return ivarcompare(lentry->key, rentry->key);
+    return ivarcompare(&lentry->key, &rentry->key);
 }
 
 /* private-data for idict */
@@ -102,7 +102,7 @@ int _idictentryindexof(const idict *d, iarray *arr, const ivar *key) {
     icheckret(key, index);
     /* temp val */
     idictentry *entry = irefnew(idictentry);
-    iassign(entry->key, (ivar*)key);
+    iobjassign(imetaof(ivar), &entry->key, (ivar*)key);
     /* search and remove */
     if (iflag_is(d->flag, EnumDictFlag_NotSortingKeys)) {
         irangearray(arr, idictentry*,
@@ -177,13 +177,13 @@ iarray *_idictentryarrayof(const idict *d, const ivar *key) {
 
 /* rehashing-indexing a entry */
 static void _idictrehashingentry(idict *d, idictentry* entry) {
-    iarray* indexentrys = _idictentryarrayof(d, entry->key);
+    iarray* indexentrys = _idictentryarrayof(d, &entry->key);
     
     /* deal with entry-array */
     if (indexentrys == NULL) {
         /* make indexentry array */
         indexentrys = _idictentryarraymake_forvalue(d, 8);
-        iarrayset(d->values, _idictkeyindex(d, entry->key), &indexentrys);
+        iarrayset(d->values, _idictkeyindex(d, &entry->key), &indexentrys);
         /* release the reference */
         irelease(indexentrys);
     }
@@ -339,7 +339,7 @@ int idictremoveentry(idict *d, idictentry *entry, iarray* indexentrys) {
     icheckret(d && entry, iino);
     
     if (indexentrys == NULL) {
-        indexentrys = _idictentryarrayof(d, entry->key);
+        indexentrys = _idictentryarrayof(d, &entry->key);
     }
     
     /* remove value */
@@ -386,7 +386,7 @@ int idictremoveall(idict *d) {
 ivar* idictvalue(const idict *d, const ivar *key) {
     idictentry *entry = idictentryof(d, key);
     if (entry) {
-        return icast(ivar, entry->value);
+        return icast(ivar, &entry->value);
     }
     return NULL;
 }

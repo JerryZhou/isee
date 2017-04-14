@@ -18,15 +18,15 @@ static void __x_cacheset(ikvmemcache *cache, int ikey, int ivalue) {
     ivar *key = ivarmakeint(ikey);
     ivar *value = ivarmakeint(ivalue);
     ikvmemcacheput(cache, key, value);
-    irefdelete(key);
-    irefdelete(value);
+    iobjfree(key);
+    iobjfree(value);
 }
 
 /* get the value from cache, if not exits just return 0 */
 static int __x_cacheget(ikvmemcache *cache, int ikey) {
     ivar *key = ivarmakeint(ikey);
     ivar *value = ikvmemcacheget(cache, key);
-    irefdelete(key);
+    iobjfree(key);
     if (value) {
         return ivarcast(value, int);
     }
@@ -35,12 +35,12 @@ static int __x_cacheget(ikvmemcache *cache, int ikey) {
 
 /* compare the lur-keys is equal to ikeys */
 static int __x_cachelrukeysequal(ikvmemcache *cache, int *ikeys, int count) {
-    iarray *keys = iarraymakeiref(0);
+    iarray *keys = iarraymakeivar(0);
     int icompare = iino;
     if(ikvmemcachekeys(cache, keys) == count) {
         icompare = iiok;
-        irangearray(keys, ivar*,
-                    if (ivarcast(__value, int) != ikeys[__key]) {
+        irangearray(keys, ivar,
+                    if (ivarcast(&__value, int) != ikeys[__key]) {
                         icompare = iino;
                         break;
                     }
@@ -133,7 +133,7 @@ SP_CASE(ikvmemcache, ikvmemcacheget) {
         ivar *key = ivarmakeint(3);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(value == NULL);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     SP_TRUE(ikvmemcachesize(cache) == 3);
@@ -152,67 +152,67 @@ SP_CASE(ikvmemcache, ikvmemcacheput) {
         ivar *key = ivarmakeint(0);
         ivar *value = ivarmakeint(0);
         ikvmemcacheput(cache, key, value);
-        irefdelete(key);
-        irefdelete(value);
+        iobjfree(key);
+        iobjfree(value);
     }
     
     {
         ivar *key = ivarmakeint(1);
         ivar *value = ivarmakeint(100);
         ikvmemcacheput(cache, key, value);
-        irefdelete(key);
-        irefdelete(value);
+        iobjfree(key);
+        iobjfree(value);
     }
     
     {
         ivar *key = ivarmakeint(2);
         ivar *value = ivarmakeint(200);
         ikvmemcacheput(cache, key, value);
-        irefdelete(key);
-        irefdelete(value);
+        iobjfree(key);
+        iobjfree(value);
     }
     
     {
         ivar *key = ivarmakeint(0);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(ivarcast(value, int) == 0);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     {
         ivar *key = ivarmakeint(1);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(ivarcast(value, int) == 100);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     {
         ivar *key = ivarmakeint(2);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(ivarcast(value, int) == 200);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     {
         ivar *key = ivarmakeint(3);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(value == NULL);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     {
         ivar *key = ivarmakeint(1);
         ivar *value = ivarmakeint(1000);
         ikvmemcacheput(cache, key, value);
-        irefdelete(key);
-        irefdelete(value);
+        iobjfree(key);
+        iobjfree(value);
     }
     
     {
         ivar *key = ivarmakeint(1);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(ivarcast(value, int) == 1000);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     SP_TRUE(ikvmemcachesize(cache) == 3);
@@ -230,79 +230,79 @@ SP_CASE(ikvmemcache, ikvmemcacheremove) {
         ivar *key = ivarmakeint(0);
         ivar *value = ivarmakeint(0);
         ikvmemcacheput(cache, key, value);
-        irefdelete(key);
-        irefdelete(value);
+        iobjfree(key);
+        iobjfree(value);
     }
     
     {
         ivar *key = ivarmakeint(1);
         ivar *value = ivarmakeint(100);
         ikvmemcacheput(cache, key, value);
-        irefdelete(key);
-        irefdelete(value);
+        iobjfree(key);
+        iobjfree(value);
     }
     
     {
         ivar *key = ivarmakeint(2);
         ivar *value = ivarmakeint(200);
         ikvmemcacheput(cache, key, value);
-        irefdelete(key);
-        irefdelete(value);
+        iobjfree(key);
+        iobjfree(value);
     }
     
     {
         ivar *key = ivarmakeint(0);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(ivarcast(value, int) == 0);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     {
         ivar *key = ivarmakeint(1);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(ivarcast(value, int) == 100);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     {
         ivar *key = ivarmakeint(2);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(ivarcast(value, int) == 200);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     {
         ivar *key = ivarmakeint(3);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(value == NULL);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     {
         ivar *key = ivarmakeint(1);
         ivar *value = ivarmakeint(1000);
         ikvmemcacheput(cache, key, value);
-        irefdelete(key);
-        irefdelete(value);
+        iobjfree(key);
+        iobjfree(value);
     }
     
     {
         ivar *key = ivarmakeint(1);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(ivarcast(value, int) == 1000);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     {
         ivar *key = ivarmakeint(1);
         SP_TRUE(ikvmemcacheremove(cache, key));
-        irefdelete(key);
+        iobjfree(key);
     }
     {
         ivar *key = ivarmakeint(1);
         ivar *value = ikvmemcacheget(cache, key);
         SP_TRUE(value == NULL);
-        irefdelete(key);
+        iobjfree(key);
     }
     
     SP_TRUE(ikvmemcachesize(cache) == 2);
