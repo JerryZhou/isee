@@ -12,6 +12,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
+/* NB!! the badly profile in the ivar-entry 
+ * DO NOT USED IN ANY HEIGH-PROFILE-REQUIRED SITUATIONS
+ * ONLY TO LEARN THE DICT-CONSTRUCTOR By JerryZhou@outlook.com
+ */
 
 /* the inner struct declares */
 struct idict_private;

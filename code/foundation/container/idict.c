@@ -239,11 +239,11 @@ static void _idict_auto_rehashing(idict *d) {
     size_t nkeys = iarraylen(d->keys);
     size_t nvalues = iarraylen(d->values);
     size_t ncollides = d->priv->collides;
-    if (nkeys > nvalues && nkeys - nvalues > ncollides) {
+    if (nkeys > 3*nvalues ) {   /* there are 3 doubles of pair in buckect */
         _idictgrowcapacity_rehashing(d);
-    } else if (nkeys < nvalues && ncollides/2 > nkeys) {
+    } else if (nkeys > nvalues && ncollides > nkeys/3 ) {   /* the collides more than 1/2 keys */
         _idictgrowcapacity_rehashing(d);
-    } else if (nvalues > 10 * nkeys && ncollides < nkeys ) {
+    } else if (nkeys && nvalues > 10 * nkeys && ncollides <= nkeys/3 ) {
         _idictshrinkcapacity_rehashing(d);
     }
 }
