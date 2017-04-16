@@ -29,8 +29,8 @@ uint64_t ivar_hash(const imeta* meta, iconstptr o) {
 int ivar_compare(const imeta* varmeta, iconstptr lfs, iconstptr rfs) {
     ivar *l = icast(ivar, lfs);
     ivar *r = icast(ivar, rfs);
-    const struct imeta* lmeta = iobjgetmeta(l);
-    const struct imeta* rmeta = iobjgetmeta(r);
+    const struct imeta* lmeta = l->meta;
+    const struct imeta* rmeta = r->meta;
     const struct imeta* meta = lmeta ? lmeta : rmeta;
     if (meta->funcs && meta->funcs->compare) {
         return meta->funcs->compare(meta, &l->v, &r->v);
