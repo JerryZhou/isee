@@ -78,8 +78,9 @@ static itreenode* _itreenode_make(const ivar *key, const ivar *value, ibyte colo
 }
 
 /* tree-init */
-itree *itreemake() {
+itree *itreemake(int flag) {
     itree *tree = irefnew(itree);
+    tree->flag |= flag;
     return tree;
 }
 
@@ -91,8 +92,9 @@ static void _itree_rotateright(itree *tree, itreenode *node) {
     
     fa->left = y;
     
-    if(y != NIL)
+    if(y != NIL) {
         y->parent = fa;
+    }
     node->right = fa;
     fa->parent = node;
     
@@ -101,16 +103,17 @@ static void _itree_rotateright(itree *tree, itreenode *node) {
     node->parent = gp;
     
     if(gp != NULL){
-        if(gp->left == fa)
+        if(gp->left == fa) {
             gp->left = node;
-        else
+        } else {
             gp->right = node;
+        }
     }
 }
 
 /* tree: rotate-left */
 static void _itree_rotateleft(itree *tree, itreenode* p) {
-    if(p->parent == NULL){
+    if(p->parent == NULL) {
         tree->root = p;
         return;
     }
@@ -120,20 +123,23 @@ static void _itree_rotateleft(itree *tree, itreenode* p) {
     
     fa->right = y;
     
-    if(y != NIL)
+    if(y != NIL) {
         y->parent = fa;
+    }
     p->left = fa;
     fa->parent = p;
     
-    if(tree->root == fa)
+    if(tree->root == fa) {
         tree->root = p;
+    }
     p->parent = gp;
     
     if(gp != NULL){
-        if(gp->left == fa)
+        if(gp->left == fa) {
             gp->left = p;
-        else
+        } else {
             gp->right = p;
+        }
     }
 }
 
@@ -182,10 +188,11 @@ static void _itree_removecase(itree *tree, itreenode *p) {
     if(sibling->color == RED) {
         p->parent->color = RED;
         sibling->color = BLACK;
-        if(p == p->parent->left)
+        if(p == p->parent->left) {
             _itree_rotateleft(tree, sibling);
-        else
+        } else {
             _itree_rotateright(tree, sibling);
+        }
     }
     
     sibling = _itreenode_sibling(p);
@@ -257,8 +264,9 @@ static int _itree_removenode(itree *tree, itreenode *p) {
     if(child && p->color == EnumTreeNodeColor_Black){
         if(child->color == EnumTreeNodeColor_Red){
             child->color = EnumTreeNodeColor_Black;
-        } else
+        } else {
             _itree_removecase(tree, child);
+        }
     }
     
     iobjfree(p);
@@ -294,7 +302,7 @@ static int itree_remove(itree *tree, itreenode *p, const ivar *key) {
 /* add node to tree with right-level */
 int _itree_addnode(itree *tree, itreenode *p) {
     ++tree->size;
-    if(p->parent == NULL){
+    if(p->parent == NULL) {
         tree->root = p;
         p->color = BLACK;
         return iiyes;

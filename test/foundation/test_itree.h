@@ -3,7 +3,7 @@
 SP_SUIT(itree);
 
 SP_CASE(itree, itreemake) {
-    itree* tree = itreemake();
+    itree* tree = itreemake(0);
     SP_TRUE(itreesize(tree) == 0);
     irefdelete(tree);
 }
@@ -29,7 +29,7 @@ static int _xtfind(itree *t, int k) {
 }
 
 SP_CASE(itree, itreeadd) {
-    itree*tree = itreemake();
+    itree*tree = itreemake(0);
     _xtadd(tree, 1, 100);
     /*
      *                  (1:BLACK)
@@ -55,7 +55,7 @@ SP_CASE(itree, itreeadd) {
 }
 
 SP_CASE(itree, itreeremove) {
-    itree*tree = itreemake();
+    itree*tree = itreemake(0);
     _xtadd(tree, 1, 100);
     _xtadd(tree, 2, 200);
     _xtadd(tree, 3, 300);
@@ -71,7 +71,7 @@ SP_CASE(itree, itreeremove) {
 }
 
 SP_CASE(itree, itreeremove2) {
-    itree*tree = itreemake();
+    itree*tree = itreemake(0);
     _xtadd(tree, 1, 100);
     _xtadd(tree, 2, 200);
     _xtadd(tree, 3, 300);
@@ -88,7 +88,7 @@ SP_CASE(itree, itreeremove2) {
 }
 
 SP_CASE(itree, itreefind) {
-    itree*tree = itreemake();
+    itree*tree = itreemake(0);
     _xtadd(tree, 1, 100);
     _xtadd(tree, 2, 200);
     _xtadd(tree, 3, 300);
@@ -103,6 +103,39 @@ SP_CASE(itree, itreefind) {
     SP_TRUE(_xtfind(tree, 2) == 2000);
     
     irefdelete(tree);
+}
+
+#include <map>
+#include "foundation/math/irand.h"
+
+static void _i_x_tree_ii(itree *d, int key, int value) {
+    ivar keyvar = {.v = {key}, .meta = imetaof(int)};
+    ivar valuevar = {.v = {value}, .meta = imetaof(int)};
+    itreeadd(d, &keyvar, &valuevar);
+}
+
+SP_CASE(itree, benchmark) {
+    irand r;
+    irandinit(&r, igetcurmicro());
+    
+    std::map<int, int> stdmap;
+    uint64_t micro = igetcurmicro();
+    for (int i=0; i<10000; ++i) {
+        int key = (int)irandN(&r, std::numeric_limits<int>::max());
+        int value = (int)irandN(&r, std::numeric_limits<int>::max());
+        stdmap[key] = value;
+    }
+    ilog("stdmap ===> [%lld]\n", igetcurmicro() - micro);
+    
+    itree *d = itreemake(EnumTreeFlag_Map);
+    micro = igetcurmicro();
+    for (int i=0; i<10000; ++i) {
+        int key = (int)irandN(&r, std::numeric_limits<int>::max());
+        int value = (int)irandN(&r, std::numeric_limits<int>::max());
+        _i_x_tree_ii(d, key, value);
+    }
+    ilog("itree ===> [%lld]\n", igetcurmicro() - micro);
+    irefdelete(d);
 }
 
 SP_CASE(itree, end) {

@@ -63,7 +63,7 @@ typedef struct itree {
 } itree;
     
 /* tree-init */
-itree *itreemake();
+itree *itreemake(int flag);
     
 /* the destructor */
 void itree_destructor(const imeta *meta, iptr o);
