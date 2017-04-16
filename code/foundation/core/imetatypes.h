@@ -64,7 +64,8 @@ __ideclaremeta(irefarrayentry,sizeof(irefarrayentry),     0,EnumMetaFlag_POD,100
 __ideclaremeta(islice, sizeof(islice),0, EnumMetaFlag_Ref, 10000, NULL, NULL, islice_destructor, NULL, NULL, NULL),\
 __ideclaremeta(istring,sizeof(istring),0,EnumMetaFlag_Ref,10000, NULL, NULL, islice_destructor, istring_hash, istring_compare, NULL),\
 __ideclaremeta(icmdarg,  sizeof(icmdarg),    0,  EnumMetaFlag_Ref,   0, NULL, NULL, icmdarg_destructor, NULL, NULL, NULL),\
-__ideclaremeta(itree,    sizeof(itree),0,        EnumMetaFlag_Ref,   0, NULL, NULL, NULL, NULL, NULL, NULL),\
+__ideclaremeta(itree,    sizeof(itree),0,        EnumMetaFlag_Ref,   0, NULL, NULL, itree_destructor, NULL, NULL, NULL),\
+__ideclaremeta(itreenode,sizeof(itreenode),0,    EnumMetaFlag_POD,   0, NULL, NULL, itreenode_destructor, NULL, NULL, NULL),\
 __ideclaremeta(idict,   sizeof(idict),0,         EnumMetaFlag_Ref,   0, NULL, NULL, idict_destructor, idict_hash, NULL, NULL),\
 __ideclaremeta(idictentry,   sizeof(idictentry),0,EnumMetaFlag_Ref,   0, NULL, NULL, idictentry_destructor, idictentry_hash, idictentry_compare, idictentry_assign),\
 __ideclaremeta(ineighbor,sizeof(ineighbor),    0,EnumMetaFlag_Ref,   0, NULL, NULL, ineighbor_destructor, NULL, NULL, NULL),\
