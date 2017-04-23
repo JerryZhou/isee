@@ -44,6 +44,12 @@ ibool irunevalid(const irune rune);
 
 /* the utf8-encoded lenght */
 size_t irunelen(const irune rune);
+ 
+/* convertint the fullwidth to halfwidth, only support ascii */
+irune irunehalfwidth(const irune rune);
+
+/* convertint the halfwidth to fullwidth, only support ascii */
+irune irunefullwidth(const irune rune);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

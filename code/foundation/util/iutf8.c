@@ -282,3 +282,41 @@ size_t irunelen(const irune rune) {
     }
     return 4;
 }
+
+/* https://zh.wikipedia.org/zh-cn/%E5%85%A8%E5%BD%A2%E5%92%8C%E5%8D%8A%E5%BD%A2 */
+typedef enum EnumHalfAndFull {
+    iRuneSpaceFull = 0x3000,
+    iRuneSpaceHalf = 0x0020,
+    
+    iRuneAscIIStartFull = 0xFF01,
+    iRuneAscIIEndFull = 0xFF5E,
+    
+    iRuneAscIIStartHalf = 0x0021,
+    iRuneAscIIEndHalf = 0x007E,
+    
+    iRuneAscIIDetal = 0xFEE0,
+    
+}EnumHalfAndFull;
+
+/* convertint the fullwidth to halfwidth */
+irune irunehalfwidth(const irune rune) {
+    if (rune == iRuneSpaceFull ) {
+        return iRuneSpaceHalf;
+    } else if (rune>= iRuneAscIIStartFull && rune<=iRuneAscIIEndFull) {
+        return rune - iRuneAscIIDetal;
+    } else {
+        return rune;
+    }
+}
+
+/* convertint the halfwidth to fullwidth */
+irune irunefullwidth(const irune rune) {
+    if (rune == iRuneSpaceHalf) {
+        return iRuneSpaceFull;
+    }else if (rune>= iRuneAscIIStartHalf && rune<=iRuneAscIIEndHalf) {
+        return rune+iRuneAscIIDetal;
+    } else {
+        return rune;
+    }
+}
+
